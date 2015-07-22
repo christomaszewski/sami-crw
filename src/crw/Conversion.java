@@ -7,6 +7,9 @@ import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 
+import edu.cmu.ri.crw.data.UtmPose;
+
+
 /**
  *
  * @author nbb
@@ -42,6 +45,12 @@ public class Conversion {
                         utmCoordinate.getNorthing(),
                         null),
                 altitude);
+    }
+    
+    public static UTMCoord UtmPoseToUTMCoord(UtmPose utmPose) {                
+        UTMCoord utmCoord = UTMCoord.fromUTM(utmPose.origin.zone,
+                (utmPose.origin.isNorth ? AVKey.NORTH : AVKey.SOUTH), utmPose.pose.getX(), utmPose.pose.getY());        
+        return utmCoord;
     }
 
     // Linearly scale a value from one value range to another

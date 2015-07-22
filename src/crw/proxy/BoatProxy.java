@@ -1,7 +1,13 @@
 package crw.proxy;
 
+import com.madara.EvalSettings;
+import gov.nasa.worldwind.geom.coords.UTMCoord;
+
 import com.madara.KnowledgeBase;
 import com.madara.KnowledgeRecord;
+import com.madara.threads.Threader;
+import com.madara.threads.BaseThread;
+
 import com.perc.mitpas.adi.mission.planning.task.Task;
 import crw.Conversion;
 import crw.event.input.proxy.ProxyPathCompleted;
@@ -33,13 +39,18 @@ import java.awt.image.BufferedImage;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.measure.unit.NonSI;
+import javax.measure.unit.SI;
 import javax.swing.Timer;
 import robotutils.Pose3D;
 import sami.engine.Engine;
@@ -86,7 +97,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     protected ArrayList<ProxyListenerInt> listeners = new ArrayList<ProxyListenerInt>();
     protected Hashtable<ProxyListenerInt, Integer> listenerCounter = new Hashtable<ProxyListenerInt, Integer>();
     // ROS update
-    UdpVehicleServer _server;
+    //UdpVehicleServer _server;
     PoseListener _stateListener;
     SensorListener _sensorListener;
     WaypointListener _waypointListener;
@@ -113,17 +124,37 @@ public class BoatProxy extends Thread implements ProxyInt {
     public static final int DEFAULT_TEAM_SIZE = 24;
     KnowledgeBase knowledge;
     final BoatProxy bp;
-    com.madara.containers.Vector waypoints;
-    com.madara.containers.String wpEventId;
-    com.madara.containers.String wpState;
-    com.madara.containers.String wpController;
-    com.madara.containers.Integer waypointsReceivedAck;
-    com.madara.containers.Integer waypointsCompletedAck;
-    com.madara.containers.Integer autonomyEnabled;
-    com.madara.containers.Integer autonomyEnabledReceivedAck;
+    
+    LutraMadaraContainers containers;
+    Threader madaraListenerThreader;
+    
+    void sendWaypointsQueue() {
+        int N = _curWaypoints.size();
+        EvalSettings delay = new EvalSettings();
+        delay.setDelaySendingModifieds(true);
+        knowledge.set(containers.prefix + "command","waypoints",delay); // note the delay
+        knowledge.set(containers.prefix + "command.size", N,delay);        
+        
+        UtmPose[] utmWaypoints = _curWaypoints.toArray(new UtmPose[N]);
+        for (int i = 0; i < N; i++) {
+            UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
+            double lat = utmCoordTemp.getLatitude().degrees;
+            double lon = utmCoordTemp.getLongitude().degrees;            
+            if (i < N-1) { // include delay argument to collect all wayponts into a single packet
+                knowledge.set(java.lang.String.format("%scommand.%d[0]",containers.prefix,i),lat,delay);
+                knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon,delay);
+            }
+            else { // last waypoint has no delay argument, sending entire waypoint algorithm command and inputs as one packet
+                knowledge.set(java.lang.String.format("%scommand.%d[0]",containers.prefix,i),lat);
+                knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon);
+            }
+        }        
+        delay.free();
+    }
+    
     // MADARA threads
-    static final int MADARA_POSE_UPDATE_RATE = 250; // ms
-    static final int MADARA_WP_UPDATE_RATE = 250; // ms
+    static final int MADARA_POSE_UPDATE_RATE = 4; // Hz
+    static final int MADARA_WP_UPDATE_RATE = 4; // Hz
 
     public String getIpAddress() {
         return ipAddress;
@@ -136,30 +167,8 @@ public class BoatProxy extends Thread implements ProxyInt {
         this.knowledge = knowledge;
         ipAddress = address.toString().substring(address.toString().indexOf("/") + 1);
 
-        // Initialize MADARA containers
-        waypoints = new com.madara.containers.Vector();
-        waypoints.setName(knowledge, ipAddress + ".waypoints");
-
-        wpEventId = new com.madara.containers.String();
-        wpEventId.setName(knowledge, ipAddress + ".waypoints.eventId");
-
-        wpState = new com.madara.containers.String();
-        wpState.setName(knowledge, ipAddress + ".waypoints.state");
-
-        wpController = new com.madara.containers.String();
-        wpController.setName(knowledge, ipAddress + ".waypoints.controller");
-
-        waypointsReceivedAck = new com.madara.containers.Integer();
-        waypointsReceivedAck.setName(knowledge, ipAddress + ".waypoints.received");
-
-        waypointsCompletedAck = new com.madara.containers.Integer();
-        waypointsCompletedAck.setName(knowledge, ipAddress + ".waypoints.completed");
-
-        autonomyEnabled = new com.madara.containers.Integer();
-        autonomyEnabled.setName(knowledge, ipAddress + ".autonomy");
-
-        autonomyEnabledReceivedAck = new com.madara.containers.Integer();
-        autonomyEnabledReceivedAck.setName(knowledge, ipAddress + ".autonomy.received");
+        containers = new LutraMadaraContainers(knowledge, boatNo);
+        madaraListenerThreader = new Threader(knowledge);
 
         String message = "Boat proxy created with name: " + name + ", color: " + color + ", addr: " + addr;
         LOGGER.info(message);
@@ -183,7 +192,7 @@ public class BoatProxy extends Thread implements ProxyInt {
             LOGGER.severe("INetAddress is null!");
         }
 
-        _server = new UdpVehicleServer(addr);
+        //_server = new UdpVehicleServer(addr); ///////////////////////////////////////////////// I don't think you need this anymore? Just need knowledge base
         bp = this;
         
         LOGGER.info("New boat created, boat # " + _boatNo);
@@ -196,12 +205,14 @@ public class BoatProxy extends Thread implements ProxyInt {
     }
 
     public void startListeners() {
-        new Thread(new MadaraPoseListener(knowledge)).start();
-        new Thread(new MadaraWaypointListener(knowledge)).start();
+        madaraListenerThreader.run(MADARA_POSE_UPDATE_RATE,"poseListener", new MadaraPoseListener());
+        madaraListenerThreader.run(MADARA_WP_UPDATE_RATE,"wpListener", new MadaraWaypointListener());
+        
     }
 
     public AsyncVehicleServer getServer() {
-        return _server;
+        //return _server;
+        return null;
     }
 
     @Override
@@ -778,14 +789,12 @@ public class BoatProxy extends Thread implements ProxyInt {
 
             // Make sure we don't send waypoint commands too fast - stop and go commands can get out of order otherwise
             checkAndSleepForCmd();
-
-            // Update MADARA containers
-            waypoints.resize(0);
-//            wpState.set("");
-            wpController.set("");
-            waypointsReceivedAck.set(1);
-            waypointsCompletedAck.set(0);
-            knowledge.sendModifieds();
+            
+            // set GAMS algorithm to null
+            //knowledge.set(containers.prefix + "algorithm.waypoints.finished", 0);
+            knowledge.set(containers.prefix + "command", "null");            
+            
+            
         } else {
             LOGGER.info("BoatProxy [" + toString() + "] startWaypoints [" + _curWaypoints.toString() + "]");
             activateAutonomy(true);
@@ -794,42 +803,29 @@ public class BoatProxy extends Thread implements ProxyInt {
             checkAndSleepForCmd();
 
             // Update MADARA containers
-            waypoints.resize(_curWaypoints.size());
-            UtmPose[] utmWaypoints = _curWaypoints.toArray(new UtmPose[_curWaypoints.size()]);
-            for (int i = 0; i < _curWaypoints.size(); i++) {
-                String utmString = utmWaypoints[i].pose.getX() + "," + utmWaypoints[i].pose.getY() + "," + utmWaypoints[i].origin.zone + "," + (utmWaypoints[i].origin.isNorth ? "N" : "S");
-                waypoints.set(i, utmString);
-            }
-//            wpState.set("");
-            wpController.set("POINT_AND_SHOOT");
-            waypointsReceivedAck.set(1);
-            waypointsCompletedAck.set(0);
-            knowledge.sendModifieds();
+            endTeleop();
+            sendWaypointsQueue();           
+                        
         }
     }
 
-    /**
-     * Sends a twist velocity to the boat server to be executed Not sure if we
-     * want to set this using MADARA containers - could get messy and we would
-     * only teleoperate within close range regardless
-     *
-     * @param t
-     */
-    public void setExternalVelocity(Twist t) {
-        _server.setVelocity(t, new FunctionObserver<Void>() {
-            public void completed(Void v) {
-                LOGGER.log(Level.FINE, "Set velocity succeeded");
-            }
-
-            public void failed(FunctionError fe) {
-                LOGGER.severe("Set velocity failed!");
-            }
-        });
+    void beginTeleop() {
+        containers.teleopStatus.set(TELEOPERATION_TYPES.GUI_MS.getLongValue());
+        knowledge.set(containers.prefix + "command", "null");
+        
+        // TODO: joystick control in java?
+        // see "package crw.ui.teleop", "GamepadController"
+        
     }
+    
+    void endTeleop() {
+        containers.teleopStatus.set(TELEOPERATION_TYPES.NONE.getLongValue());
+    }
+    
 
     public void activateAutonomy(final boolean activate) {
-        autonomyEnabled.set((activate ? 1 : 0));
-        autonomyEnabledReceivedAck.set(1);
+        //autonomyEnabled.set((activate ? 1 : 0));
+        //autonomyEnabledReceivedAck.set(1);
     }
 
     public Color getColor() {
@@ -841,7 +837,8 @@ public class BoatProxy extends Thread implements ProxyInt {
     }
 
     public UdpVehicleServer getVehicleServer() {
-        return _server;
+        //return _server;
+        return null;
     }
 
     @Override
@@ -865,166 +862,102 @@ public class BoatProxy extends Thread implements ProxyInt {
         lastTime = System.currentTimeMillis();
     }
 
-    class MadaraPoseListener implements Runnable {
+    @Override
+    public void completeMission(UUID missionId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-        protected KnowledgeBase knowledge;
-        protected KnowledgeRecord kr;
-
-        public MadaraPoseListener(KnowledgeBase knowledge) {
-            this.knowledge = knowledge;
-        }
-
+    class MadaraPoseListener extends BaseThread {
+        
+        KnowledgeRecord kr;
+        
         @Override
         public void run() {
-            while (true) {
-                try {
-                    Thread.sleep(MADARA_POSE_UPDATE_RATE);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(WaypointListener.class.getName()).log(Level.SEVERE, null, ex);
+            kr = knowledge.get(containers.prefix + "location.0");
+            double easting = kr.toDouble();
+            kr = knowledge.get(containers.prefix + "location.1");
+            double northing = kr.toDouble();
+            double altitude = 0.0;
+            double roll = 0.0;
+            double pitch = 0.0;
+            kr = knowledge.get(containers.prefix + "location.2");
+            double yaw = kr.toDouble();
+            double lat = containers.latLong.get(0);
+            double lon = containers.latLong.get(1);
+            int zone = (int)containers.longitudeZone.get();
+            String hemisphere;  
+            String wwHemi;
+            if (lat > 0) {
+                hemisphere = "N";
+                wwHemi = AVKey.NORTH;
+            } 
+            else {
+                hemisphere = "S";
+                wwHemi = AVKey.SOUTH;
+            }            
+            
+            // update local variables
+            try {
+                UTMCoord boatPos = UTMCoord.fromUTM(zone, wwHemi, easting, northing);
+                LatLon latlon = new LatLon(boatPos.getLatitude(), boatPos.getLongitude());
+                Position p = new Position(latlon, 0.0);
+
+                // Update state variables
+                _pose = new UtmPose(new Pose3D(easting, northing, altitude, roll, pitch, yaw), new Utm(zone, (hemisphere.startsWith("N") || hemisphere.startsWith("n"))));
+                position = p;
+                utmCoord = boatPos;
+                location = Conversion.positionToLocation(position);
+
+                for (ProxyListenerInt boatProxyListener : listeners) {
+                    boatProxyListener.poseUpdated();
                 }
 
-                // Update pose from MADARA containers
-                kr = knowledge.get(ipAddress + ".pose.x");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                double easting = kr.toDouble();
-                kr.free();
-                kr = knowledge.get(ipAddress + ".pose.y");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                double northing = kr.toDouble();
-                kr.free();
-                kr = knowledge.get(ipAddress + ".pose.z");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                double altitude = kr.toDouble();
-                kr.free();
-                kr = knowledge.get(ipAddress + ".pose.roll");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                double roll = kr.toDouble();
-                kr.free();
-                kr = knowledge.get(ipAddress + ".pose.pitch");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                double pitch = kr.toDouble();
-                kr.free();
-                kr = knowledge.get(ipAddress + ".pose.yaw");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                double yaw = kr.toDouble();
-                kr.free();
-                kr = knowledge.get(ipAddress + ".pose.zone");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                int zone = (int)kr.toLong();
-                kr.free();
-                kr = knowledge.get(ipAddress + ".pose.hemisphere");
-                if (kr == null) {
-                    LOGGER.warning("KnowlegeRecord is NULL");
-                    continue;
-                }
-                String hemisphere = kr.toString();
-                String wwHemi = (hemisphere.startsWith("N") || hemisphere.startsWith("n")) ? AVKey.NORTH : AVKey.SOUTH;
-                kr.free();
-
-                try {
-                    UTMCoord boatPos = UTMCoord.fromUTM(zone, wwHemi, easting, northing);
-                    LatLon latlon = new LatLon(boatPos.getLatitude(), boatPos.getLongitude());
-                    Position p = new Position(latlon, 0.0);
-
-                    // Update state variables
-                    _pose = new UtmPose(new Pose3D(easting, northing, altitude, roll, pitch, yaw), new Utm(zone, (hemisphere.startsWith("N") || hemisphere.startsWith("n"))));
-                    position = p;
-                    utmCoord = boatPos;
-                    location = Conversion.positionToLocation(position);
-
+                // Send out event update
+                if (sendEvent.get()) {
+                    ProxyPoseUpdated ie = new ProxyPoseUpdated(null, null, bp);
                     for (ProxyListenerInt boatProxyListener : listeners) {
-                        boatProxyListener.poseUpdated();
+                        boatProxyListener.eventOccurred(ie);
                     }
-
-                    // Send out event update
-                    if (sendEvent.get()) {
-                        ProxyPoseUpdated ie = new ProxyPoseUpdated(null, null, bp);
-                        for (ProxyListenerInt boatProxyListener : listeners) {
-                            boatProxyListener.eventOccurred(ie);
-                        }
-                        sendEvent.set(false);
-                    }
-                } catch (java.lang.IllegalArgumentException iae) {
-//                    iae.printStackTrace();
+                    sendEvent.set(false);
                 }
+            } catch (java.lang.IllegalArgumentException iae) {
+                // iae.printStackTrace();
             }
         }
     }
-
-    class MadaraWaypointListener implements Runnable {
-
-        protected KnowledgeBase knowledge;
-        com.madara.containers.Integer waypointsCompletedAck;
-        com.madara.containers.String wpState;
-
-        public MadaraWaypointListener(KnowledgeBase knowledge) {
-            this.knowledge = knowledge;
-            waypointsCompletedAck = new com.madara.containers.Integer();
-            waypointsCompletedAck.setName(knowledge, ipAddress + ".waypoints.completed");
-            wpState = new com.madara.containers.String();
-            wpState.setName(knowledge, ipAddress + ".waypoints.state");
-        }
-
+    
+    
+    class MadaraWaypointListener extends BaseThread {
         @Override
         public void run() {
-            while (true) {
-                try {
-                    Thread.sleep(MADARA_WP_UPDATE_RATE);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(WaypointListener.class.getName()).log(Level.SEVERE, null, ex);
+            // Check if waypoints were completed
+            if (knowledge.get(containers.prefix + "algorithm.waypoints.finished").toLong() == 1) {
+
+                // Notify listeners
+                for (ProxyListenerInt boatProxyListener : listeners) {
+                    boatProxyListener.waypointsComplete();
                 }
+                if (sequentialOutputEvents.isEmpty()) {
+                    LOGGER.severe("Got a waypoints done message, but sequentialOutputEvents is empty!");
+                } 
+                else {
+                    // Remove the OutputEvent that held this path
+                    OutputEvent oe = sequentialOutputEvents.remove(0);
+                    // Send out the InputEvent assocaited with this path
+                    InputEvent ie = sequentialInputEvents.remove(0);
 
-                // Check if waypoints were completed
-                if (waypointsCompletedAck.get() == 1) {
-                    waypointsCompletedAck.set(0);
-                    knowledge.sendModifieds();
+                    updateWaypoints(true, true);
 
-                    // Notify listeners
+                    LOGGER.log(Level.FINE, "BoatProxy " + getName() + " completed sequential OE " + oe + ", sending out IE " + ie);
                     for (ProxyListenerInt boatProxyListener : listeners) {
-                        boatProxyListener.waypointsComplete();
+                        boatProxyListener.eventOccurred(ie);
                     }
-                    if (sequentialOutputEvents.isEmpty()) {
-                        LOGGER.severe("Got a waypoints done message, but sequentialOutputEvents is empty!");
-                    } else {
-                        // Remove the OutputEvent that held this path
-                        OutputEvent oe = sequentialOutputEvents.remove(0);
-                        // Send out the InputEvent assocaited with this path
-                        InputEvent ie = sequentialInputEvents.remove(0);
-
-                        updateWaypoints(true, true);
-
-                        LOGGER.log(Level.FINE, "BoatProxy " + getName() + " completed sequential OE " + oe + ", sending out IE " + ie);
-                        for (ProxyListenerInt boatProxyListener : listeners) {
-                            boatProxyListener.eventOccurred(ie);
-                        }
-                        if (!sequentialOutputEvents.isEmpty()) {
-                            LOGGER.log(Level.FINE, "Sequential OE list is not empty, do the next one!");
-                            sendCurrentWaypoints();
-                        }
+                    if (!sequentialOutputEvents.isEmpty()) {
+                        LOGGER.log(Level.FINE, "Sequential OE list is not empty, do the next one!");
+                        sendCurrentWaypoints();
                     }
                 }
             }
-        }
+        }       
     }
 }

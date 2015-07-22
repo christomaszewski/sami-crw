@@ -37,7 +37,7 @@ public class CrwProxyServer implements ProxyServerInt {
     public KnowledgeBase knowledge;
 
     public CrwProxyServer() {
-        QoSTransportSettings settings = new QoSTransportSettings();
+        QoSTransportSettings settings = new QoSTransportSettings();        
         settings.setHosts(new String[]{"239.255.0.1:4150"});
         settings.setType(TransportType.MULTICAST_TRANSPORT);
         knowledge = new KnowledgeBase("base_station", settings);
@@ -151,8 +151,8 @@ public class CrwProxyServer implements ProxyServerInt {
         //@todo nothing calls this - should that be the case?
         for (ProxyInt p : proxies) {
             if (p instanceof BoatProxy) {
-                ((BoatProxy) p)._server.stopCamera(null);
-                ((BoatProxy) p)._server.shutdown();
+                //((BoatProxy) p)._server.stopCamera(null); /////////////////////////////////////////////////////////////////////////////////////////////////
+                //((BoatProxy) p)._server.shutdown(); ///////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         }
         return true;
@@ -169,8 +169,8 @@ public class CrwProxyServer implements ProxyServerInt {
         LOGGER.info("Setting camera on all boats to have time between frames = " + d);
         for (ProxyInt p : proxies) {
             if (p instanceof BoatProxy) {
-                ((BoatProxy) p)._server.stopCamera(null);
-                ((BoatProxy) p)._server.startCamera(0, d, 640, 480, null);
+                //((BoatProxy) p)._server.stopCamera(null); ///////////////////////////////////////////////////////////////////////////////////////////////////////
+                //((BoatProxy) p)._server.startCamera(0, d, 640, 480, null); ///////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         }
     }

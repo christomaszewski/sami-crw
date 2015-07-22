@@ -25,7 +25,7 @@ import crw.event.output.service.ProxyCompareDistanceRequest;
 import crw.general.FastSimpleBoatSimulator;
 import crw.proxy.BoatProxy;
 import crw.proxy.CrwProxyServer;
-import crw.proxy.LutraGamsServer;
+//import crw.proxy.LutraGamsServer;
 import crw.ui.ImagePanel;
 import static crw.ui.teleop.GainsPanel.RUDDER_GAINS_AXIS;
 import static crw.ui.teleop.GainsPanel.THRUST_GAINS_AXIS;
@@ -353,7 +353,9 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     relevantProxyList.add(proxy);
                     if (proxy instanceof BoatProxy) {
                         BoatProxy bp = (BoatProxy) proxy;
-                        new Thread(new LutraGamsServer(bp.getServer(), bp.getIpAddress(), boatCounter, BoatProxy.DEFAULT_TEAM_SIZE)).start();
+                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //new Thread(new LutraGamsServer(bp.getServer(), bp.getIpAddress(), boatCounter, BoatProxy.DEFAULT_TEAM_SIZE)).start();
+                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
                 } else {
                     LOGGER.severe("Failed to create simulated proxy");
