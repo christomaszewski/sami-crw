@@ -35,11 +35,27 @@ public class CrwProxyServer implements ProxyServerInt {
     HashMap<ProxyInt, AbstractAsset> proxyToAssetMap = new HashMap<ProxyInt, AbstractAsset>();
     // MADARA knowlege base
     public KnowledgeBase knowledge;
+    
+    ///////////////////////////////////////////////////////
+    @Override
+    public int getProxyCounter() {
+        return proxyCounter;
+    }
+    
+    
+    public void printKB() {
+        if (knowledge != null) { knowledge.print(); }
+    }
+    ///////////////////////////////////////////////////////
 
     public CrwProxyServer() {
         QoSTransportSettings settings = new QoSTransportSettings();        
-        settings.setHosts(new String[]{"239.255.0.1:4150"});
-        settings.setType(TransportType.MULTICAST_TRANSPORT);
+        //settings.setHosts(new String[]{"239.255.0.1:4150"});
+        //settings.setType(TransportType.MULTICAST_TRANSPORT);
+        settings.setHosts(new String[]{"192.168.1.255:15000"});
+        settings.setType(TransportType.BROADCAST_TRANSPORT);
+        settings.setRebroadcastTtl(2);
+        settings.enableParticipantTtl(1);
         knowledge = new KnowledgeBase("base_station", settings);
     }
 
@@ -59,16 +75,22 @@ public class CrwProxyServer implements ProxyServerInt {
 
     @Override
     public ProxyInt createProxy(String name, Color color, InetSocketAddress addr) {
+        return null;
+    }
+    
+    @Override
+    public ProxyInt createNumberedProxy(String name, Color color, int boatNo) {
         try {
             // Create proxy
             if (color == null) {
                 LOGGER.severe("Boat proxy's color was null, using white");
                 color = Color.WHITE;
             }
-            ProxyInt proxy = new BoatProxy(name, color, proxyCounter, addr, knowledge);
+            //ProxyInt proxy = new BoatProxy(name, color, proxyCounter, addr, knowledge);
+            ProxyInt proxy = new BoatProxy(name, color, boatNo, knowledge);
             proxyCounter++;
             proxies.add(proxy);
-            ipToProxyMap.put(addr, proxy);
+            //ipToProxyMap.put(addr, proxy);
 
             // Create asset
             //@todo Proxy and asset should be combined...

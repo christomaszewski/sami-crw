@@ -25,6 +25,7 @@ import crw.event.output.service.ProxyCompareDistanceRequest;
 import crw.general.FastSimpleBoatSimulator;
 import crw.proxy.BoatProxy;
 import crw.proxy.CrwProxyServer;
+import crw.proxy.SimulatedGAMSBoat;
 //import crw.proxy.LutraGamsServer;
 import crw.ui.ImagePanel;
 import static crw.ui.teleop.GainsPanel.RUDDER_GAINS_AXIS;
@@ -294,7 +295,9 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
         } else if (oe instanceof ConnectExistingProxy) {
             // Connect to a non-simulated proxy
             ConnectExistingProxy connectEvent = (ConnectExistingProxy) oe;
-            ProxyInt proxy = Engine.getInstance().getProxyServer().createProxy(connectEvent.name, connectEvent.color, CrwNetworkUtils.toInetSocketAddress(connectEvent.server));
+            //ProxyInt proxy = Engine.getInstance().getProxyServer().createProxy(connectEvent.name, connectEvent.color, CrwNetworkUtils.toInetSocketAddress(connectEvent.server));
+            ProxyInt proxy = Engine.getInstance().getProxyServer().createNumberedProxy(connectEvent.name, connectEvent.color, Integer.parseInt(connectEvent.boatNo));
+            
             ImagePanel.setImagesDirectory(connectEvent.imageStorageDirectory);
             if (proxy != null) {
                 ProxyCreated proxyCreated = new ProxyCreated(oe.getId(), oe.getMissionId(), proxy);
@@ -317,51 +320,64 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             }
             for (int i = 0; i < createEvent.numberToCreate; i++) {
                 // Create a simulated boat and run a ROS server around it
-                VehicleServer server = new FastSimpleBoatSimulator();
-                UdpVehicleService rosServer = new UdpVehicleService(11411 + portCounter, server);
-                // Space out multiple simulated boats by 1m
-                Location spacedLocation = getSpacedLocation(createEvent.startLocation, i, 1);
-                UTMCoordinate utmc = spacedLocation.getCoordinate();
-                UtmPose p1 = new UtmPose(new Pose3D(utmc.getEasting(), utmc.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utmc.getZoneNumber(), utmc.getHemisphere().equals(Hemisphere.NORTH)));
-                server.setPose(p1);
+                //VehicleServer server = new FastSimpleBoatSimulator();
+                //UdpVehicleService rosServer = new UdpVehicleService(11411 + portCounter, server);
+                
+                // TODO: create a GAMS simulated agent platform
+                // Start simulated GAMS server
                 name = CoreHelper.getUniqueName(name, proxyNames);
                 proxyNames.add(name);
-                InetSocketAddress socketAddress = new InetSocketAddress("localhost", 11411 + portCounter);
-                ProxyInt proxy = Engine.getInstance().getProxyServer().createProxy(name, color, socketAddress);
-                color = CrwHelper.randomColor();
-
-                // Set initial pose
-                ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
-                if (proxyServer instanceof CrwProxyServer) {
-                    KnowledgeBase knowledge = ((CrwProxyServer) proxyServer).getKnowledgeBase();
-                    String ipAddress = socketAddress.toString().substring(socketAddress.toString().indexOf("/") + 1);
-                    knowledge.set(ipAddress + ".pose.x", utmc.getEasting());
-                    knowledge.set(ipAddress + ".pose.y", utmc.getNorthing());
-                    knowledge.set(ipAddress + ".pose.z", "");
-                    knowledge.set(ipAddress + ".pose.roll", "");
-                    knowledge.set(ipAddress + ".pose.pitch", "");
-                    knowledge.set(ipAddress + ".pose.yaw", "0");
-                    knowledge.set(ipAddress + ".pose.zone", utmc.getZoneNumber());
-                    knowledge.set(ipAddress + ".pose.hemsphere", utmc.getHemisphere().toString());
-                    knowledge.sendModifieds();
-                } else {
-                    LOGGER.severe("ProxyServer is not a CrwProxyServer");
-                }
-
-                // Start simulated GAMS server
+                int boatNo = Engine.getInstance().getProxyServer().getProxyCounter();            
+                ProxyInt proxy = Engine.getInstance().getProxyServer().createNumberedProxy(name, color, boatNo);
+                
+                // Space out multiple simulated boats by 1m
+                Location spacedLocation = getSpacedLocation(createEvent.startLocation, i, 3);
+                UTMCoordinate utmc = spacedLocation.getCoordinate();
+                UtmPose p1 = new UtmPose(new Pose3D(utmc.getEasting(), utmc.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utmc.getZoneNumber(), utmc.getHemisphere().equals(Hemisphere.NORTH)));
+                UTMCoord utmCoord = Conversion.UtmPoseToUTMCoord(p1);
+                
                 if (proxy != null) {
                     relevantProxyList.add(proxy);
                     if (proxy instanceof BoatProxy) {
                         BoatProxy bp = (BoatProxy) proxy;
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         //new Thread(new LutraGamsServer(bp.getServer(), bp.getIpAddress(), boatCounter, BoatProxy.DEFAULT_TEAM_SIZE)).start();
-                        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        new Thread(new SimulatedGAMSBoat(boatNo, BoatProxy.DEFAULT_TEAM_SIZE, utmCoord, bp)).start();
                     }
                 } else {
                     LOGGER.severe("Failed to create simulated proxy");
                     error = true;
-                }
-                
+                }                                
+
+                //server.setPose(p1);
+
+                //InetSocketAddress socketAddress = new InetSocketAddress("localhost", 11411 + portCounter);
+                //ProxyInt proxy = Engine.getInstance().getProxyServer().createProxy(name, color, socketAddress);
+
+                //color = CrwHelper.randomColor();
+
+                // Set initial pose in the GUI knowledge base? Or should this only be in the simulated GAMS platform's knowledge base?
+                /*
+                                ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
+                                if (proxyServer instanceof CrwProxyServer) {
+                                    KnowledgeBase knowledge = ((CrwProxyServer) proxyServer).getKnowledgeBase();
+                                    java.lang.String prefix = java.lang.String.format("device.%d.",boatNo);
+                                    knowledge.set(prefix + "home[0]", utmc.getEasting());
+                                    knowledge.set(prefix + "home[1]", utmc.getNorthing());
+                                    knowledge.set(prefix + "home[2]", 0.0);
+                                    knowledge.set(prefix + "location[0]", utmc.getEasting());
+                                    knowledge.set(prefix + "location[1]", utmc.getNorthing());
+                                    knowledge.set(prefix + "location[2]", 0.0);
+                                    knowledge.set(prefix + "dest[0]", utmc.getEasting());
+                                    knowledge.set(prefix + "dest[1]", utmc.getNorthing());
+                                    knowledge.set(prefix + "dest[2]", 0.0);
+                                    knowledge.set(prefix + "latLong[0]",utmCoord.getLatitude().degrees);
+                                    knowledge.set(prefix + "latLong[1]",utmCoord.getLongitude().degrees);
+
+                                } else {
+                                    LOGGER.severe("ProxyServer is not a CrwProxyServer");
+                                }
+                                */
+
                 boatCounter++;
                 portCounter++;
             }

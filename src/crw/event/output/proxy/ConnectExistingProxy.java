@@ -19,18 +19,21 @@ public class ConnectExistingProxy extends OutputEvent {
     // Fields
     public String name;
     public Color color;
-    public String server;
+    //public String server;
+    public String boatNo;
     public String imageStorageDirectory;
 
     static {
         fieldNames.add("name");
         fieldNames.add("color");
-        fieldNames.add("server");
+        //fieldNames.add("server");
+        fieldNames.add("boatNo");
         fieldNames.add("imageStorageDirectory");
 
         fieldNameToDescription.put("name", "Name of the proxy?");
         fieldNameToDescription.put("color", "Visualization color for the proxy?");
-        fieldNameToDescription.put("server", "IP address (with port number) of proxy?");
+        //fieldNameToDescription.put("server", "IP address (with port number) of proxy?");
+        fieldNameToDescription.put("boatNo", "Madara device number for the proxy?");
         fieldNameToDescription.put("imageStorageDirectory", "Where to store images taken by this proxy?");
     }
 
@@ -39,6 +42,7 @@ public class ConnectExistingProxy extends OutputEvent {
     }
 
     public String toString() {
-        return "ConnectExistingProxy [" + name + ", " + color + ", " + server + ", " + imageStorageDirectory + "]";
+        //return "ConnectExistingProxy [" + name + ", " + color + ", " + server + ", " + imageStorageDirectory + "]";
+        return "ConnectExistingProxy [" + name + ", " + color + ", " + boatNo + ", " + imageStorageDirectory + "]";
     }
 }

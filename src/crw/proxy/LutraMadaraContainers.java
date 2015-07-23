@@ -49,7 +49,7 @@ public class LutraMadaraContainers {
     final long defaultTeleopStatus = 0L;
 
     Self self;
-
+    
     public LutraMadaraContainers(KnowledgeBase knowledge, int id) {
         this.knowledge = knowledge;
         this.prefix = java.lang.String.format("device.%d.",id);
@@ -105,6 +105,10 @@ public class LutraMadaraContainers {
         accel.set(defaultAccelTime);
         decel.set(defaultDecelTime);
         teleopStatus.set(defaultTeleopStatus);
+    }
+    
+    public void setSelf(Self self) {
+        this.self = self;
     }
 
 }

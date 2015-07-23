@@ -47,11 +47,13 @@ public class Conversion {
                 altitude);
     }
     
+    ////////////////////////////////////////////////
     public static UTMCoord UtmPoseToUTMCoord(UtmPose utmPose) {                
         UTMCoord utmCoord = UTMCoord.fromUTM(utmPose.origin.zone,
                 (utmPose.origin.isNorth ? AVKey.NORTH : AVKey.SOUTH), utmPose.pose.getX(), utmPose.pose.getY());        
         return utmCoord;
     }
+    ///////////////////////////////////////////////
 
     // Linearly scale a value from one value range to another
     public static double convertRange(double valueIn, double minIn, double maxIn, double minOut, double maxOut) {

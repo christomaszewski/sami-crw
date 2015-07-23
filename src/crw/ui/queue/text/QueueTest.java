@@ -1,5 +1,6 @@
 package crw.ui.queue.text;
 
+import com.madara.KnowledgeBase;
 import sami.allocation.ResourceAllocation;
 import sami.proxy.ProxyInt;
 import com.perc.mitpas.adi.common.datamodels.AbstractAsset;
@@ -19,11 +20,13 @@ import java.util.List;
 import crw.task.EcMeasTask;
 import crw.uilanguage.message.toui.AllocationOptionsMessage;
 import crw.uilanguage.message.toui.ProxyOptionsMessage;
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 import sami.CoreHelper;
+import sami.engine.Engine;
 import sami.event.MissingParamsRequest;
 import sami.event.ReflectedEventSpecification;
 import sami.event.ReflectionHelper;
@@ -109,7 +112,8 @@ public class QueueTest implements ResponseListener {
     public ArrayList<ProxyInt> createProxies(int numProxies) {
         ArrayList<ProxyInt> proxies = new ArrayList<ProxyInt>();
         for (int i = 0; i < numProxies; i++) {
-            proxies.add(new BoatProxy("Boat" + i, CrwHelper.randomColor(), i, new InetSocketAddress("localhost", 11411 + i), null));
+            //proxies.add(new BoatProxy("Boat" + i, CrwHelper.randomColor(), i, new InetSocketAddress("localhost", 11411 + i), null));
+            proxies.add(Engine.getInstance().getProxyServer().createNumberedProxy("Boat" + i,CrwHelper.randomColor(),i)); ////////////////////////////////////////////////////////
         }
         return proxies;
     }

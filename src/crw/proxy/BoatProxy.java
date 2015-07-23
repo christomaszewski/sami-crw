@@ -104,12 +104,15 @@ public class BoatProxy extends Thread implements ProxyInt {
     //@todo need to consolidate all these different pose representations
     UtmPose _pose;
     private Position position = null;
-    private UTMCoord utmCoord = null;
+    //private UTMCoord utmCoord = null;
     private Location location = null;
     private BufferedImage latestImg = null;
     // Waypoints
-    final Queue<UtmPose> _curWaypoints = new LinkedList<UtmPose>();
-    final Queue<UtmPose> _futureWaypoints = new LinkedList<UtmPose>();
+    //final Queue<UtmPose> _curWaypoints = new LinkedList<UtmPose>();
+    final Queue<Position> _curWaypoints = new LinkedList<Position>();
+    //final Queue<UtmPose> _futureWaypoints = new LinkedList<UtmPose>();
+    final Queue<Position> _futureWaypoints = new LinkedList<Position>();
+    
     Iterable<Position> _curWaypointsPos = null;
     Iterable<Position> _futureWaypointsPos = null;
     // FunctionObserver variables
@@ -118,8 +121,8 @@ public class BoatProxy extends Thread implements ProxyInt {
     final AtomicBoolean sendEvent = new AtomicBoolean(true);
     long lastTime = -1;
     // IP address
-    private final InetSocketAddress address;
-    private final String ipAddress;
+    //private final InetSocketAddress address;
+    //private final String ipAddress;
     // MADARA KB and containers
     public static final int DEFAULT_TEAM_SIZE = 24;
     KnowledgeBase knowledge;
@@ -135,11 +138,15 @@ public class BoatProxy extends Thread implements ProxyInt {
         knowledge.set(containers.prefix + "command","waypoints",delay); // note the delay
         knowledge.set(containers.prefix + "command.size", N,delay);        
         
-        UtmPose[] utmWaypoints = _curWaypoints.toArray(new UtmPose[N]);
+        //UtmPose[] utmWaypoints = _curWaypoints.toArray(new UtmPose[N]);
+        Position[] wps = _curWaypoints.toArray(new Position[N]);
         for (int i = 0; i < N; i++) {
-            UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
-            double lat = utmCoordTemp.getLatitude().degrees;
-            double lon = utmCoordTemp.getLongitude().degrees;            
+            //UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
+            //double lat = utmCoordTemp.getLatitude().degrees;
+            //double lon = utmCoordTemp.getLongitude().degrees;            
+            double lat = wps[i].latitude.degrees;            
+            double lon = wps[i].longitude.degrees;
+            
             if (i < N-1) { // include delay argument to collect all wayponts into a single packet
                 knowledge.set(java.lang.String.format("%scommand.%d[0]",containers.prefix,i),lat,delay);
                 knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon,delay);
@@ -157,20 +164,23 @@ public class BoatProxy extends Thread implements ProxyInt {
     static final int MADARA_WP_UPDATE_RATE = 4; // Hz
 
     public String getIpAddress() {
-        return ipAddress;
+        //return ipAddress;
+        return "IHaveNoIpAddress";
     }
 
     // End stuff for simulated data creation
-    public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
+    //public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
+    public BoatProxy(final String name, Color color, final int boatNo, KnowledgeBase knowledge) {
         this._boatNo = boatNo;
-        this.address = addr;
+        //this.address = addr;
         this.knowledge = knowledge;
-        ipAddress = address.toString().substring(address.toString().indexOf("/") + 1);
+        //ipAddress = address.toString().substring(address.toString().indexOf("/") + 1);
+        //ipAddress = "heyheyhey"; ////////////////////////////////////////////////////////////////////////////////////
 
         containers = new LutraMadaraContainers(knowledge, boatNo);
         madaraListenerThreader = new Threader(knowledge);
 
-        String message = "Boat proxy created with name: " + name + ", color: " + color + ", addr: " + addr;
+        String message = "Boat proxy created with name: " + name + ", color: " + color;
         LOGGER.info(message);
 
         Timer stateTimer = new Timer(EVENT_GENERATION_TIMER, new ActionListener() {
@@ -188,9 +198,9 @@ public class BoatProxy extends Thread implements ProxyInt {
 
         //Initialize the boat by initalizing a proxy server for it
         // Connect to boat
-        if (addr == null) {
-            LOGGER.severe("INetAddress is null!");
-        }
+        //if (addr == null) {
+        //    LOGGER.severe("INetAddress is null!");
+        //}
 
         //_server = new UdpVehicleServer(addr); ///////////////////////////////////////////////// I don't think you need this anymore? Just need knowledge base
         bp = this;
@@ -198,7 +208,7 @@ public class BoatProxy extends Thread implements ProxyInt {
         LOGGER.info("New boat created, boat # " + _boatNo);
 
         for (int i = 0; i < NUM_SENSOR_PORTS; i++) {
-            ((CrwObserverServer) Engine.getInstance().getObserverServer()).createObserver(this, i);
+            //((CrwObserverServer) Engine.getInstance().getObserverServer()).createObserver(this, i);  ////////////////////////////////// do we need sensor observers anymore?
         }
 
         // startCamera();
@@ -550,7 +560,8 @@ public class BoatProxy extends Thread implements ProxyInt {
         return location;
     }
 
-    public Queue<UtmPose> getCurrentWaypoints() {
+    //public Queue<UtmPose> getCurrentWaypoints() {
+    public Queue<Position> getCurrentWaypoints() {
         return _curWaypoints;
     }
 
@@ -558,7 +569,8 @@ public class BoatProxy extends Thread implements ProxyInt {
         return _curWaypointsPos;
     }
 
-    public Queue<UtmPose> getFutureWaypoints() {
+    //public Queue<UtmPose> getFutureWaypoints() {
+    public Queue<Position> getFutureWaypoints() {
         return _futureWaypoints;
     }
 
@@ -624,15 +636,16 @@ public class BoatProxy extends Thread implements ProxyInt {
                         }
                         _curWaypointsPos = positions;
                         for (Position position : positions) {
-                            UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
-                            UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
-                            _curWaypoints.add(pose);
+                            _curWaypoints.add(position);
+                            //UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
+                            //UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
+                            //_curWaypoints.add(pose);
                         }
-                        if (_curWaypoints.isEmpty()) {
+                        if (_curWaypoints.isEmpty()) {                            
                             // Add current position so waypoint complete fires
-                            LOGGER.info("Constructed curWaypoints was empty, adding current boat position");
-                            UtmPose pose = new UtmPose(new Pose3D(utmCoord.getEasting(), utmCoord.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utmCoord.getZone(), utmCoord.getHemisphere().contains("North")));
-                            _curWaypoints.add(pose);
+                            //LOGGER.info("Constructed curWaypoints was empty, adding current boat position");
+                            //UtmPose pose = new UtmPose(new Pose3D(utmCoord.getEasting(), utmCoord.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utmCoord.getZone(), utmCoord.getHemisphere().contains("North")));
+                            //_curWaypoints.add(pose);
                         }
                     } else {
                         if (!executePath.getProxyPaths().containsKey(this)) {
@@ -651,9 +664,10 @@ public class BoatProxy extends Thread implements ProxyInt {
 
                         _curWaypointsPos = positions;
                         for (Position position : positions) {
-                            UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
-                            UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
-                            _curWaypoints.add(pose);
+                            _curWaypoints.add(position);
+                            //UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
+                            //UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
+                            //_curWaypoints.add(pose);
                         }
                     } else {
                         LOGGER.severe("Proxy points has no entry for this proxy: " + this + ": " + gotoPoint.getProxyPoints());
@@ -709,9 +723,10 @@ public class BoatProxy extends Thread implements ProxyInt {
                 }
                 _futureWaypointsPos = positions;
                 for (Position position : positions) {
-                    UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
-                    UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
-                    _futureWaypoints.add(pose);
+                    //UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
+                    //UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
+                    //_futureWaypoints.add(pose);
+                    _futureWaypoints.add(position);
                 }
             }
         }
@@ -826,6 +841,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     public void activateAutonomy(final boolean activate) {
         //autonomyEnabled.set((activate ? 1 : 0));
         //autonomyEnabledReceivedAck.set(1);
+        //autonomyEnabled.set((activate ? beginTeleop() : endTeleop()));
     }
 
     public Color getColor() {
@@ -905,7 +921,7 @@ public class BoatProxy extends Thread implements ProxyInt {
                 // Update state variables
                 _pose = new UtmPose(new Pose3D(easting, northing, altitude, roll, pitch, yaw), new Utm(zone, (hemisphere.startsWith("N") || hemisphere.startsWith("n"))));
                 position = p;
-                utmCoord = boatPos;
+                //utmCoord = boatPos;
                 location = Conversion.positionToLocation(position);
 
                 for (ProxyListenerInt boatProxyListener : listeners) {
