@@ -327,7 +327,8 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 // Start simulated GAMS server
                 name = CoreHelper.getUniqueName(name, proxyNames);
                 proxyNames.add(name);
-                int boatNo = Engine.getInstance().getProxyServer().getProxyCounter();            
+                //int boatNo = Engine.getInstance().getProxyServer().getProxyCounter();            
+                int boatNo = Engine.getInstance().getProxyServer().nextHighestBoatNo();
                 ProxyInt proxy = Engine.getInstance().getProxyServer().createNumberedProxy(name, color, boatNo);
                 
                 // Space out multiple simulated boats by 1m

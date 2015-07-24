@@ -2,6 +2,8 @@ package crw.proxy;
 
 import com.gams.algorithms.BaseAlgorithm;
 import com.gams.controllers.BaseController;
+import com.gams.utility.Logging;
+
 import com.madara.KnowledgeBase;
 import com.madara.transport.QoSTransportSettings;
 import com.madara.transport.TransportType;
@@ -28,19 +30,21 @@ public class SimulatedGAMSBoat implements Runnable {
         this.id = id;
         this.teamSize = teamSize;
         this.initialUTMCoord = initialUTMCoord;
-        this.bp = bp;
+        this.bp = bp;        
         settings = new QoSTransportSettings();
         settings.setHosts(new String[]{"192.168.1.255:15000"});
         settings.setType(TransportType.BROADCAST_TRANSPORT);
         settings.setRebroadcastTtl(2);
         settings.enableParticipantTtl(1);
         knowledge = new KnowledgeBase(name,settings);
-        controller = new BaseController(knowledge);        
+        controller = new BaseController(knowledge);
+        
+        com.gams.utility.Logging.setLevel(2);
     }
     
     void start() {
         controller.initVars(id, teamSize);
-        platform = new SimulatedGAMSBoatPlatform(knowledge, id, initialUTMCoord, bp.containers);
+        platform = new SimulatedGAMSBoatPlatform(knowledge, id, initialUTMCoord);
         algorithm = new DwellAlgorithm();
         controller.initPlatform(platform);
         controller.initAlgorithm(algorithm);

@@ -206,6 +206,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             //@todo Ideally we would only do this if the teleop panel is opened
 
             // Thrust gains
+/*          
             activeVehicle.getGains(THRUST_GAINS_AXIS, new FunctionObserver<double[]>() {
                 public void completed(double[] values) {
                     LOGGER.fine("Get thrust gains succeeded: Axis [" + THRUST_GAINS_AXIS + "] PID [" + values[0] + ", " + values[1] + ", " + values[2] + "]");
@@ -218,6 +219,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
                     LOGGER.severe("Get thrust gains failed: Axis [" + THRUST_GAINS_AXIS + "]");
                 }
             });
+        
             // Rudder gains
             activeVehicle.getGains(RUDDER_GAINS_AXIS, new FunctionObserver<double[]>() {
                 public void completed(double[] values) {
@@ -247,7 +249,10 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             activeWinchObserver.addListener(this);
 
             applyB.setEnabled(true);
-        } else {
+        */
+        } 
+        
+        else {
             activeVehicle = null;
             // No vehicle selected, blank out text fields
             thrustPTF.setText("");

@@ -33,12 +33,14 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     final double ROTVEL = Math.PI/5.0; // rad/s (rotate 180 degrees in 5 seconds)
     final double VEL = 10; // m/s
     
-    public SimulatedGAMSBoatPlatform(KnowledgeBase knowledge, int id, UTMCoord initialUTMCoord, LutraMadaraContainers containers) {
+    public SimulatedGAMSBoatPlatform(KnowledgeBase knowledge, int id, UTMCoord initialUTMCoord) {
         this.knowledge = knowledge;        
         this.id = id;
-        this.containers = containers;
         name = java.lang.String.format("SimBoat#%d",id);
         this.initialUTMCoord = initialUTMCoord;
+        
+        containers = new LutraMadaraContainers(this.knowledge, id);
+        
         t = System.currentTimeMillis();
     }
     

@@ -1,10 +1,9 @@
 package crw.proxy;
 
 import com.madara.EvalSettings;
-import gov.nasa.worldwind.geom.coords.UTMCoord;
-
 import com.madara.KnowledgeBase;
 import com.madara.KnowledgeRecord;
+import com.madara.containers.DoubleVector;
 import com.madara.threads.Threader;
 import com.madara.threads.BaseThread;
 
@@ -29,6 +28,7 @@ import edu.cmu.ri.crw.data.Utm;
 import edu.cmu.ri.crw.data.UtmPose;
 import edu.cmu.ri.crw.udp.UdpVehicleServer;
 import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
@@ -140,22 +140,33 @@ public class BoatProxy extends Thread implements ProxyInt {
         
         //UtmPose[] utmWaypoints = _curWaypoints.toArray(new UtmPose[N]);
         Position[] wps = _curWaypoints.toArray(new Position[N]);
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N; i++) {                                    
             //UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
             //double lat = utmCoordTemp.getLatitude().degrees;
             //double lon = utmCoordTemp.getLongitude().degrees;            
             double lat = wps[i].latitude.degrees;            
             double lon = wps[i].longitude.degrees;
             
-            if (i < N-1) { // include delay argument to collect all wayponts into a single packet
-                knowledge.set(java.lang.String.format("%scommand.%d[0]",containers.prefix,i),lat,delay);
-                knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon,delay);
-            }
-            else { // last waypoint has no delay argument, sending entire waypoint algorithm command and inputs as one packet
-                knowledge.set(java.lang.String.format("%scommand.%d[0]",containers.prefix,i),lat);
-                knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon);
-            }
-        }        
+            // TODO: switch to DoubleVector
+            //DoubleVector wpDV = new DoubleVector();
+            //wpDV.setName(knowledge, java.lang.String.format("%scommand.%d",containers.prefix,i));
+            //wpDV.resize(2);            
+            //wpDV.set(0,lat);
+            //wpDV.set(1,lon);
+            
+            /*
+                        if (i < N-1) { // include delay argument to collect all wayponts into a single packet
+                            //knowledge.set(java.lang.String.format("%scommand.%d[0]",containers.prefix,i),lat,delay);
+                            //knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon,delay);
+
+                        }
+                        else { // last waypoint has no delay argument, sending entire waypoint algorithm command and inputs as one packet
+                            knowledge.set(containers.prefix + java.lang.String.format("command.%d[0]",i),lat,delay);
+                            knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon);
+                        }
+                        */
+        }      
+        knowledge.sendModifieds();
         delay.free();
     }
     
@@ -179,6 +190,7 @@ public class BoatProxy extends Thread implements ProxyInt {
 
         containers = new LutraMadaraContainers(knowledge, boatNo);
         madaraListenerThreader = new Threader(knowledge);
+        startListeners();
 
         String message = "Boat proxy created with name: " + name + ", color: " + color;
         LOGGER.info(message);
@@ -216,8 +228,7 @@ public class BoatProxy extends Thread implements ProxyInt {
 
     public void startListeners() {
         madaraListenerThreader.run(MADARA_POSE_UPDATE_RATE,"poseListener", new MadaraPoseListener());
-        madaraListenerThreader.run(MADARA_WP_UPDATE_RATE,"wpListener", new MadaraWaypointListener());
-        
+        madaraListenerThreader.run(MADARA_WP_UPDATE_RATE,"wpListener", new MadaraWaypointListener());        
     }
 
     public AsyncVehicleServer getServer() {
@@ -889,33 +900,35 @@ public class BoatProxy extends Thread implements ProxyInt {
         
         @Override
         public void run() {
-            kr = knowledge.get(containers.prefix + "location.0");
-            double easting = kr.toDouble();
-            kr = knowledge.get(containers.prefix + "location.1");
-            double northing = kr.toDouble();
+            
+            kr = knowledge.get(containers.prefix + "location");
+            double[] x = kr.toDoubleArray();
+            //double easting = x[0];
+            //double northing = x[1];
             double altitude = 0.0;
             double roll = 0.0;
             double pitch = 0.0;
-            kr = knowledge.get(containers.prefix + "location.2");
-            double yaw = kr.toDouble();
-            double lat = containers.latLong.get(0);
-            double lon = containers.latLong.get(1);
+            double yaw = x[2];
+            Angle lat = Angle.fromDegrees(containers.latLong.get(0));
+            Angle lon = Angle.fromDegrees(containers.latLong.get(1));
+            LatLon latlon = new LatLon(lat, lon);
             int zone = (int)containers.longitudeZone.get();
             String hemisphere;  
             String wwHemi;
-            if (lat > 0) {
+            if (lat.getDegrees() > 0) {
                 hemisphere = "N";
                 wwHemi = AVKey.NORTH;
             } 
             else {
                 hemisphere = "S";
                 wwHemi = AVKey.SOUTH;
-            }            
+            }
+            UTMCoord boatPos = UTMCoord.fromLatLon(lat, lon);
+            double easting = boatPos.getEasting();
+            double northing = boatPos.getNorthing();
             
             // update local variables
-            try {
-                UTMCoord boatPos = UTMCoord.fromUTM(zone, wwHemi, easting, northing);
-                LatLon latlon = new LatLon(boatPos.getLatitude(), boatPos.getLongitude());
+            try {                                
                 Position p = new Position(latlon, 0.0);
 
                 // Update state variables
@@ -937,7 +950,7 @@ public class BoatProxy extends Thread implements ProxyInt {
                     sendEvent.set(false);
                 }
             } catch (java.lang.IllegalArgumentException iae) {
-                // iae.printStackTrace();
+                //iae.printStackTrace();
             }
         }
     }

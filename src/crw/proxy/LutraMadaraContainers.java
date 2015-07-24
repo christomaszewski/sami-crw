@@ -3,10 +3,13 @@ package crw.proxy;
 import com.gams.variables.Self;
 
 import com.madara.KnowledgeBase;
+import com.madara.UpdateSettings;
 import com.madara.containers.Double;
 import com.madara.containers.DoubleVector;
 import com.madara.containers.Integer;
 import com.madara.containers.String;
+import java.util.ArrayList;
+import java.util.List;
 
 enum TELEOPERATION_TYPES {
     NONE(0), GUI_WP(1), GUI_MS(2), RC(3);
@@ -30,6 +33,7 @@ public class LutraMadaraContainers {
 
     KnowledgeBase knowledge;
     java.lang.String prefix;
+    UpdateSettings settings; // used to force a global variable to not broadcast as if it were local
 
     Double distToDest;
     Double sufficientProximity;
@@ -37,7 +41,6 @@ public class LutraMadaraContainers {
     Double accel;
     Double decel;
     Integer teleopStatus; // see TELEOPERATION_TYPES enum
-    Integer localized; // == 1 if both GPS and compass are initialized
     DoubleVector motorCommands;
     DoubleVector latLong;
     Integer longitudeZone;
@@ -53,8 +56,12 @@ public class LutraMadaraContainers {
     public LutraMadaraContainers(KnowledgeBase knowledge, int id) {
         this.knowledge = knowledge;
         this.prefix = java.lang.String.format("device.%d.",id);
+        this.settings = new UpdateSettings();
+        settings.setTreatGlobalsAsLocals(true);
+        
         distToDest = new Double();
         distToDest.setName(knowledge, prefix + "distToDest");
+        //distToDest.setSettings(settings);
         sufficientProximity = new Double();
         sufficientProximity.setName(knowledge,prefix + "sufficientProximity");
         sufficientProximity.set(defaultSufficientProximity);
@@ -73,16 +80,18 @@ public class LutraMadaraContainers {
         teleopStatus = new Integer();
         teleopStatus.setName(knowledge, prefix + "teleopStatus");
         teleopStatus.set(defaultTeleopStatus);
-        localized = new Integer();
-        localized.setName(knowledge,".localized");
-        localized.set(0);
         latLong = new DoubleVector();
         latLong.setName(knowledge,prefix + "latLong");
         latLong.resize(2);
+        //latLong.setSettings(settings);
         longitudeZone = new Integer();
         longitudeZone.setName(knowledge, prefix + "longitudeZone");
+        //longitudeZone.setSettings(settings);
         latitudeZone = new String();
         latitudeZone.setName(knowledge, prefix + "latitudeZone");
+        //latitudeZone.setSettings(settings);                        
+        
+        settings.free();
     }
 
     public void freeAll() {
@@ -92,7 +101,6 @@ public class LutraMadaraContainers {
         accel.free();
         decel.free();
         teleopStatus.free();
-        localized.free();
         motorCommands.free();
         latLong.free();
         longitudeZone.free();

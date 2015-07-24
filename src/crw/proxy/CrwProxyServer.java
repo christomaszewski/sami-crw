@@ -42,6 +42,18 @@ public class CrwProxyServer implements ProxyServerInt {
         return proxyCounter;
     }
     
+    @Override
+    public int nextHighestBoatNo() {
+        int result = -1;
+        for (ProxyInt proxy : proxies) {
+            if (proxy instanceof BoatProxy) {
+                BoatProxy bp = (BoatProxy)proxy;
+                result = Math.max(result, bp._boatNo);
+            } 
+        }        
+        return Math.max(0, result + 1);
+    }
+    
     
     public void printKB() {
         if (knowledge != null) { knowledge.print(); }
