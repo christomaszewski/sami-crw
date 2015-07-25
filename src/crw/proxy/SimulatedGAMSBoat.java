@@ -2,7 +2,7 @@ package crw.proxy;
 
 import com.gams.algorithms.BaseAlgorithm;
 import com.gams.controllers.BaseController;
-import com.gams.utility.Logging;
+//import com.gams.utility.Logging;
 
 import com.madara.KnowledgeBase;
 import com.madara.transport.QoSTransportSettings;
@@ -32,14 +32,16 @@ public class SimulatedGAMSBoat implements Runnable {
         this.initialUTMCoord = initialUTMCoord;
         this.bp = bp;        
         settings = new QoSTransportSettings();
-        settings.setHosts(new String[]{"192.168.1.255:15000"});
-        settings.setType(TransportType.BROADCAST_TRANSPORT);
+        settings.setHosts(new String[]{"239.255.0.1:4150"});
+        settings.setType(TransportType.MULTICAST_TRANSPORT);
+        //settings.setHosts(new String[]{"192.168.1.255:15000"});
+        //settings.setType(TransportType.BROADCAST_TRANSPORT);
         settings.setRebroadcastTtl(2);
         settings.enableParticipantTtl(1);
         knowledge = new KnowledgeBase(name,settings);
         controller = new BaseController(knowledge);
         
-        com.gams.utility.Logging.setLevel(2);
+        //com.gams.utility.Logging.setLevel(2);
     }
     
     void start() {
@@ -51,7 +53,7 @@ public class SimulatedGAMSBoat implements Runnable {
         //platform.start();
         new Thread(new Runnable() {
             @Override
-            public void run() {
+            public void run() {    
                 controller.run(1.0/5.0,3600.0); // run --> time interval, duration |  runHz --> run Hz, run duration, send Hz
             }
         }).start();

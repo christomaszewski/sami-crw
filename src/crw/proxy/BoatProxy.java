@@ -3,7 +3,7 @@ package crw.proxy;
 import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import com.madara.KnowledgeRecord;
-import com.madara.containers.DoubleVector;
+import com.madara.containers.NativeDoubleVector;
 import com.madara.threads.Threader;
 import com.madara.threads.BaseThread;
 
@@ -148,11 +148,12 @@ public class BoatProxy extends Thread implements ProxyInt {
             double lon = wps[i].longitude.degrees;
             
             // TODO: switch to DoubleVector
-            //DoubleVector wpDV = new DoubleVector();
-            //wpDV.setName(knowledge, java.lang.String.format("%scommand.%d",containers.prefix,i));
-            //wpDV.resize(2);            
-            //wpDV.set(0,lat);
-            //wpDV.set(1,lon);
+            NativeDoubleVector wpNDV = new NativeDoubleVector();
+            wpNDV.setName(knowledge, java.lang.String.format("%scommand.%d",containers.prefix,i));
+            wpNDV.resize(2);            
+            wpNDV.set(0,lat);
+            wpNDV.set(1,lon);
+            wpNDV.free();
             
             /*
                         if (i < N-1) { // include delay argument to collect all wayponts into a single packet
