@@ -43,6 +43,9 @@ public class LutraMadaraContainers {
     Double decel;
     Integer teleopStatus; // see TELEOPERATION_TYPES enum
     DoubleVector motorCommands;
+    NativeDoubleVector bearingPIDGains;
+    NativeDoubleVector thrustPIDGains;
+    NativeDoubleVector thrustPPIGains;
     DoubleVector eastingNorthingBearing; // UTM x,y,th
     NativeDoubleVector location; // stand in for device.{id}.location
     Integer longitudeZone;
@@ -53,6 +56,9 @@ public class LutraMadaraContainers {
     final double defaultAccelTime = 5.0;
     final double defaultDecelTime = 5.0;
     final long defaultTeleopStatus = 0L;
+    final double[] bearingPIDGainsDefaults = new double[]{0.5,0.5,0.5}; // cols: P,I,D
+    final double[] thrustPIDGainsDefaults = new double[]{0.2,0,0.3}; // cols: P,I,D
+    final double[] thrustPPIGainsDefaults = new double[]{1.0,1.0,1.0}; // cols: Pos-P, Vel-P, Vel-I    
 
     Self self;
     
@@ -66,22 +72,17 @@ public class LutraMadaraContainers {
         distToDest.setName(knowledge, prefix + "distToDest");
         sufficientProximity = new Double();
         sufficientProximity.setName(knowledge,prefix + "sufficientProximity");
-        sufficientProximity.set(defaultSufficientProximity);
         peakVelocity = new Double();
         peakVelocity.setName(knowledge, prefix + "peakVelocity");
-        peakVelocity.set(defaultPeakVelocity);
         accel = new Double();
         accel.setName(knowledge, prefix + "accelTime");
-        accel.set(defaultAccelTime);
         decel = new Double();
         decel.setName(knowledge, prefix + "decelTime");
-        decel.set(defaultDecelTime);
         motorCommands = new DoubleVector();
         motorCommands.setName(knowledge, prefix + "motorCommands");
         motorCommands.resize(2);
         teleopStatus = new Integer();
         teleopStatus.setName(knowledge, prefix + "teleopStatus");
-        teleopStatus.set(defaultTeleopStatus);
         longitudeZone = new Integer();
         longitudeZone.setName(knowledge, prefix + "longitudeZone");
         longitudeZone.setSettings(settings);
@@ -98,7 +99,19 @@ public class LutraMadaraContainers {
         waypointsFinishedStatus = new Integer();
         waypointsFinishedStatus.setName(knowledge, prefix + "algorithm.waypoints.finished");
         
+        bearingPIDGains= new NativeDoubleVector();
+        bearingPIDGains.setName(knowledge, prefix + "bearingPIDGains");
+        bearingPIDGains.resize(3);
+
+        thrustPIDGains= new NativeDoubleVector();
+        thrustPIDGains.setName(knowledge, prefix + "thrustPIDGains");
+        thrustPIDGains.resize(3);
+
+        thrustPPIGains= new NativeDoubleVector();
+        thrustPPIGains.setName(knowledge, prefix + "thrustPPIGains");
+        thrustPPIGains.resize(3);
         
+        restoreDefaults();
         
         settings.free();
     }
@@ -116,6 +129,9 @@ public class LutraMadaraContainers {
         eastingNorthingBearing.free();
         location.free();
         waypointsFinishedStatus.free();
+        bearingPIDGains.free();
+        thrustPIDGains.free();
+        thrustPPIGains.free();        
     }
 
     public void restoreDefaults() {
@@ -124,6 +140,11 @@ public class LutraMadaraContainers {
         accel.set(defaultAccelTime);
         decel.set(defaultDecelTime);
         teleopStatus.set(defaultTeleopStatus);
+        for (int i = 0; i < 3; i++) {
+            bearingPIDGains.set(i,bearingPIDGainsDefaults[i]);
+            thrustPIDGains.set(i,thrustPIDGainsDefaults[i]);
+            thrustPPIGains.set(i,thrustPPIGainsDefaults[i]);
+        }
     }
     
     public void setSelf(Self self) {

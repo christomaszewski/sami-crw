@@ -38,8 +38,8 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     double[] currentDestination;
     Threader threader;
     
-    final double ROTVEL = Math.PI/2.0; // rad/s
-    final double VEL = 20.0; // m/s
+    final double ROTVEL_MAX = Math.PI/2.0; // rad/s
+    final double VEL_MAX = 20.0; // m/s
     
     public SimulatedGAMSBoatPlatform(KnowledgeBase knowledge, int id, UTMCoord initialUTMCoord) {
         this.knowledge = knowledge;        
@@ -47,8 +47,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         name = java.lang.String.format("SimBoat#%d",id);
         this.initialUTMCoord = initialUTMCoord;
         
-        containers = new LutraMadaraContainers(this.knowledge, id);
-                
+        containers = new LutraMadaraContainers(this.knowledge, id);                
     }
     
     @Override
@@ -86,7 +85,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         
         t = System.currentTimeMillis();
         threader = new Threader(knowledge);
-        threader.run(5,"movement",new MovementThread());
+        threader.run(25.0,"movement",new MovementThread());
         
         knowledge.sendModifieds();
     }
@@ -97,7 +96,21 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
             updateDistToDest();
             Long old_t = t;
             t = System.currentTimeMillis();
-            double dt = (t.doubleValue() - old_t.doubleValue())/1000.0; // time difference in seconds                
+            double dt = (t.doubleValue() - old_t.doubleValue())/1000.0; // time difference in seconds    
+            
+            double VEL;
+            double ROTVEL;
+            if (containers.teleopStatus.get() == TELEOPERATION_TYPES.GUI_MS.getLongValue()) {
+                double[] desiredVELs = motorSignalToVelocityMap();
+                VEL = desiredVELs[0];
+                ROTVEL = desiredVELs[1];
+            }
+            else {
+                VEL = VEL_MAX;
+                ROTVEL = ROTVEL_MAX;
+            }
+            
+            
             if (containers.distToDest.get() > getPositionAccuracy()) {                                
                 double[] x = containers.eastingNorthingBearing.toRecord().toDoubleArray();
                 double[] xd = self.device.dest.toRecord().toDoubleArray();
@@ -141,6 +154,15 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
             }            
         }
         
+    }
+    
+    double[] motorSignalToVelocityMap() {
+        double[] forwardVel_rotVel = new double[2];
+        double thrustSignal = containers.motorCommands.get(0) + containers.motorCommands.get(1);
+        double bearingSignal = containers.motorCommands.get(1) - containers.motorCommands.get(0);
+        forwardVel_rotVel[0] = thrustSignal/2.0*VEL_MAX;
+        forwardVel_rotVel[1] = bearingSignal/2.0*ROTVEL_MAX;
+        return forwardVel_rotVel;
     }
     
     double maxAbs(double a, double b) {

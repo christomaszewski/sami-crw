@@ -47,7 +47,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         velocityMultF.setPreferredSize(new Dimension(50, velocityMultF.getPreferredSize().height));
         winchTF = new JTextField("");
         winchTF.setPreferredSize(new Dimension(50, winchTF.getPreferredSize().height));
-        thrustPTF = new JTextField("");
+        thrustPTF = new JTextField("heyheyhey"); ///////////////////////////////////////////////////////////////////////////////////////////
         thrustPTF.setPreferredSize(new Dimension(50, thrustPTF.getPreferredSize().height));
         thrustITF = new JTextField("");
         thrustITF.setPreferredSize(new Dimension(50, thrustITF.getPreferredSize().height));

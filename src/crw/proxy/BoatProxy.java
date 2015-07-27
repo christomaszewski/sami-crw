@@ -24,7 +24,6 @@ import edu.cmu.ri.crw.ImageListener;
 import edu.cmu.ri.crw.PoseListener;
 import edu.cmu.ri.crw.SensorListener;
 import edu.cmu.ri.crw.WaypointListener;
-import edu.cmu.ri.crw.data.Twist;
 import edu.cmu.ri.crw.data.Utm;
 import edu.cmu.ri.crw.data.UtmPose;
 import edu.cmu.ri.crw.udp.UdpVehicleServer;
@@ -50,8 +49,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.measure.unit.NonSI;
-import javax.measure.unit.SI;
 import javax.swing.Timer;
 import robotutils.Pose3D;
 import sami.engine.Engine;
@@ -809,7 +806,7 @@ public class BoatProxy extends Thread implements ProxyInt {
 
             // Update MADARA containers
             endTeleop();
-            sendWaypointsQueue();           
+            sendWaypointsQueue();
                         
         }
     }
