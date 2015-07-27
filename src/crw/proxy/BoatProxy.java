@@ -3,6 +3,7 @@ package crw.proxy;
 import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import com.madara.KnowledgeRecord;
+import com.madara.UpdateSettings;
 import com.madara.containers.NativeDoubleVector;
 import com.madara.threads.Threader;
 import com.madara.threads.BaseThread;
@@ -138,7 +139,6 @@ public class BoatProxy extends Thread implements ProxyInt {
         knowledge.set(containers.prefix + "command","waypoints",delay); // note the delay
         knowledge.set(containers.prefix + "command.size", N,delay);        
         
-        //UtmPose[] utmWaypoints = _curWaypoints.toArray(new UtmPose[N]);
         Position[] wps = _curWaypoints.toArray(new Position[N]);
         for (int i = 0; i < N; i++) {                                    
             //UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
@@ -150,29 +150,18 @@ public class BoatProxy extends Thread implements ProxyInt {
             // TODO: switch to DoubleVector
             NativeDoubleVector wpNDV = new NativeDoubleVector();
             wpNDV.setName(knowledge, java.lang.String.format("%scommand.%d",containers.prefix,i));
-            wpNDV.resize(2);            
+            wpNDV.resize(3);            
             wpNDV.set(0,lat);
             wpNDV.set(1,lon);
+            wpNDV.set(2,0.0); // altitude
             wpNDV.free();
-            
-            /*
-                        if (i < N-1) { // include delay argument to collect all wayponts into a single packet
-                            //knowledge.set(java.lang.String.format("%scommand.%d[0]",containers.prefix,i),lat,delay);
-                            //knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon,delay);
-
-                        }
-                        else { // last waypoint has no delay argument, sending entire waypoint algorithm command and inputs as one packet
-                            knowledge.set(containers.prefix + java.lang.String.format("command.%d[0]",i),lat,delay);
-                            knowledge.set(java.lang.String.format("%scommand.%d[1]",containers.prefix,i),lon);
-                        }
-                        */
         }      
         knowledge.sendModifieds();
         delay.free();
     }
     
     // MADARA threads
-    static final int MADARA_POSE_UPDATE_RATE = 4; // Hz
+    static final int MADARA_POSE_UPDATE_RATE = 10; // Hz
     static final int MADARA_WP_UPDATE_RATE = 4; // Hz
 
     public String getIpAddress() {
@@ -187,9 +176,14 @@ public class BoatProxy extends Thread implements ProxyInt {
         //this.address = addr;
         this.knowledge = knowledge;
         //ipAddress = address.toString().substring(address.toString().indexOf("/") + 1);
-        //ipAddress = "heyheyhey"; ////////////////////////////////////////////////////////////////////////////////////
 
         containers = new LutraMadaraContainers(knowledge, boatNo);
+        UpdateSettings settings = new UpdateSettings();
+        settings = new UpdateSettings();
+        settings.setTreatGlobalsAsLocals(true);
+        containers.waypointsFinishedStatus.setSettings(settings);
+        settings.free();
+        
         madaraListenerThreader = new Threader(knowledge);
         startListeners();
 
@@ -209,13 +203,6 @@ public class BoatProxy extends Thread implements ProxyInt {
         this.name = name;
         this.color = color;
 
-        //Initialize the boat by initalizing a proxy server for it
-        // Connect to boat
-        //if (addr == null) {
-        //    LOGGER.severe("INetAddress is null!");
-        //}
-
-        //_server = new UdpVehicleServer(addr); ///////////////////////////////////////////////// I don't think you need this anymore? Just need knowledge base
         bp = this;
         
         LOGGER.info("New boat created, boat # " + _boatNo);
@@ -649,9 +636,6 @@ public class BoatProxy extends Thread implements ProxyInt {
                         _curWaypointsPos = positions;
                         for (Position position : positions) {
                             _curWaypoints.add(position);
-                            //UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
-                            //UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
-                            //_curWaypoints.add(pose);
                         }
                         if (_curWaypoints.isEmpty()) {                            
                             // Add current position so waypoint complete fires
@@ -677,9 +661,6 @@ public class BoatProxy extends Thread implements ProxyInt {
                         _curWaypointsPos = positions;
                         for (Position position : positions) {
                             _curWaypoints.add(position);
-                            //UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
-                            //UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
-                            //_curWaypoints.add(pose);
                         }
                     } else {
                         LOGGER.severe("Proxy points has no entry for this proxy: " + this + ": " + gotoPoint.getProxyPoints());
@@ -735,9 +716,6 @@ public class BoatProxy extends Thread implements ProxyInt {
                 }
                 _futureWaypointsPos = positions;
                 for (Position position : positions) {
-                    //UTMCoord utm = UTMCoord.fromLatLon(position.latitude, position.longitude);
-                    //UtmPose pose = new UtmPose(new Pose3D(utm.getEasting(), utm.getNorthing(), 0.0, 0.0, 0.0, 0.0), new Utm(utm.getZone(), utm.getHemisphere().contains("North")));
-                    //_futureWaypoints.add(pose);
                     _futureWaypoints.add(position);
                 }
             }
@@ -900,18 +878,15 @@ public class BoatProxy extends Thread implements ProxyInt {
         KnowledgeRecord kr;
         
         @Override
-        public void run() {
-            
-            kr = knowledge.get(containers.prefix + "location");
-            double[] x = kr.toDoubleArray();
-            //double easting = x[0];
-            //double northing = x[1];
+        public void run() {            
+            double yaw = knowledge.get(containers.prefix + "eastingNorthingBearing.2").toDouble();
+
             double altitude = 0.0;
             double roll = 0.0;
             double pitch = 0.0;
-            double yaw = x[2];
-            Angle lat = Angle.fromDegrees(containers.latLong.get(0));
-            Angle lon = Angle.fromDegrees(containers.latLong.get(1));
+
+            Angle lat = Angle.fromDegrees(containers.location.get(0));
+            Angle lon = Angle.fromDegrees(containers.location.get(1));
             LatLon latlon = new LatLon(lat, lon);
             int zone = (int)containers.longitudeZone.get();
             String hemisphere;  
@@ -935,7 +910,6 @@ public class BoatProxy extends Thread implements ProxyInt {
                 // Update state variables
                 _pose = new UtmPose(new Pose3D(easting, northing, altitude, roll, pitch, yaw), new Utm(zone, (hemisphere.startsWith("N") || hemisphere.startsWith("n"))));
                 position = p;
-                //utmCoord = boatPos;
                 location = Conversion.positionToLocation(position);
 
                 for (ProxyListenerInt boatProxyListener : listeners) {
@@ -963,6 +937,9 @@ public class BoatProxy extends Thread implements ProxyInt {
             // Check if waypoints were completed
             if (knowledge.get(containers.prefix + "algorithm.waypoints.finished").toLong() == 1) {
 
+                knowledge.set(containers.prefix + "command","null");
+                containers.waypointsFinishedStatus.set(0); // need to manually set this to 0 or this poll will fire over and over
+                
                 // Notify listeners
                 for (ProxyListenerInt boatProxyListener : listeners) {
                     boatProxyListener.waypointsComplete();

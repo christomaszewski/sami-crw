@@ -1,0 +1,2139 @@
+ant -f /home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core -Dnb.internal.action.name=run run
+init:
+Deleting: /home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/build/built-jar.properties
+deps-jar:
+Updating property file: /home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/build/built-jar.properties
+compile:
+run:
+INFO 1437941589872 sami.ui.MissionMonitor.setUpLogging (1489) "Log directory is run/logs/2015.07.26.16.13.09/"
+INFO 1437941590091 sami.ui.MissionMonitor.<init> (1489) "java.version: 1.8.0_45"
+INFO 1437941590091 sami.ui.MissionMonitor.<init> (1489) "sun.arch.data.model: 64"
+INFO 1437941590091 sami.ui.MissionMonitor.<init> (1489) "java.class.path: /home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/commons-logging-1.1.1.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/commons-math3-3.0.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/swing-layout-1.0.4.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/jung/collections-generic-4.01.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/jung/jung-algorithms-2.0.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/jung/jung-api-2.0.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/jung/jung-graph-impl-2.0.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/jung/jung-visualization-2.0.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/perc/PercjPlanningCommon.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/lib/perc/percjutils.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/madara.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/gams.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/jscience-4.3.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/build/classes:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/build/classes:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/crwlib/crwlib_client.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/crwlib/crwlib_core.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/crwlib/robotutils.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/input/jinput.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/worldwind/gdal.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/worldwind/gluegen-rt.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/worldwind/jogl-all.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/worldwind/worldwind.jar:/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-crw/lib/worldwind/worldwindx.jar"
+INFO 1437941590092 sami.ui.MissionMonitor.<init> (1489) "java.library.path: ../sami-crw/lib/input:/home/jazen/ace/ACE_wrappers/ace:/home/jazen/madara:/home/jazen/gams"
+INFO 1437941590092 sami.ui.MissionMonitor.<init> (1489) "java.ext.dirs: /usr/lib/jvm/java-8-oracle/jre/lib/ext:/usr/java/packages/lib/ext"
+INFO 1437941590093 sami.ui.MissionMonitor.<init> (1489) "java.util.logging.config.file: logging.properties"
+INFO 1437941590100 sami.engine.Mediator.openLatestProject (1489) "Load latest DRM"
+INFO 1437941590154 sami.engine.Mediator.openSpecifiedProject (1489) "Reading: /home/jazen/Documents/Research/Platypus_Software/sami-crw/plans/crw.drm"
+INFO 1437941590378 sami.engine.Mediator.openLatestEnvironment (1489) "Load latest EPF"
+INFO 1437941590379 sami.engine.Mediator.openSpecifiedEnvironment (1489) "Reading: /home/jazen/Documents/Research/Platypus_Software/sami-crw/configs/duck_hollow.epf"
+INFO 1437941590386 sami.config.DomainConfigManager.openLatestDomainConfiguration (1489) "Load latest DCF"
+INFO 1437941590386 sami.config.DomainConfigManager.openSpecifiedDomainConfiguration (1489) "Reading: /home/jazen/Documents/Research/Platypus_Software/sami-crw/configs/crw.dcf"
+WARNING 1437941590403 sami.config.DomainConfig.parseTreeFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-agents.cfg"
+WARNING 1437941590404 sami.config.DomainConfig.parseTreeFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-assets.cfg"
+WARNING 1437941590405 sami.config.DomainConfig.parseListFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-comp.cfg"
+WARNING 1437941590405 sami.config.DomainConfig.parseListFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-from.cfg"
+WARNING 1437941590426 sami.config.DomainConfig.parseTreeFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-markups.cfg"
+WARNING 1437941590426 sami.config.DomainConfig.parseListFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-server.cfg"
+WARNING 1437941590427 sami.config.DomainConfig.parseTreeFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-tasks.cfg"
+WARNING 1437941590427 sami.config.DomainConfig.parseListFile (1476) "Reading file failed: /Users/nbb/Code/sami-crw/configs/crw-ui.cfg"
+INFO 1437941590427 sami.ui.MissionMonitor.<init> (1489) "drm: /home/jazen/Documents/Research/Platypus_Software/sami-crw/plans/crw.drm"
+INFO 1437941590428 sami.ui.MissionMonitor.<init> (1489) "epf: /home/jazen/Documents/Research/Platypus_Software/sami-crw/configs/duck_hollow.epf"
+INFO 1437941590428 sami.ui.MissionMonitor.<init> (1489) "dcf: /home/jazen/Documents/Research/Platypus_Software/sami-crw/configs/crw.dcf"
+INFO 1437941590442 sami.CoreHelper.copyLoadedDrmToFile (1489) "Copied DRM "/home/jazen/Documents/Research/Platypus_Software/sami-crw/plans/crw.drm" to "/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/run/logs/2015.07.26.16.13.09/crw.drm""
+INFO 1437941590443 sami.CoreHelper.copyLoadedEpfToFile (1489) "Copied EPF "/home/jazen/Documents/Research/Platypus_Software/sami-crw/configs/duck_hollow.epf" to "/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/run/logs/2015.07.26.16.13.09/duck_hollow.epf""
+INFO 1437941590444 sami.CoreHelper.copyLoadedDcfToFile (1489) "Copied DCF "/home/jazen/Documents/Research/Platypus_Software/sami-crw/configs/crw.dcf" to "/home/jazen/Documents/Research/Platypus_Software/MyForks/sami-core/run/logs/2015.07.26.16.13.09/crw.dcf""
+INFO 1437941591124 sami.service.ServiceServer.<init> (27) "Starting services"
+INFO 1437941591125 sami.ui.MissionMonitor.<init> (1489) "Initializing UI class: crw.ui.CrwUiServerListener"
+INFO 1437941591127 sami.uilanguage.LocalUiClientServer.addServerListener (50) "Server listener added: class crw.ui.CrwUiServerListener"
+INFO 1437941591129 sami.ui.MissionMonitor.<init> (1489) "Initializing UI class: crw.ui.queue.text.QueueFrame"
+INFO 1437941591193 sami.uilanguage.LocalUiClientServer.addClientListener (22) "Client listener added: class crw.ui.queue.text.QueueFrame"
+INFO 1437941591197 sami.ui.MissionMonitor.<init> (1489) "Initializing UI class: crw.ui.MessageFrame"
+INFO 1437941591213 sami.uilanguage.LocalUiClientServer.addClientListener (22) "Client listener added: class crw.ui.MessagePanel"
+INFO 1437941591244 sami.ui.MissionMonitor.<init> (1489) "Initializing UI class: crw.ui.MapFrame"
+libEGL warning: failed to create a pipe screen for i965
+INFO 1437941593075 sami.uilanguage.LocalUiClientServer.addClientListener (22) "Client listener added: class crw.ui.MapFrame"
+INFO 1437941593157 sami.ui.MissionMonitor.<init> (1489) "Initializing UI class: crw.ui.CommFrame"
+INFO 1437941593161 sami.uilanguage.LocalUiClientServer.addClientListener (22) "Client listener added: class crw.ui.CommPanel"
+INFO 1437941593164 sami.ui.MissionMonitor.<init> (1489) "Initializing UI class: crw.ui.AllocationFrame"
+INFO 1437941593199 sami.uilanguage.LocalUiClientServer.addClientListener (22) "Client listener added: class crw.ui.AllocationFrame"
+INFO 1437941593224 sami.ui.MissionMonitor.<init> (1489) "Initializing UI class: crw.ui.InterruptFrame"
+INFO 1437941593229 sami.uilanguage.LocalUiClientServer.addClientListener (22) "Client listener added: class crw.ui.InterruptFrame"
+INFO 1437941596050 sami.engine.Engine.spawnRootMission (1489) "Spawning root mission from spec [Create Sim Boats]"
+INFO 1437941596073 sami.engine.PlanManager.<init> (1489) "Creating PlanManager for mSpec Create Sim Boats with mission ID 012a2c07-deb9-4446-9f00-58debceb890d and planName Create Sim Boats"
+INFO 1437941596074 sami.engine.PlanManager.finishSetup (1489) "Creating task tokens for task specifications"
+INFO 1437941596173 sami.engine.PlanManager.enterPlace (1489) "Entering Place:Get Params with Tokens: [Token:Generic] with checkForTransition: true, getInTransitions: [], inEdges: [], getOutTransitions: [Transition:Got Params, Transition:AbortMission, Transition:CompleteMission], outEdges: [InEdge:Get Params⇨Got Params, InEdge:Get Params⇨AbortMission, InEdge:Get Params⇨CompleteMission]"
+INFO 1437941596203 sami.uilanguage.LocalUiClientServer.toUiMessageReceived (34) "toUiMessageReceived: GetParamsMessage [{CreateSimulatedProxy={public java.awt.Color crw.event.output.proxy.CreateSimulatedProxy.color=(CreateSimulatedProxy), public int crw.event.output.proxy.CreateSimulatedProxy.numberToCreate=(CreateSimulatedProxy), public java.lang.String crw.event.output.proxy.CreateSimulatedProxy.name=(CreateSimulatedProxy), public sami.path.Location crw.event.output.proxy.CreateSimulatedProxy.startLocation=(CreateSimulatedProxy)}}]"
+INFO 1437941596207 crw.ui.queue.text.QueueFrame.toUiMessageReceived (1489) "@STAT QueueFrame ToUiMessage received: GetParamsMessage [{CreateSimulatedProxy={public java.awt.Color crw.event.output.proxy.CreateSimulatedProxy.color=(CreateSimulatedProxy), public int crw.event.output.proxy.CreateSimulatedProxy.numberToCreate=(CreateSimulatedProxy), public java.lang.String crw.event.output.proxy.CreateSimulatedProxy.name=(CreateSimulatedProxy), public sami.path.Location crw.event.output.proxy.CreateSimulatedProxy.startLocation=(CreateSimulatedProxy)}}]"
+INFO 1437941602401 sami.uilanguage.LocalUiClientServer.UIMessage (63) "Message from UI: ParamsSelectedMessage [{CreateSimulatedProxy={public java.awt.Color crw.event.output.proxy.CreateSimulatedProxy.color=java.awt.Color[r=102,g=0,b=0], public int crw.event.output.proxy.CreateSimulatedProxy.numberToCreate=1, public java.lang.String crw.event.output.proxy.CreateSimulatedProxy.name=SimBoat, public sami.path.Location crw.event.output.proxy.CreateSimulatedProxy.startLocation=Location: [UTMCoordinate: [4474378.0, 592012.0, 17T], 218.0407824322839]}}]"
+INFO 1437941602402 crw.ui.CrwUiServerListener.FromUiMessage (1489) "@STAT CrwUiServerListener message received: ParamsSelectedMessage [{CreateSimulatedProxy={public java.awt.Color crw.event.output.proxy.CreateSimulatedProxy.color=java.awt.Color[r=102,g=0,b=0], public int crw.event.output.proxy.CreateSimulatedProxy.numberToCreate=1, public java.lang.String crw.event.output.proxy.CreateSimulatedProxy.name=SimBoat, public sami.path.Location crw.event.output.proxy.CreateSimulatedProxy.startLocation=Location: [UTMCoordinate: [4474378.0, 592012.0, 17T], 218.0407824322839]}}]"
+INFO 1437941602406 sami.mission.MissionPlanSpecification.instantiate (1489) "Instantiating mission: Create Sim Boats with id: 012a2c07-deb9-4446-9f00-58debceb890d"
+INFO 1437941602409 sami.engine.PlanManager.executeTransition (1489) "Executing Transition:Got Params, inPlaces: [Place:Get Params], inEdges: [InEdge:Get Params⇨Got Params], outPlaces: [Place:], outEdges: [OutEdge]"
+INFO 1437941602410 sami.engine.PlanManager.leavePlace (1489) "Leaving Place:Get Params with [Token:Generic] and taking [Token:Generic]"
+INFO 1437941602410 sami.engine.PlanManager.enterPlace (1489) "Entering Place: with Tokens: [Token:Generic] with checkForTransition: false, getInTransitions: [], inEdges: [OutEdge], getOutTransitions: [Transition:, Transition:AbortMissionHelper], outEdges: [InEdge, InEdge]"
+INFO 1437941602453 crw.proxy.BoatProxy.<init> (1489) "Boat proxy created with name: SimBoat, color: java.awt.Color[r=102,g=0,b=0]"
+INFO 1437941602454 crw.proxy.BoatProxy.<init> (1489) "New boat created, boat # 0"
+Gams:JNI_OnLoad: Class loader call failed for com.madara.KnowledgeRecord
+gams::controllers::Base_Controller::init_vars: 0 id, 24 processes
+gams::controllers::Base_Controller::init_vars: initializing platform's vars
+gams::controllers::Base_Controller::init_vars: initializing algorithm's vars
+gams::platforms::Java_Platform::get_java_instance: Creating new local ref out of saved global reference.
+gams::controllers::Base_Controller::init_platform (java): deleting old platform
+gams::platforms::Java_Platform::destructor: Deleting global references.
+gams::controllers::Base_Controller::init_platform (java): creating new Java platform
+gams::platforms::Java_Platform::constructor: initializing platform and status.
+gams::platforms::Java_Platform::constructor: allocating global reference for object.
+gams::platforms::Java_Platform::constructor: allocating global reference for object's class.
+gams::platforms::Java_Platform::constructor: class and object obtained successfully.
+gams::controllers::Base_Controller::init_platform (java): initializing vars for platform
+gams::controllers::Base_Controller::init_vars: initializing platform's vars
+gams::controllers::Base_Controller::init_platform (java): Algorithm exists. Updating its platform.
+gams::controllers::Base_Controller::init_vars: initializing platform's vars
+gams::controllers::Base_Controller::init_algorithm (java): deleting old algorithm
+gams::algorithms::Java_Algorithm::destructor: Deleting global references.
+gams::controllers::Base_Controller::init_algorithm (java): creating new Java algorithm
+gams::algorithms::Base_Algorithm: constructor succeeded
+gams::algorithms::Java_Algorithm::constructor: allocating global reference for object.
+gams::algorithms::Java_Algorithm::constructor: allocating global reference for object's class.
+gams::algorithms::Java_Algorithm::constructor: class and object obtained successfully.
+gams::controllers::Base_Controller::init_algorithm (java): initializing vars for algorithm
+gams::controllers::Base_Controller::init_vars: initializing algorithm's vars
+gams::controllers::Base_Controller::init_vars: initializing algorithm's vars
+gams::platforms::Java_Platform::get_java_instance: Creating new local ref out of saved global reference.
+gams::controllers::Base_Controller::run: loop_period: 1s, max_runtime: 0s, send_period: 6s
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+INFO 1437941603590 sami.engine.PlanManager.executeTransition (1489) "Executing Transition:, inPlaces: [Place:], inEdges: [InEdge], outPlaces: [Place:], outEdges: [OutEdge]"
+INFO 1437941603591 sami.engine.PlanManager.leavePlace (1489) "Leaving Place: with [Token:Generic] and taking []"
+INFO 1437941603591 sami.engine.PlanManager.enterPlace (1489) "Entering Place: with Tokens: [Token:P-0-NULL] with checkForTransition: false, getInTransitions: [Transition:], inEdges: [OutEdge], getOutTransitions: [], outEdges: []"
+INFO 1437941603592 sami.uilanguage.LocalUiClientServer.toUiMessageReceived (34) "toUiMessageReceived: InformationMessage [Simulated boat created: ]"
+INFO 1437941603592 crw.ui.MessagePanel.toUiMessageReceived (1489) "MessagePanel ToUiMessage received: InformationMessage [Simulated boat created: ]"
+INFO 1437941603592 sami.engine.PlanManager.finishMission (1489) "Finishing plan at end place [Place:]"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+INFO 1437941604251 crw.ui.MessagePanel.getMessageArray (1489) "Message list updated; 0 critical 0 high 0 medium 0 low "
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+INFO 1437941604612 sami.engine.Engine.spawnRootMission (1489) "Spawning root mission from spec [Single move]"
+INFO 1437941604617 sami.engine.PlanManager.<init> (1489) "Creating PlanManager for mSpec Single move with mission ID 901f9fd7-f126-496b-9f2e-839d837460b3 and planName Single move"
+INFO 1437941604618 sami.engine.PlanManager.finishSetup (1489) "Creating task tokens for task specifications"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+INFO 1437941604650 sami.engine.PlanManager.enterPlace (1489) "Entering Place:Get Params with Tokens: [Token:Generic, Token:P-0-NULL] with checkForTransition: true, getInTransitions: [], inEdges: [], getOutTransitions: [Transition:Got Params, Transition:AbortMission, Transition:CompleteMission], outEdges: [InEdge:Get Params⇨Got Params, InEdge:Get Params⇨AbortMission, InEdge:Get Params⇨CompleteMission]"
+INFO 1437941604660 sami.uilanguage.LocalUiClientServer.toUiMessageReceived (34) "toUiMessageReceived: GetParamsMessage [{AssembleLocationRequest={public sami.path.Location crw.event.output.service.AssembleLocationRequest.assemblyLocation=(AssembleLocationRequest)}}]"
+INFO 1437941604664 crw.ui.queue.text.QueueFrame.toUiMessageReceived (1489) "@STAT QueueFrame ToUiMessage received: GetParamsMessage [{AssembleLocationRequest={public sami.path.Location crw.event.output.service.AssembleLocationRequest.assemblyLocation=(AssembleLocationRequest)}}]"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+INFO 1437941607357 sami.uilanguage.LocalUiClientServer.UIMessage (63) "Message from UI: ParamsSelectedMessage [{AssembleLocationRequest={public sami.path.Location crw.event.output.service.AssembleLocationRequest.assemblyLocation=Location: [UTMCoordinate: [4474367.0, 592016.0, 17T], 216.0]}}]"
+INFO 1437941607358 crw.ui.CrwUiServerListener.FromUiMessage (1489) "@STAT CrwUiServerListener message received: ParamsSelectedMessage [{AssembleLocationRequest={public sami.path.Location crw.event.output.service.AssembleLocationRequest.assemblyLocation=Location: [UTMCoordinate: [4474367.0, 592016.0, 17T], 216.0]}}]"
+INFO 1437941607360 sami.mission.MissionPlanSpecification.instantiate (1489) "Instantiating mission: Single move with id: 901f9fd7-f126-496b-9f2e-839d837460b3"
+INFO 1437941607363 sami.engine.PlanManager.executeTransition (1489) "Executing Transition:Got Params, inPlaces: [Place:Get Params], inEdges: [InEdge:Get Params⇨Got Params], outPlaces: [Place:], outEdges: [OutEdge]"
+INFO 1437941607364 sami.engine.PlanManager.leavePlace (1489) "Leaving Place:Get Params with [Token:Generic, Token:P-0-NULL] and taking [Token:Generic, Token:P-0-NULL]"
+INFO 1437941607369 sami.engine.PlanManager.enterPlace (1489) "Entering Place: with Tokens: [Token:Generic, Token:P-0-NULL] with checkForTransition: false, getInTransitions: [], inEdges: [OutEdge], getOutTransitions: [Transition:], outEdges: [InEdge]"
+INFO 1437941607370 sami.uilanguage.LocalUiClientServer.toUiMessageReceived (34) "toUiMessageReceived: SelectionMessage [false, false, true, [SimBoat]]"
+INFO 1437941607371 crw.ui.queue.text.QueueFrame.toUiMessageReceived (1489) "@STAT QueueFrame ToUiMessage received: SelectionMessage [false, false, true, [SimBoat]]"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::algorithms::Java_Algorithm::analyze: Obtaining user-defined analyze method.
+gams::algorithms::Java_Algorithm::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::algorithms::Java_Algorithm::plan: Obtaining user-defined explanecute method.
+gams::algorithms::Java_Algorithm::plan: Calling user-defined plan method.
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::algorithms::Java_Algorithm::execute: Obtaining user-defined execute method.
+gams::algorithms::Java_Algorithm::execute: Calling user-defined execute method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+INFO 1437941608278 sami.uilanguage.LocalUiClientServer.UIMessage (63) "Message from UI: BoatProxySelectedMessage [SimBoat]"
+INFO 1437941608278 crw.ui.CrwUiServerListener.FromUiMessage (1489) "@STAT CrwUiServerListener message received: BoatProxySelectedMessage [SimBoat]"
+INFO 1437941608279 sami.engine.PlanManager.executeTransition (1489) "Executing Transition:, inPlaces: [Place:], inEdges: [InEdge], outPlaces: [Place:], outEdges: [OutEdge]"
+INFO 1437941608279 sami.engine.PlanManager.leavePlace (1489) "Leaving Place: with [Token:Generic, Token:P-0-NULL] and taking [Token:P-0-NULL]"
+INFO 1437941608280 sami.engine.PlanManager.enterPlace (1489) "Entering Place: with Tokens: [Token:P-0-NULL] with checkForTransition: false, getInTransitions: [Transition:], inEdges: [OutEdge], getOutTransitions: [Transition:], outEdges: [InEdge]"
+INFO 1437941608280 sami.engine.PlanManager.executeTransition (1489) "Executing Transition:, inPlaces: [Place:], inEdges: [InEdge], outPlaces: [Place:], outEdges: [OutEdge]"
+INFO 1437941608281 sami.engine.PlanManager.leavePlace (1489) "Leaving Place: with [Token:P-0-NULL] and taking [Token:P-0-NULL]"
+INFO 1437941608281 sami.engine.PlanManager.enterPlace (1489) "Entering Place: with Tokens: [Token:P-0-NULL] with checkForTransition: false, getInTransitions: [Transition:], inEdges: [OutEdge], getOutTransitions: [Transition:], outEdges: [InEdge]"
+INFO 1437941608290 crw.proxy.BoatProxy.sendCurrentWaypoints (1489) "BoatProxy [SimBoat] startWaypoints [[(40.414842642405596°, -79.91543930356961°, 216.0)]]"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::init_algorithm: initializing algorithm waypoints
+gams::controllers::Base_Controller::init_algorithm: deleting old algorithm
+gams::algorithms::Java_Algorithm::destructor: Deleting global references.
+gams::controllers::Base_Controller::init_algorithm: factory is creating algorithm waypoints
+gams::algorithms::Controller_Algorithm_Factory::create: creating "waypoints" algorithm.
+gams::algorithms::Base_Algorithm: constructor succeeded
+gams::algorithms::area_coverage::Base_Area_Coverage: constructor succeeded
+gams::algorithms::area_coverage::Waypoint_Coverage: init_vars
+gams::algorithms::area_coverage::Waypoint_Coverage: init_variable_values
+gams::controllers::Base_Controller::init_vars: initializing algorithm's vars
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::platforms::Java_Platform::move: Obtaining user-defined move method
+gams::platforms::Java_Platform::move: Obtaining Position class and constructor
+gams::utility::java::find_class: Retrieving class loader and loadClass method
+gams::utility::java::find_class: Attempting to find class com.gams.utility.Position via ClassLoader
+gams::utility::java::find_class: Exception in Class Loader. Attempting FindClass on com/gams/utility/Position.
+gams::utility::java::find_class: Class was found. Returning.
+gams::platforms::Java_Platform::move: Creating new position object.
+gams::platforms::Java_Platform::move: Calling user-defined move method.
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+INFO 1437941608704 sami.engine.PlanManager.executeTransition (1489) "Executing Transition:, inPlaces: [Place:], inEdges: [InEdge], outPlaces: [Place:], outEdges: [OutEdge]"
+INFO 1437941608705 sami.engine.PlanManager.leavePlace (1489) "Leaving Place: with [Token:P-0-NULL] and taking [Token:P-0-NULL]"
+INFO 1437941608705 sami.engine.PlanManager.enterPlace (1489) "Entering Place: with Tokens: [Token:P-0-NULL] with checkForTransition: false, getInTransitions: [Transition:], inEdges: [OutEdge], getOutTransitions: [], outEdges: []"
+INFO 1437941608706 sami.engine.PlanManager.finishMission (1489) "Finishing plan at end place [Place:]"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941608953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941609203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941609453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941609703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941609953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941610203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000109 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941610453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000091 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941610703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000091 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941610953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000072 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941611203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000072 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000053 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941611453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000053 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941611703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000035 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941611953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000035 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941612203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000016 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000016 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941612453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941612703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941612953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941613203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941613453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941613703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941613953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941614203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941614453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941614703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941614953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941615203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+
+Knowledge in Knowledge Base:
+device.0.accelTime=5
+device.0.algorithm.waypoints.deadlocked=0
+device.0.algorithm.waypoints.failed=0
+device.0.algorithm.waypoints.finished=1
+device.0.algorithm.waypoints.ok=1
+device.0.algorithm.waypoints.paused=0
+device.0.algorithm.waypoints.unknown=0
+device.0.algorithm.waypoints.waiting=0
+device.0.command=waypoints
+device.0.command.0=40.4148, -79.9154, 0
+device.0.command.size=1
+device.0.decelTime=5
+device.0.dest=592016, 4.47437e+06, 0
+device.0.distToDest=0
+device.0.eastingNorthingBearing..size=3
+device.0.eastingNorthingBearing.0=592016
+device.0.eastingNorthingBearing.1=4.47437e+06
+device.0.eastingNorthingBearing.2=-1.22203
+device.0.home=592012, 4.47438e+06, 0
+device.0.latLong..size=2
+device.0.latLong.0=40.4148
+device.0.latLong.1=-79.9154
+device.0.latitudeZone=T
+device.0.location=40.4148, -79.9154, 0
+device.0.longitudeZone=17
+device.0.motorCommands..size=2
+device.0.motorCommands.0=0
+device.0.motorCommands.1=0
+device.0.peakVelocity=2
+device.0.position=40.4148, -79.9154, 0
+device.0.source=0, 0, 0
+device.0.sufficientProximity=3
+device.0.teleopStatus=0
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941615453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941615703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941615953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941616203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941616453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941616703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941616953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941617203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941617453 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941617703 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941617953 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+SEVERE 1437941618203 crw.proxy.BoatProxy$MadaraWaypointListener.run (1463) "Got a waypoints done message, but sequentialOutputEvents is empty!"
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+gams::platforms::Java_Platform::sense: Calling user-defined sense method.
+gams::controllers::Base_Controller::run: calling analyze ()
+gams::controllers::Base_Controller::analyze: calling platform_->analyze ()
+gams::platforms::Java_Platform::analyze: Obtaining user-defined analyze method.
+gams::platforms::Java_Platform::analyze: Calling user-defined analyze method.
+gams::controllers::Base_Controller::analyze: calling system_analyze ()
+gams::controllers::Base_Controller::system_analyze: checking device and swarm commands
+gams::controllers::Base_Controller::analyze: calling algorithm_->analyze ()
+gams::controllers::Base_Controller::run: calling plan ()
+gams::controllers::Base_Controller::plan: calling algorithm_->plan ()
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: distance between points is 0.000000 (need 0.500000 accuracy)
+gams::platforms::Java_Platform::get_accuracy: Obtaining user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: Calling user-defined getAccuracy method.
+gams::platforms::Java_Platform::get_accuracy: returning 0.500000
+gams::algorithms::area_coverage::Base_Area_Coverage: generating new position
+gams::controllers::Base_Controller::run: calling execute ()
+gams::controllers::Base_Controller::execute: calling algorithm_->execute ()
+gams::controllers::Base_Controller::run: sending updates
+gams::controllers::Base_Controller::run: sleeping until next epoch
+gams::controllers::Base_Controller::run: calling monitor ()
+gams::controllers::Base_Controller::monitor: calling platform_->sense ()
+gams::platforms::Java_Platform::sense: Obtaining user-defined sense method
+BUILD SUCCESSFUL (total time: 29 seconds)
+

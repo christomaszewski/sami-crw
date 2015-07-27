@@ -7,6 +7,7 @@ import com.madara.UpdateSettings;
 import com.madara.containers.Double;
 import com.madara.containers.DoubleVector;
 import com.madara.containers.Integer;
+import com.madara.containers.NativeDoubleVector;
 import com.madara.containers.String;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +43,11 @@ public class LutraMadaraContainers {
     Double decel;
     Integer teleopStatus; // see TELEOPERATION_TYPES enum
     DoubleVector motorCommands;
-    DoubleVector latLong;
+    DoubleVector eastingNorthingBearing; // UTM x,y,th
+    NativeDoubleVector location; // stand in for device.{id}.location
     Integer longitudeZone;
     String latitudeZone; // a single character (see UTM) http://jscience.org/api/org/jscience/geography/coordinates/UTM.html
+    Integer waypointsFinishedStatus; // used as a stand in for device.{id}.algorithm.waypoints.finished
     final double defaultSufficientProximity = 3.0;
     final double defaultPeakVelocity = 2.0;
     final double defaultAccelTime = 5.0;
@@ -61,7 +64,6 @@ public class LutraMadaraContainers {
         
         distToDest = new Double();
         distToDest.setName(knowledge, prefix + "distToDest");
-        //distToDest.setSettings(settings);
         sufficientProximity = new Double();
         sufficientProximity.setName(knowledge,prefix + "sufficientProximity");
         sufficientProximity.set(defaultSufficientProximity);
@@ -80,16 +82,23 @@ public class LutraMadaraContainers {
         teleopStatus = new Integer();
         teleopStatus.setName(knowledge, prefix + "teleopStatus");
         teleopStatus.set(defaultTeleopStatus);
-        latLong = new DoubleVector();
-        latLong.setName(knowledge,prefix + "latLong");
-        latLong.resize(2);
-        //latLong.setSettings(settings);
         longitudeZone = new Integer();
         longitudeZone.setName(knowledge, prefix + "longitudeZone");
-        //longitudeZone.setSettings(settings);
+        longitudeZone.setSettings(settings);
         latitudeZone = new String();
         latitudeZone.setName(knowledge, prefix + "latitudeZone");
-        //latitudeZone.setSettings(settings);                        
+        latitudeZone.setSettings(settings);                                   
+        eastingNorthingBearing = new DoubleVector();
+        eastingNorthingBearing.setName(knowledge, prefix + "eastingNorthingBearing");
+        eastingNorthingBearing.resize(3);
+        location = new NativeDoubleVector();
+        location.setName(knowledge, prefix + "location");
+        location.resize(3);
+        location.setSettings(settings);        
+        waypointsFinishedStatus = new Integer();
+        waypointsFinishedStatus.setName(knowledge, prefix + "algorithm.waypoints.finished");
+        
+        
         
         settings.free();
     }
@@ -102,9 +111,11 @@ public class LutraMadaraContainers {
         decel.free();
         teleopStatus.free();
         motorCommands.free();
-        latLong.free();
         longitudeZone.free();
         latitudeZone.free();
+        eastingNorthingBearing.free();
+        location.free();
+        waypointsFinishedStatus.free();
     }
 
     public void restoreDefaults() {

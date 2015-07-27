@@ -13,6 +13,8 @@ import com.madara.threads.BaseThread;
 import com.madara.threads.Threader;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
@@ -36,8 +38,8 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     double[] currentDestination;
     Threader threader;
     
-    final double ROTVEL = Math.PI/5.0; // rad/s
-    final double VEL = 10.0; // m/s
+    final double ROTVEL = Math.PI/2.0; // rad/s
+    final double VEL = 20.0; // m/s
     
     public SimulatedGAMSBoatPlatform(KnowledgeBase knowledge, int id, UTMCoord initialUTMCoord) {
         this.knowledge = knowledge;        
@@ -52,7 +54,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     @Override
     public void init(BaseController controller) {
         super.init(controller);
-        containers.setSelf(self); // need to do this here (but not on a real phone) b/c BoatProxy owns the containers
+        containers.setSelf(self); // need to do this here (but not on a real phone) b/c here BoatProxy owns the containers
         this.self.device.dest.resize(3);
         this.self.device.home.resize(3);
         this.self.device.location.resize(3);
@@ -60,8 +62,8 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         
         double lat = initialUTMCoord.getLatitude().degrees;
         double lon = initialUTMCoord.getLongitude().degrees;
-        containers.latLong.set(0, lat);
-        containers.latLong.set(1, lon);
+        //containers.latLong.set(0, lat);
+        //containers.latLong.set(1, lon);
         UTM utmLoc = UTM.latLongToUtm(LatLong.valueOf(lat,lon, NonSI.DEGREE_ANGLE),ReferenceEllipsoid.WGS84);
         containers.longitudeZone.set((long)utmLoc.longitudeZone());
         containers.latitudeZone.set(java.lang.String.format("%c",utmLoc.latitudeZone()));        
@@ -70,8 +72,11 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         containers.self.device.home.set(0, easting);
         containers.self.device.home.set(1, northing);
         containers.self.device.home.set(2,0.0);
-        containers.self.device.location.set(0, easting);
-        containers.self.device.location.set(1, northing);
+        containers.eastingNorthingBearing.set(0,easting);
+        containers.eastingNorthingBearing.set(1,northing);
+        containers.eastingNorthingBearing.set(2, 0.0);
+        containers.self.device.location.set(0, lat);
+        containers.self.device.location.set(1, lon);
         containers.self.device.location.set(2,0.0);
         containers.self.device.dest.set(0, easting);
         containers.self.device.dest.set(1, northing);
@@ -86,16 +91,15 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         knowledge.sendModifieds();
     }
     
-    class MovementThread extends BaseThread {
+    class MovementThread extends BaseThread { // permanent thread to ensure that platform is always trying to get to the current destination
         @Override
         public void run() {
             updateDistToDest();
-            //while (containers.distToDest.get() > proximity) {                        
             Long old_t = t;
             t = System.currentTimeMillis();
             double dt = (t.doubleValue() - old_t.doubleValue())/1000.0; // time difference in seconds                
             if (containers.distToDest.get() > getPositionAccuracy()) {                                
-                double[] x = self.device.location.toRecord().toDoubleArray();
+                double[] x = containers.eastingNorthingBearing.toRecord().toDoubleArray();
                 double[] xd = self.device.dest.toRecord().toDoubleArray();
                 double[] xError = new double[3];
                 xError[0] = xd[0] - x[0];
@@ -107,21 +111,26 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
                     xError[2] = xError[2] - Math.signum(xError[2])*2*Math.PI;
                 }                                        
                 if (Math.abs(xError[2]) > 0) { // point toward goal first, then move
-                    self.device.location.set(2, x[2] + minAbs(Math.signum(xError[2])*ROTVEL*dt,xError[2]));
+                    containers.eastingNorthingBearing.set(2, x[2] + minAbs(Math.signum(xError[2])*ROTVEL*dt,xError[2]));
                 }
                 else { // now that you point directly to the goal, move toward it
                     // find max velocity in x and y
                     double VELX = Math.abs(VEL*Math.cos(angleToGoal));
                     double VELY = Math.abs(VEL*Math.sin(angleToGoal));                        
-                    self.device.location.set(0, x[0] + minAbs(Math.signum(xError[0])*VELX*dt,xError[0]));
-                    self.device.location.set(1, x[1] + minAbs(Math.signum(xError[1])*VELY*dt,xError[1]));
+                    containers.eastingNorthingBearing.set(0,x[0] + minAbs(Math.signum(xError[0])*VELX*dt,xError[0]));
+                    containers.eastingNorthingBearing.set(1,x[1] + minAbs(Math.signum(xError[1])*VELY*dt,xError[1]));
                     UTM utm = UTM.valueOf((int)containers.longitudeZone.get(), containers.latitudeZone.get().charAt(0), 
-                            self.device.location.get(0), self.device.location.get(1), SI.METER);
+                            containers.eastingNorthingBearing.get(0), containers.eastingNorthingBearing.get(1), SI.METER);
                     
                     // remember, GUI listens to latitude and longitude, so they must also be updated
                     LatLong latLong = UTM.utmToLatLong(utm, ReferenceEllipsoid.WGS84);
-                    containers.latLong.set(0,latLong.latitudeValue(NonSI.DEGREE_ANGLE));
-                    containers.latLong.set(1,latLong.longitudeValue(NonSI.DEGREE_ANGLE));
+                    double lat = latLong.latitudeValue(NonSI.DEGREE_ANGLE);
+                    double lon = latLong.longitudeValue(NonSI.DEGREE_ANGLE);
+                    //containers.latLong.set(0,lat);
+                    //containers.latLong.set(1,lon);                    
+                    self.device.location.set(0, lat);
+                    self.device.location.set(1, lon);
+                    self.device.location.set(2, 0.0);                    
                 }
                 updateDistToDest();
                 try {
@@ -150,15 +159,17 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     }
     @Override
     public double getAccuracy() {
-        return 0.0;
+        return 0.00003; // this is used in a Lat/Long comparison, so it needs to be very small. 0.00001 degrees is about 1 meter
+        // The control uses UTM easting,northing. Converting this to lat,long is not perfect. 
     }
     @Override
     public double getPositionAccuracy() {
-        return 0.0;
+        return 2; ////////////// this value is irrelevant for the waypoints algorithm, but not for the platform's effort to reach the waypoint
     }
     @Override
     public Position getPosition() {
-        Position position = new Position(containers.latLong.get(0),containers.latLong.get(1),0.0);
+        //Position position = new Position(containers.latLong.get(0),containers.latLong.get(1),0.0);
+        Position position = new Position(containers.eastingNorthingBearing.get(0), containers.eastingNorthingBearing.get(1), containers.eastingNorthingBearing.get(2));
         return position;
     }
     @Override
@@ -189,7 +200,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     }
     
     void updateDistToDest() {
-        double[] x = self.device.location.toRecord().toDoubleArray();
+        double[] x = containers.eastingNorthingBearing.toRecord().toDoubleArray();
         double[] xd = self.device.dest.toRecord().toDoubleArray();
         containers.distToDest.set(Math.pow(Math.pow(xd[0]-x[0],2.0) + Math.pow(xd[1]-x[1],2.0),0.5));
     }
