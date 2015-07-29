@@ -1,10 +1,12 @@
 package crw.handler;
 
+import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import crw.Conversion;
 import crw.CrwHelper;
 import crw.event.input.proxy.GainsSent;
 import crw.event.input.proxy.ProxyCreated;
+import crw.event.input.proxy.ProxyEndsGAMSAlgorithm;
 import crw.event.input.proxy.ProxyPathCompleted;
 import crw.event.input.proxy.ProxyPathFailed;
 import crw.event.input.proxy.ProxyPoseUpdated;
@@ -16,6 +18,7 @@ import crw.event.output.proxy.ConnectExistingProxy;
 import crw.event.output.proxy.CreateSimulatedProxy;
 import crw.event.output.service.AssembleLocationRequest;
 import crw.event.output.proxy.ProxyEmergencyAbort;
+import crw.event.output.proxy.ProxyEndGAMSAlgorithm;
 import crw.event.output.proxy.ProxyExecutePath;
 import crw.event.output.proxy.ProxyExploreArea;
 import crw.event.output.proxy.ProxyGotoPoint;
@@ -318,12 +321,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             for (ProxyInt proxy : proxyList) {
                 proxyNames.add(proxy.getProxyName());
             }
-            for (int i = 0; i < createEvent.numberToCreate; i++) {
-                // Create a simulated boat and run a ROS server around it
-                //VehicleServer server = new FastSimpleBoatSimulator();
-                //UdpVehicleService rosServer = new UdpVehicleService(11411 + portCounter, server);
-                
-                // TODO: create a GAMS simulated agent platform
+            for (int i = 0; i < createEvent.numberToCreate; i++) {              
                 // Start simulated GAMS server
                 name = CoreHelper.getUniqueName(name, proxyNames);
                 proxyNames.add(name);
@@ -348,36 +346,6 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     LOGGER.severe("Failed to create simulated proxy");
                     error = true;
                 }                                
-
-                //server.setPose(p1);
-
-                //InetSocketAddress socketAddress = new InetSocketAddress("localhost", 11411 + portCounter);
-                //ProxyInt proxy = Engine.getInstance().getProxyServer().createProxy(name, color, socketAddress);
-
-                //color = CrwHelper.randomColor();
-
-                // Set initial pose in the GUI knowledge base? Or should this only be in the simulated GAMS platform's knowledge base?
-                /*
-                                ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
-                                if (proxyServer instanceof CrwProxyServer) {
-                                    KnowledgeBase knowledge = ((CrwProxyServer) proxyServer).getKnowledgeBase();
-                                    java.lang.String prefix = java.lang.String.format("device.%d.",boatNo);
-                                    knowledge.set(prefix + "home[0]", utmc.getEasting());
-                                    knowledge.set(prefix + "home[1]", utmc.getNorthing());
-                                    knowledge.set(prefix + "home[2]", 0.0);
-                                    knowledge.set(prefix + "location[0]", utmc.getEasting());
-                                    knowledge.set(prefix + "location[1]", utmc.getNorthing());
-                                    knowledge.set(prefix + "location[2]", 0.0);
-                                    knowledge.set(prefix + "dest[0]", utmc.getEasting());
-                                    knowledge.set(prefix + "dest[1]", utmc.getNorthing());
-                                    knowledge.set(prefix + "dest[2]", 0.0);
-                                    knowledge.set(prefix + "latLong[0]",utmCoord.getLatitude().degrees);
-                                    knowledge.set(prefix + "latLong[1]",utmCoord.getLongitude().degrees);
-
-                                } else {
-                                    LOGGER.severe("ProxyServer is not a CrwProxyServer");
-                                }
-                                */
 
                 boatCounter++;
                 portCounter++;
@@ -440,7 +408,28 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     listener.eventGenerated(response);
                 }
             }
-        } else if (oe instanceof ProxyExecutePath
+        } 
+        else if (oe instanceof ProxyEndGAMSAlgorithm) {
+            int numProxies = 0;     
+            ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
+            ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
+            for (Token token : tokens) {
+                if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
+                    ((BoatProxy)token.getProxy()).endGAMSAlgorithm();
+                }                
+            }
+            if (numProxies == 0) {
+                LOGGER.log(Level.WARNING, "ProxyEndGAMSAlgorithm had no relevant proxies attached: " + oe);
+            }                   
+            
+            ProxyEndsGAMSAlgorithm ie = new ProxyEndsGAMSAlgorithm(oe.getId(), oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }            
+            
+        }
+        
+        else if (oe instanceof ProxyExecutePath
                 || oe instanceof ProxyEmergencyAbort
                 || oe instanceof ProxyResendWaypoints) {
             int numProxies = 0;

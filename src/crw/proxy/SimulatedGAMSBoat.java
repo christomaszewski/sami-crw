@@ -41,7 +41,7 @@ public class SimulatedGAMSBoat implements Runnable {
         knowledge = new KnowledgeBase(name,settings);
         controller = new BaseController(knowledge);
         
-        //com.gams.utility.Logging.setLevel(6);
+        com.gams.utility.Logging.setLevel(6);
     }
     
     void start() {

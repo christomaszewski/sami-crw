@@ -1,43 +1,29 @@
-package crw.event.output.operator;
-
-import sami.event.OutputEvent;
+package crw.event.output.proxy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
-import sami.area.Area2D;
+import sami.event.OutputEvent;
 
 /**
  *
  * @author jjb
  */
-public class OperatorCreateRegion extends OutputEvent {
+public class ProxyRandomEdgeCoverage extends OutputEvent {
     // List of fields for which a definition should be provided
     public static final ArrayList<String> fieldNames = new ArrayList<String>();
     // Description for each field
     public static final HashMap<String, String> fieldNameToDescription = new HashMap<String, String>();
     // Fields
-    public Area2D region;
     public int regionNo;
     
     static {
-        fieldNames.add("region");
-        fieldNames.add("regionNo");
-        
-        fieldNameToDescription.put("region", "Region to create?");
+        fieldNames.add("regionNo");        
         fieldNameToDescription.put("regionNo", "Number for region id?");
     }
 
-    public OperatorCreateRegion() {
+    public ProxyRandomEdgeCoverage() {
         id = UUID.randomUUID();
-    }
-    
-    public Area2D getRegion() {
-        return region;
-    }
-
-    public void setRegion(Area2D area) {
-        this.region = area;
     }
     
     public int getRegionNo() {
@@ -49,7 +35,7 @@ public class OperatorCreateRegion extends OutputEvent {
     }
 
     public String toString() {
-        return "OperatorCreateRegion";
-    }
-   
+        return "ProxyPerimeterPatrol";
+    }       
+    
 }

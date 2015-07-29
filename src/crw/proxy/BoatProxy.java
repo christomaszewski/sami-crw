@@ -157,6 +157,10 @@ public class BoatProxy extends Thread implements ProxyInt {
         delay.free();
     }
     
+    public void endGAMSAlgorithm() {
+        knowledge.set(containers.prefix + "command", "null");
+    }
+    
     // MADARA threads
     static final int MADARA_POSE_UPDATE_RATE = 10; // Hz
     static final int MADARA_WP_UPDATE_RATE = 4; // Hz
@@ -794,7 +798,8 @@ public class BoatProxy extends Thread implements ProxyInt {
             
             // set GAMS algorithm to null
             //knowledge.set(containers.prefix + "algorithm.waypoints.finished", 0);
-            knowledge.set(containers.prefix + "command", "null");            
+            //knowledge.set(containers.prefix + "command", "null");            
+            endGAMSAlgorithm();
             
             
         } else {

@@ -1,4 +1,4 @@
-package crw.event.input.operator;
+package crw.event.input.proxy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import sami.event.InputEvent;
  *
  * @author jjb
  */
-public class OperatorCreatesRegion extends InputEvent {
+public class ProxyEndsGAMSAlgorithm extends InputEvent{
     
     // List of fields for which a definition should be provided
     public static final ArrayList<String> fieldNames = new ArrayList<String>();
@@ -20,14 +20,14 @@ public class OperatorCreatesRegion extends InputEvent {
     // Description for each variable
     public static final HashMap<String, String> variableNameToDescription = new HashMap<String, String>();
     
-    public OperatorCreatesRegion() {
+    public ProxyEndsGAMSAlgorithm() {
         id = UUID.randomUUID();
     }    
     
-    public OperatorCreatesRegion(UUID relevantOutputEventUuid, UUID missionUuid) {
+    public ProxyEndsGAMSAlgorithm(UUID relevantOutputEventUuid, UUID missionUuid) {
         this.relevantOutputEventId = relevantOutputEventUuid;
         this.missionId = missionUuid;
         id = UUID.randomUUID();
-    }    
+    }        
     
 }

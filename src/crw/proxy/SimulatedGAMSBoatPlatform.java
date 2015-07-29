@@ -13,8 +13,6 @@ import com.madara.threads.BaseThread;
 import com.madara.threads.Threader;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;

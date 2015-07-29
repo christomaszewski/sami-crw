@@ -39,8 +39,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     public double velocityMult = 0.12, winch, thrustP, thrustI, thrustD, rudderP, rudderI, rudderD;
     private BoatProxy activeProxy = null;
     private AsyncVehicleServer activeVehicle = null;
-    private ObserverInt activeWinchObserver = null;
-
+    private ObserverInt activeWinchObserver = null;    
+    
     public GainsPanel() {
         super();
         velocityMultF = new JTextField(velocityMult + "");
