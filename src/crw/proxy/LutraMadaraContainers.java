@@ -1,6 +1,7 @@
 package crw.proxy;
 
 import com.gams.variables.Self;
+import com.madara.EvalSettings;
 
 import com.madara.KnowledgeBase;
 import com.madara.UpdateSettings;
@@ -10,18 +11,9 @@ import com.madara.containers.Integer;
 import com.madara.containers.NativeDoubleVector;
 import com.madara.containers.String;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-enum TELEOPERATION_TYPES {
-    NONE(0), GUI_WP(1), GUI_MS(2), RC(3);
-    // NONE --> control loops are always active (always try to arrive at and stay at current destination unless algorithm overrides)
-    // GUI_WP --> user selects waypoint(s) in a GUI. Boat controls arrival, but the boat does nothing after it arrives
-    // GUI_MS --> user is sending motor signals to the boats via a GUI (w/ joystick). Boat control loops completely disabled
-    // RC --> user is sending motor signals to the boats via a radio controller. Boat control loops completely disabled
-    private final long value;
-    TELEOPERATION_TYPES(long value) { this.value = value; }
-    public final long getLongValue() { return value; }
-}
 
 /**
  * @author jjb
@@ -42,12 +34,15 @@ public class LutraMadaraContainers {
     Double accel;
     Double decel;
     Integer teleopStatus; // see TELEOPERATION_TYPES enum
-    DoubleVector motorCommands;
+    NativeDoubleVector motorCommands;
+    Double thrustFraction;
+    Double bearingFraction;
     NativeDoubleVector bearingPIDGains;
     NativeDoubleVector thrustPIDGains;
     NativeDoubleVector thrustPPIGains;
     DoubleVector eastingNorthingBearing; // UTM x,y,th
     NativeDoubleVector location; // stand in for device.{id}.location
+    NativeDoubleVector dest; // stand in for device.{.id}.location
     Integer longitudeZone;
     String latitudeZone; // a single character (see UTM) http://jscience.org/api/org/jscience/geography/coordinates/UTM.html
     Integer waypointsFinishedStatus; // used as a stand in for device.{id}.algorithm.waypoints.finished
@@ -78,7 +73,7 @@ public class LutraMadaraContainers {
         accel.setName(knowledge, prefix + "accelTime");
         decel = new Double();
         decel.setName(knowledge, prefix + "decelTime");
-        motorCommands = new DoubleVector();
+        motorCommands = new NativeDoubleVector();
         motorCommands.setName(knowledge, prefix + "motorCommands");
         motorCommands.resize(2);
         teleopStatus = new Integer();
@@ -95,7 +90,11 @@ public class LutraMadaraContainers {
         location = new NativeDoubleVector();
         location.setName(knowledge, prefix + "location");
         location.resize(3);
-        location.setSettings(settings);        
+        location.setSettings(settings);   
+        dest = new NativeDoubleVector();
+        dest.setName(knowledge, prefix + "dest");
+        dest.resize(3);              
+        
         waypointsFinishedStatus = new Integer();
         waypointsFinishedStatus.setName(knowledge, prefix + "algorithm.waypoints.finished");
         
@@ -110,6 +109,11 @@ public class LutraMadaraContainers {
         thrustPPIGains= new NativeDoubleVector();
         thrustPPIGains.setName(knowledge, prefix + "thrustPPIGains");
         thrustPPIGains.resize(3);
+        
+        thrustFraction = new Double();
+        bearingFraction = new Double();
+        thrustFraction.setName(knowledge, prefix + "thrustFraction");
+        bearingFraction.setName(knowledge, prefix + "bearingFraction");        
         
         restoreDefaults();
         
@@ -128,10 +132,13 @@ public class LutraMadaraContainers {
         latitudeZone.free();
         eastingNorthingBearing.free();
         location.free();
+        dest.free();
         waypointsFinishedStatus.free();
         bearingPIDGains.free();
         thrustPIDGains.free();
-        thrustPPIGains.free();        
+        thrustPPIGains.free();    
+        thrustFraction.free();
+        bearingFraction.free();
     }
 
     public void restoreDefaults() {
@@ -151,14 +158,55 @@ public class LutraMadaraContainers {
         this.self = self;
     }
     
+    public void setTeleopStatus(TELEOPERATION_TYPES type) {
+        teleopStatus.set(type.getLongValue());
+    }
+    
+    public void keepCurrentLocation() {
+        dest.set(0, eastingNorthingBearing.get(0));
+        dest.set(1, eastingNorthingBearing.get(1));
+        dest.set(2, eastingNorthingBearing.get(2));            
+    }
+    
     public void stopMotors() {
         motorCommands.set(0, 0.0);
         motorCommands.set(1, 0.0);
     }
     
-    public void setMotors(double m1, double m2) {
-        motorCommands.set(0, m1);
-        motorCommands.set(1, m2);
+    public double[] getMotorCommands() {
+        return motorCommands.toRecord().toDoubleArray();
     }
+    
+    public double[] getThrustAndBearingFraction() {
+        double[] thrustAndBearingFraction = new double[2];
+        thrustAndBearingFraction[0] = thrustFraction.get();
+        thrustAndBearingFraction[1] = bearingFraction.get();
+        return thrustAndBearingFraction;
+    }
+    
+    public void setThrustAndRudderFraction(double thrustFraction, double bearingFraction) {
+        this.thrustFraction.set(thrustFraction);
+        this.bearingFraction.set(bearingFraction);
+    }
+    
+    public void setBearingPIDGains(double P, double I, double D) {
+        bearingPIDGains.set(0, P);
+        bearingPIDGains.set(1, I);
+        bearingPIDGains.set(2, D);
+    }
+    
+    public void setThrustPIDGains(double P, double I, double D) {
+        thrustPIDGains.set(0, P);
+        thrustPIDGains.set(1, I);
+        thrustPIDGains.set(2, D);        
+    }    
+    
+    public void setThrustPPIGains(double PosP, double VelP, double VelI) {
+        thrustPPIGains.set(0,PosP);
+        thrustPPIGains.set(1,VelP);
+        thrustPPIGains.set(2,VelI);
+    }
+    
+    
 
 }

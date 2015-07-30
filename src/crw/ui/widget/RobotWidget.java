@@ -6,6 +6,7 @@ import crw.ui.component.WorldWindPanel;
 import crw.event.output.proxy.ProxyExecutePath;
 import crw.proxy.BoatProxy;
 import crw.proxy.CrwProxyServer;
+import crw.proxy.TELEOPERATION_TYPES;
 import crw.ui.worldwind.BoatMarker;
 import crw.ui.VideoFeedPanel;
 import crw.ui.teleop.GainsPanel;
@@ -124,7 +125,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     public static final int DEFAULT_UPDATE_MS = 750;
     public static final int DEFAULT_COMMAND_MS = 200;
     // Ranges for thrust and rudder signals
-    public static final double THRUST_MIN = -1.0;
+    public static final double THRUST_MIN = 0.0; ///////////////////////////////////////////////////  -1 or 0?
     public static final double THRUST_MAX = 1.0;
     public static final double RUDDER_MIN = 1.0;
     public static final double RUDDER_MAX = -1.0;
@@ -466,7 +467,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         wwPanel.revalidate();
     }
 
-    public void showExpandables() {
+    public void showExpandables() {  ///////////////////////////////////////////////////////////////////////////////////////////////
         Dimension mapDim = wwPanel.wwCanvas.getSize();
         int height = Math.min(mapDim.width, mapDim.height) / 4;
         velocityP.setPreferredSize(new Dimension(mapDim.width / 2, height));
@@ -483,10 +484,11 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         velocityP.stopBoat();
         this.controlMode = controlMode;
         switch (controlMode) {
-            case TELEOP:
+            case TELEOP: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 cancelAssignedWaypoints();
                 showExpandables();
                 enableTeleop();
+                selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.GUI_MS);////////////////////////////////////////
                 break;
             case POINT:
                 hideExpandables();
@@ -499,6 +501,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             case NONE:
                 hideExpandables();
                 disableTeleop();
+                selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.NONE);////////////////////////////////////////
                 break;
         }
     }
@@ -545,21 +548,18 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         if (boatMarker != null) {
             boatProxy = markerToProxy.get(boatMarker);
             enabled = true;
-            // Update teleop panel's proxy                         
-            
+            // Update teleop panel's proxy                                     
             //_vehicle = boatProxy.getVehicleServer();
-            //velocityP.setVehicle(boatProxy.getVehicleServer());            
-            //gainsP.setProxy(boatProxy);
-            
-            velocityP.setVehicle(boatProxy.getBoatNo(), boatProxy);
-            
-            
+            //velocityP.setVehicle(boatProxy.getVehicleServer());
+            velocityP.setVehicle(boatProxy);
+            gainsP.setProxy(boatProxy);            
         } else {
-            // Remove teleop panel's proxy and hide teleop panel
-            
+            // Remove teleop panel's proxy and hide teleop panel            
             //_vehicle = null;
-            //velocityP.setVehicle(null);
-            //gainsP.setProxy(null);
+            velocityP.setVehicle(null);
+            gainsP.setProxy(null);
+            
+            
             setControlMode(ControlMode.NONE);
             hideExpandables();
         }
@@ -767,17 +767,21 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         return (ArrayList<Class>) supportedCreationClasses.clone();
     }
 
-    // Callback that handles GUI events that change velocity
+    // TODO: need Madara version of this /////////////////////////////////////////////////////////////////////////////
+    // Callback that handles GUI events that change velocity 
     public void updateVelocity() {
+        /*
         // Check if there is already a command queued up, if not, queue one up
         if (!_sentVelCommand.getAndSet(true)) {
             // Send one command immediately
             sendVelocity();
             // Queue up a command at the end of the refresh timestep
-            _timer.schedule(new UpdateVelTask(), DEFAULT_COMMAND_MS);
+            _timer.schedule(new UpdateVelTask(), DEFAULT_COMMAND_MS); //////////////////////////////////////////////////////////////////////////////
         } else {
             _queuedVelCommand.set(true);
         }
+        */
+        selectedProxy.containers.setThrustAndRudderFraction(telThrustFrac,telRudderFrac);
     }
 
     // Simple update task that periodically checks whether velocity needs updating
@@ -796,22 +800,30 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
 
     // Sets velocities from sliders to control proxy
     protected void sendVelocity() {        
-        //if (_vehicle != null) {
-        //    Twist twist = new Twist();
-        //    twist.dx(telThrustFrac);
-        //    twist.drz(telRudderFrac);
-        //    _vehicle.setVelocity(twist, null);
-        //}
-        selectedProxy.containers.setMotors(telThrustFrac, telRudderFrac);
+        /*
+        if (_vehicle != null) {
+            Twist twist = new Twist();
+            twist.dx(telThrustFrac);
+            twist.drz(telRudderFrac);
+            _vehicle.setVelocity(twist, null);
+        }
+                */
+        
+        //selectedProxy.containers.setThrustAndRudderFraction(telThrustFrac,telRudderFrac);
     }
 
     public void stopBoat() {
-        //if (_vehicle != null) {
-        //    telRudderFrac = 0.0;
-        //    telThrustFrac = 0;
-        //    updateVelocity();
-        //}
-        selectedProxy.endGAMSAlgorithm();
+        /*
+        if (_vehicle != null) {
+            telRudderFrac = 0.0;
+            telThrustFrac = 0;
+            updateVelocity();
+        }
+                */
+        
+        selectedProxy.containers.setThrustAndRudderFraction(0.0,0.0);
         selectedProxy.containers.stopMotors();
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

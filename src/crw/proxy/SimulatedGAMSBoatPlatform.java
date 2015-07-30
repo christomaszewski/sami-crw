@@ -102,53 +102,53 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
             
             double VEL;
             double ROTVEL;
-            if (containers.teleopStatus.get() == TELEOPERATION_TYPES.GUI_MS.getLongValue()) {
-                double[] desiredVELs = motorSignalToVelocityMap();
+            
+            double[] x = containers.eastingNorthingBearing.toRecord().toDoubleArray();
+            
+            System.out.println(String.format("Current teleop status = %d",containers.teleopStatus.get()));
+            
+            if (containers.teleopStatus.get() != TELEOPERATION_TYPES.NONE.getLongValue()) {
+                double[] desiredVELs = thrustAndRudderFractionToVelocityMap();
                 VEL = desiredVELs[0];
                 ROTVEL = desiredVELs[1];
+                double VELX = Math.abs(VEL*Math.cos(x[2]));
+                double VELY = Math.abs(VEL*Math.sin(x[2]));                  
+                containers.eastingNorthingBearing.set(0,x[0] + VELX*dt);
+                containers.eastingNorthingBearing.set(1,x[1] + VELY*dt);
+                containers.eastingNorthingBearing.set(2,x[2] + ROTVEL*dt);
+                updateLatLong();
             }
             else {
                 VEL = VEL_MAX;
                 ROTVEL = ROTVEL_MAX;
+                if (containers.distToDest.get() > getPositionAccuracy()) {                                                                       
+                    double[] xd = self.device.dest.toRecord().toDoubleArray();
+                    double[] xError = new double[3];
+                    xError[0] = xd[0] - x[0];
+                    xError[1] = xd[1] - x[1];                    
+                    double angleToGoal = Math.atan2(xError[1],xError[0]);
+                    xError[2] = angleToGoal - x[2];
+                    // Error magnitude must be <= 180 degrees. Wrap the error into [-180,180]
+                    while (Math.abs(xError[2]) > Math.PI) {
+                        xError[2] = xError[2] - Math.signum(xError[2])*2*Math.PI;
+                    }                                        
+                    if (Math.abs(xError[2]) > 0) { // point toward goal first, then move
+                        containers.eastingNorthingBearing.set(2, x[2] + minAbs(Math.signum(xError[2])*ROTVEL*dt,xError[2]));
+                    }
+                    else { // now that you point directly to the goal, move toward it
+                        // find max velocity in x and y
+                        double VELX = Math.abs(VEL*Math.cos(angleToGoal));
+                        double VELY = Math.abs(VEL*Math.sin(angleToGoal));                        
+                        containers.eastingNorthingBearing.set(0,x[0] + minAbs(Math.signum(xError[0])*VELX*dt,xError[0]));
+                        containers.eastingNorthingBearing.set(1,x[1] + minAbs(Math.signum(xError[1])*VELY*dt,xError[1]));
+                        updateLatLong();                  
+                    }
+                    updateDistToDest();
+                }                
             }
             
             
-            if (containers.distToDest.get() > getPositionAccuracy()) {                                
-                double[] x = containers.eastingNorthingBearing.toRecord().toDoubleArray();
-                double[] xd = self.device.dest.toRecord().toDoubleArray();
-                double[] xError = new double[3];
-                xError[0] = xd[0] - x[0];
-                xError[1] = xd[1] - x[1];                    
-                double angleToGoal = Math.atan2(xError[1],xError[0]);
-                xError[2] = angleToGoal - x[2];
-                // Error magnitude must be <= 180 degrees. Wrap the error into [-180,180]
-                while (Math.abs(xError[2]) > Math.PI) {
-                    xError[2] = xError[2] - Math.signum(xError[2])*2*Math.PI;
-                }                                        
-                if (Math.abs(xError[2]) > 0) { // point toward goal first, then move
-                    containers.eastingNorthingBearing.set(2, x[2] + minAbs(Math.signum(xError[2])*ROTVEL*dt,xError[2]));
-                }
-                else { // now that you point directly to the goal, move toward it
-                    // find max velocity in x and y
-                    double VELX = Math.abs(VEL*Math.cos(angleToGoal));
-                    double VELY = Math.abs(VEL*Math.sin(angleToGoal));                        
-                    containers.eastingNorthingBearing.set(0,x[0] + minAbs(Math.signum(xError[0])*VELX*dt,xError[0]));
-                    containers.eastingNorthingBearing.set(1,x[1] + minAbs(Math.signum(xError[1])*VELY*dt,xError[1]));
-                    UTM utm = UTM.valueOf((int)containers.longitudeZone.get(), containers.latitudeZone.get().charAt(0), 
-                            containers.eastingNorthingBearing.get(0), containers.eastingNorthingBearing.get(1), SI.METER);
-                    
-                    // remember, GUI listens to latitude and longitude, so they must also be updated
-                    LatLong latLong = UTM.utmToLatLong(utm, ReferenceEllipsoid.WGS84);
-                    double lat = latLong.latitudeValue(NonSI.DEGREE_ANGLE);
-                    double lon = latLong.longitudeValue(NonSI.DEGREE_ANGLE);
-                    //containers.latLong.set(0,lat);
-                    //containers.latLong.set(1,lon);                    
-                    self.device.location.set(0, lat);
-                    self.device.location.set(1, lon);
-                    self.device.location.set(2, 0.0);                    
-                }
-                updateDistToDest();
-            }
+
             /*
                     try {
                         Thread.sleep(100);
@@ -160,12 +160,25 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         
     }
     
-    double[] motorSignalToVelocityMap() {
+    void updateLatLong() {
+        UTM utm = UTM.valueOf((int)containers.longitudeZone.get(), containers.latitudeZone.get().charAt(0), 
+                                containers.eastingNorthingBearing.get(0), containers.eastingNorthingBearing.get(1), SI.METER);
+
+        // remember, GUI listens to latitude and longitude, so they must also be updated
+        LatLong latLong = UTM.utmToLatLong(utm, ReferenceEllipsoid.WGS84);
+        double lat = latLong.latitudeValue(NonSI.DEGREE_ANGLE);
+        double lon = latLong.longitudeValue(NonSI.DEGREE_ANGLE);
+        //containers.latLong.set(0,lat);
+        //containers.latLong.set(1,lon);                    
+        self.device.location.set(0, lat);
+        self.device.location.set(1, lon);
+        self.device.location.set(2, 0.0); 
+    }
+    
+    double[] thrustAndRudderFractionToVelocityMap() {
         double[] forwardVel_rotVel = new double[2];
-        double thrustSignal = containers.motorCommands.get(0) + containers.motorCommands.get(1);
-        double bearingSignal = containers.motorCommands.get(1) - containers.motorCommands.get(0);
-        forwardVel_rotVel[0] = thrustSignal/2.0*VEL_MAX;
-        forwardVel_rotVel[1] = bearingSignal/2.0*ROTVEL_MAX;
+        forwardVel_rotVel[0] = containers.thrustFraction.get()*VEL_MAX;
+        forwardVel_rotVel[1] = containers.bearingFraction.get()*ROTVEL_MAX;
         return forwardVel_rotVel;
     }
     
@@ -214,6 +227,12 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         targetDA[0] = target.getX();
         targetDA[1] = target.getY();        
         if (!Arrays.equals(currentDestination, targetDA)) {
+            
+            ////////////////
+            //System.out.println(String.format("Boat # %d's KB:",id));
+            //knowledge.print();
+            ////////////////
+            
             currentDestination = targetDA.clone();
             UTM utmLoc = UTM.latLongToUtm(LatLong.valueOf(target.getX(),target.getY(), NonSI.DEGREE_ANGLE),ReferenceEllipsoid.WGS84);
             double easting = utmLoc.eastingValue(SI.METER);

@@ -38,7 +38,10 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     public JButton applyB;
     public double velocityMult = 0.12, winch, thrustP, thrustI, thrustD, rudderP, rudderI, rudderD;
     private BoatProxy activeProxy = null;
-    private AsyncVehicleServer activeVehicle = null;
+    /////////////////////////////////////////////////////////////////////////
+    //private AsyncVehicleServer activeVehicle = null;
+    
+    /////////////////////////////////////////////////////////////////////////
     private ObserverInt activeWinchObserver = null;    
     
     public GainsPanel() {
@@ -47,7 +50,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         velocityMultF.setPreferredSize(new Dimension(50, velocityMultF.getPreferredSize().height));
         winchTF = new JTextField("");
         winchTF.setPreferredSize(new Dimension(50, winchTF.getPreferredSize().height));
-        thrustPTF = new JTextField("heyheyhey"); ///////////////////////////////////////////////////////////////////////////////////////////
+        thrustPTF = new JTextField("");
         thrustPTF.setPreferredSize(new Dimension(50, thrustPTF.getPreferredSize().height));
         thrustITF = new JTextField("");
         thrustITF.setPreferredSize(new Dimension(50, thrustITF.getPreferredSize().height));
@@ -122,10 +125,10 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     }
 
     public void applyFieldValues() {
-        if (activeVehicle == null) {
-            LOGGER.warning("Tried to apply field values to a null vehicle server!");
-            return;
-        }
+        //if (activeVehicle == null) {
+        //    LOGGER.warning("Tried to apply field values to a null vehicle server!");
+        //    return;
+        //}
         double temp;
 
         // Thrust PID
@@ -159,7 +162,12 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         if (Double.isFinite(temp)) {
             winch = temp;
         }
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        activeProxy.containers.setThrustPIDGains(thrustP, thrustI, thrustD);
+        activeProxy.containers.setBearingPIDGains(rudderP, rudderI, rudderD);
 
+        /*
         // Always send in case of communication problems
         activeVehicle.setGains(THRUST_GAINS_AXIS, new double[]{thrustP, thrustI, thrustD}, new FunctionObserver<Void>() {
             public void completed(Void v) {
@@ -188,6 +196,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
                 LOGGER.severe("Set winch gains failed: Axis [" + WINCH_GAINS_AXIS + "] PID [" + winch + ", " + winch + ", " + winch + "]");
             }
         });
+        */
     }
 
     public void setProxy(BoatProxy boatProxy) {
@@ -201,7 +210,10 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
 
         activeProxy = boatProxy;
         if (activeProxy != null) {
-            activeVehicle = boatProxy.getVehicleServer();
+            //activeVehicle = boatProxy.getVehicleServer();
+            
+            
+
             // Retrieve vehicle specific values
             //@todo Ideally we would only do this if the teleop panel is opened
 
@@ -253,7 +265,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         } 
         
         else {
-            activeVehicle = null;
+            //activeVehicle = null;
             // No vehicle selected, blank out text fields
             thrustPTF.setText("");
             thrustITF.setText("");

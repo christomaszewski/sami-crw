@@ -122,7 +122,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     //private final InetSocketAddress address;
     //private final String ipAddress;
     // MADARA KB and containers
-    public static final int DEFAULT_TEAM_SIZE = 24;
+    public static final int DEFAULT_TEAM_SIZE = 1;
     KnowledgeBase knowledge;
     final BoatProxy bp;
     
@@ -131,8 +131,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     
     public boolean isTeleop() {
         return ((int)containers.teleopStatus.get() > 0);
-    }
-    
+    }    
     
     void sendWaypointsQueue() {
         int N = _curWaypoints.size();
@@ -162,8 +161,14 @@ public class BoatProxy extends Thread implements ProxyInt {
         delay.free();
     }
     
-    public void endGAMSAlgorithm() {
-        knowledge.set(containers.prefix + "command", "null");
+    public void endGAMSAlgorithm() {        
+        containers.keepCurrentLocation();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+            //
+        }        
+        knowledge.set(containers.prefix + "command", "null"); // this must happen AFTER at least one call from the GAMS algorithm to the platform's move()
     }
     
     // MADARA threads

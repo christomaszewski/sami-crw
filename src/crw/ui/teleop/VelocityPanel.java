@@ -3,6 +3,7 @@ package crw.ui.teleop;
 import com.madara.KnowledgeBase;
 import crw.Conversion;
 import crw.proxy.BoatProxy;
+import crw.proxy.TELEOPERATION_TYPES;
 import crw.ui.widget.RobotWidget;
 import edu.cmu.ri.crw.AsyncVehicleServer;
 import edu.cmu.ri.crw.FunctionObserver;
@@ -228,16 +229,27 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
         repaint();
     }
 
+    // TODO: replace this with Madara /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     @Override
-    public void receivedVelocity(Twist twist) {
+    public void receivedVelocity(Twist twist) {        
         recThrustFrac = twist.dx();
         recRudderFrac = twist.drz();
         vizRecThrustFrac = Conversion.convertRange(twist.dx(), VEH_THRUST_MIN, VEH_THRUST_MAX, VIZ_THRUST_MIN, VIZ_THRUST_MAX);
         vizRecRudderFrac = Conversion.convertRange(twist.drz(), VEH_RUDDER_MIN, VEH_RUDDER_MAX, VIZ_RUDDER_MIN, VIZ_RUDDER_MAX);
-        repaint();
+        repaint();            
+    }    
+    
+    public void receivedVelocity() { //Madara version
+        Twist twist = new Twist();
+        double[] thrustAndBearingFraction = selectedProxy.containers.getThrustAndBearingFraction();
+        twist.dx(thrustAndBearingFraction[0]);
+        twist.drz(thrustAndBearingFraction[1]);
+        receivedVelocity(twist);        
     }
     
     // TODO: replace this with Madara /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
     public void setVehicle(AsyncVehicleServer vehicle) {
         if (_vehicle != null) {
             // Remove velocity listener from previously selected proxy
@@ -261,26 +273,25 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
             enableTeleop(false);
         }
     }
+    */
     
     
-    public void setVehicle(java.lang.Integer boatNo, BoatProxy selectedProxy) {
-        if (boatNo != null) {
-            this.boatNo = (int)boatNo;
-            // change the state of teleop
-            boatPrefix = String.format("device.%d.",boatNo);            
+    
+    public void setVehicle(BoatProxy selectedProxy) {
+        if (selectedProxy != null) {
             this.selectedProxy = selectedProxy;
             enableTeleop(!selectedProxy.isTeleop());
         }
         else {
-            selectedProxy = null;
             enableTeleop(false);
         }
     }
     
     
+    
 
     public void enableTeleop(boolean enable) {
-        if (this.teleopEnabled == enable) {
+        if (this.teleopEnabled == enable) { // if input matches current state
             // Return now to avoid adding/removing listeners multiple times
             return;
         }
@@ -291,7 +302,8 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
             // Reset variables
             teleLock = false;
             robotWidget.telRudderFrac = VEH_RUDDER_CENTER;
-            robotWidget.telThrustFrac = VEH_THRUST_ZERO;
+            robotWidget.telThrustFrac = VEH_THRUST_ZERO;                        
+            
             // Start listening to input devices again
             for (TeleopSourceInt source : teleopSources) {
                 source.enable(true);
@@ -302,7 +314,8 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
                 source.enable(false);
             }
             // Reset variables and send stop command
-            teleLock = false;
+            teleLock = false;           
+            
             robotWidget.stopBoat();
         }
     }
