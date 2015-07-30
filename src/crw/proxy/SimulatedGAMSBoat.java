@@ -17,7 +17,7 @@ public class SimulatedGAMSBoat implements Runnable {
     
     int id;
     int teamSize;
-    java.lang.String name = java.lang.String.format("SimBoat#%d",id);
+    java.lang.String name; 
     BaseController controller;
     SimulatedGAMSBoatPlatform platform;
     QoSTransportSettings settings;
@@ -38,10 +38,12 @@ public class SimulatedGAMSBoat implements Runnable {
         //settings.setType(TransportType.BROADCAST_TRANSPORT);
         settings.setRebroadcastTtl(2);
         settings.enableParticipantTtl(1);
+        name = String.format("SimBoat#%d",id);
         knowledge = new KnowledgeBase(name,settings);
         controller = new BaseController(knowledge);
         
-        com.gams.utility.Logging.setLevel(6);
+        //com.gams.utility.Logging.setLevel(6);
+        //com.madara.logger.GlobalLogger.setLevel(6);
     }
     
     void start() {

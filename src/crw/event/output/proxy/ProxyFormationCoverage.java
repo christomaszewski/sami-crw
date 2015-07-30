@@ -36,7 +36,7 @@ public class ProxyFormationCoverage extends OutputEvent {
         fieldNameToDescription.put("spacing", "distance from leader to ring of agents around leader?");
         //fieldNameToDescription.put("teamMembers", "a,b,c,... team boatNo N-tuple?");
         fieldNameToDescription.put("modifier", "algorithm modifier ('default' or 'rotation' ONLY)?");
-        fieldNameToDescription.put("coverageType", "coverage type ('urec' ONLY)?");
+        fieldNameToDescription.put("coverageType", "coverage type ('urec' or 'waypoints')?");
     }
     
     public ProxyFormationCoverage() {

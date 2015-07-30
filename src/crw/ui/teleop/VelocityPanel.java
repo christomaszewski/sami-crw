@@ -1,6 +1,8 @@
 package crw.ui.teleop;
 
+import com.madara.KnowledgeBase;
 import crw.Conversion;
+import crw.proxy.BoatProxy;
 import crw.ui.widget.RobotWidget;
 import edu.cmu.ri.crw.AsyncVehicleServer;
 import edu.cmu.ri.crw.FunctionObserver;
@@ -46,6 +48,13 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
 
     // Vehicle server variables
     protected AsyncVehicleServer _vehicle = null;
+    ///////////////////////////////////////////////////////////////////////////////
+    int boatNo;
+    String boatPrefix;
+    BoatProxy selectedProxy;
+    KnowledgeBase knowledge;
+    ///////////////////////////////////////////////////////////////////////////////
+    
     public static final int DEFAULT_UPDATE_MS = 750;
     public static final int DEFAULT_COMMAND_MS = 200;
     // Ranges for thrust and rudder signals to send to vehicle server
@@ -74,7 +83,7 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
     private TeleopSourceInt activeTeleopSource = null;
     private ArrayList<TeleopSourceInt> teleopSources = new ArrayList<TeleopSourceInt>();
 
-    public VelocityPanel(RobotWidget robotWidget) {
+    public VelocityPanel(RobotWidget robotWidget, KnowledgeBase knowledge) {
 //    public VelocityPanel(RBBak robotWidget) {
         this.robotWidget = robotWidget;
         mouseController = new MouseController(this);
@@ -92,6 +101,8 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
         addMouseMotionListener(this);
         addComponentListener(this);
         setFocusable(true);
+        
+        this.knowledge = knowledge;
     }
 
     @Override
@@ -225,7 +236,8 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
         vizRecRudderFrac = Conversion.convertRange(twist.drz(), VEH_RUDDER_MIN, VEH_RUDDER_MAX, VIZ_RUDDER_MIN, VIZ_RUDDER_MAX);
         repaint();
     }
-
+    
+    // TODO: replace this with Madara /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void setVehicle(AsyncVehicleServer vehicle) {
         if (_vehicle != null) {
             // Remove velocity listener from previously selected proxy
@@ -249,6 +261,23 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
             enableTeleop(false);
         }
     }
+    
+    
+    public void setVehicle(java.lang.Integer boatNo, BoatProxy selectedProxy) {
+        if (boatNo != null) {
+            this.boatNo = (int)boatNo;
+            // change the state of teleop
+            boatPrefix = String.format("device.%d.",boatNo);            
+            this.selectedProxy = selectedProxy;
+            enableTeleop(!selectedProxy.isTeleop());
+        }
+        else {
+            selectedProxy = null;
+            enableTeleop(false);
+        }
+    }
+    
+    
 
     public void enableTeleop(boolean enable) {
         if (this.teleopEnabled == enable) {
@@ -277,6 +306,8 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
             robotWidget.stopBoat();
         }
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void focusGained(FocusEvent fe) {

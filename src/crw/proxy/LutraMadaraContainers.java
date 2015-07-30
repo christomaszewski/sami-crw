@@ -150,5 +150,15 @@ public class LutraMadaraContainers {
     public void setSelf(Self self) {
         this.self = self;
     }
+    
+    public void stopMotors() {
+        motorCommands.set(0, 0.0);
+        motorCommands.set(1, 0.0);
+    }
+    
+    public void setMotors(double m1, double m2) {
+        motorCommands.set(0, m1);
+        motorCommands.set(1, m2);
+    }
 
 }

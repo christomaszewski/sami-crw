@@ -1,9 +1,11 @@
 package crw.ui.widget;
 
+import com.madara.KnowledgeBase;
 import crw.ui.worldwind.WorldWindWidgetInt;
 import crw.ui.component.WorldWindPanel;
 import crw.event.output.proxy.ProxyExecutePath;
 import crw.proxy.BoatProxy;
+import crw.proxy.CrwProxyServer;
 import crw.ui.worldwind.BoatMarker;
 import crw.ui.VideoFeedPanel;
 import crw.ui.teleop.GainsPanel;
@@ -55,6 +57,7 @@ import sami.path.Path;
 import sami.path.PathUtm;
 import sami.proxy.ProxyInt;
 import sami.proxy.ProxyListenerInt;
+import sami.proxy.ProxyServerInt;
 import sami.proxy.ProxyServerListenerInt;
 import sami.uilanguage.MarkupComponent;
 import sami.uilanguage.MarkupComponentHelper;
@@ -112,7 +115,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
 
     // new stuff
     // Velocity to be sent to the boat
-    public double telRudderFrac = 0.0, telThrustFrac = 0;
+    public double telRudderFrac = 0.0, telThrustFrac = 0.0;
     protected AsyncVehicleServer _vehicle = null;
     // Sets up a flag limiting the rate of velocity command transmission
     public AtomicBoolean _sentVelCommand = new AtomicBoolean(false);
@@ -121,10 +124,14 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     public static final int DEFAULT_UPDATE_MS = 750;
     public static final int DEFAULT_COMMAND_MS = 200;
     // Ranges for thrust and rudder signals
-    public static final double THRUST_MIN = 0.0;
+    public static final double THRUST_MIN = -1.0;
     public static final double THRUST_MAX = 1.0;
     public static final double RUDDER_MIN = 1.0;
     public static final double RUDDER_MAX = -1.0;
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    KnowledgeBase knowledge;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public RobotWidget() {
         populateLists();
@@ -143,7 +150,12 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         initRenderableLayer();
         initButtons();
         initExpandables();
-        Engine.getInstance().getProxyServer().addListener(this);
+        Engine.getInstance().getProxyServer().addListener(this);        
+        
+        ProxyServerInt proxyServer = Engine.getInstance().getProxyServer(); ///////////////////////////////////////
+        if (proxyServer instanceof CrwProxyServer) {          
+            knowledge = ((CrwProxyServer)proxyServer).getKnowledgeBase();
+        }
 
         // Set up a SelectListener to know when the cursor is over a BoatMarker
         wwPanel.wwCanvas.addSelectListener(new SelectListener() {
@@ -436,7 +448,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     public void initExpandables() {
         videoP = new VideoFeedPanel();
         videoP.setVisible(false);
-        velocityP = new VelocityPanel(this);
+        velocityP = new VelocityPanel(this, knowledge); ////////////////////////////
         velocityP.setVisible(false);
         gainsP = new GainsPanel();
         gainsP.setVisible(false);
@@ -523,7 +535,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             boatMarker.getAttributes().setHeadingMaterial(SELECTED_MAT);
         }
 
-        // Proxy stuff
+        // Proxy stuff ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (selectedProxy != null) {
             // Stop previous boat if it is locked in teleoperation mode
             disableTeleop();
@@ -533,19 +545,28 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         if (boatMarker != null) {
             boatProxy = markerToProxy.get(boatMarker);
             enabled = true;
-            // Update teleop panel's proxy 
-            _vehicle = boatProxy.getVehicleServer();
-            velocityP.setVehicle(boatProxy.getVehicleServer());
-            gainsP.setProxy(boatProxy);
+            // Update teleop panel's proxy                         
+            
+            //_vehicle = boatProxy.getVehicleServer();
+            //velocityP.setVehicle(boatProxy.getVehicleServer());            
+            //gainsP.setProxy(boatProxy);
+            
+            velocityP.setVehicle(boatProxy.getBoatNo(), boatProxy);
+            
+            
         } else {
             // Remove teleop panel's proxy and hide teleop panel
-            _vehicle = null;
-            velocityP.setVehicle(null);
-            gainsP.setProxy(null);
+            
+            //_vehicle = null;
+            //velocityP.setVehicle(null);
+            //gainsP.setProxy(null);
             setControlMode(ControlMode.NONE);
             hideExpandables();
         }
         selectedProxy = boatProxy;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        
         // Disable buttons if selected proxy is null
         if (teleopButton != null) {
             teleopButton.setEnabled(enabled);
@@ -774,20 +795,23 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     }
 
     // Sets velocities from sliders to control proxy
-    protected void sendVelocity() {
-        if (_vehicle != null) {
-            Twist twist = new Twist();
-            twist.dx(telThrustFrac);
-            twist.drz(telRudderFrac);
-            _vehicle.setVelocity(twist, null);
-        }
+    protected void sendVelocity() {        
+        //if (_vehicle != null) {
+        //    Twist twist = new Twist();
+        //    twist.dx(telThrustFrac);
+        //    twist.drz(telRudderFrac);
+        //    _vehicle.setVelocity(twist, null);
+        //}
+        selectedProxy.containers.setMotors(telThrustFrac, telRudderFrac);
     }
 
     public void stopBoat() {
-        if (_vehicle != null) {
-            telRudderFrac = 0.0;
-            telThrustFrac = 0;
-            updateVelocity();
-        }
+        //if (_vehicle != null) {
+        //    telRudderFrac = 0.0;
+        //    telThrustFrac = 0;
+        //    updateVelocity();
+        //}
+        selectedProxy.endGAMSAlgorithm();
+        selectedProxy.containers.stopMotors();
     }
 }

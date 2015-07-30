@@ -126,8 +126,13 @@ public class BoatProxy extends Thread implements ProxyInt {
     KnowledgeBase knowledge;
     final BoatProxy bp;
     
-    LutraMadaraContainers containers;
-    Threader madaraListenerThreader;
+    public LutraMadaraContainers containers;
+    Threader madaraListenerThreader;    
+    
+    public boolean isTeleop() {
+        return ((int)containers.teleopStatus.get() > 0);
+    }
+    
     
     void sendWaypointsQueue() {
         int N = _curWaypoints.size();

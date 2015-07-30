@@ -35,6 +35,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     Long t;
     double[] currentDestination;
     Threader threader;
+    final double METERS_PER_LATLONG_DEGREE = 111*1000;
     
     final double ROTVEL_MAX = Math.PI/2.0; // rad/s
     final double VEL_MAX = 20.0; // m/s
@@ -75,6 +76,9 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         containers.self.device.location.set(0, lat);
         containers.self.device.location.set(1, lon);
         containers.self.device.location.set(2,0.0);
+        containers.self.device.source.set(0, lat);
+        containers.self.device.source.set(1, lon);
+        containers.self.device.source.set(2,0.0);        
         containers.self.device.dest.set(0, easting);
         containers.self.device.dest.set(1, northing);
         containers.self.device.dest.set(2,0.0);
@@ -144,12 +148,14 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
                     self.device.location.set(2, 0.0);                    
                 }
                 updateDistToDest();
-                try {
-                    Thread.sleep(100);
-                } 
-                catch (InterruptedException ex) {                                                    
-                }
-            }            
+            }
+            /*
+                    try {
+                        Thread.sleep(100);
+                    } 
+                    catch (InterruptedException ex) {                                                    
+                    }            
+                    */
         }
         
     }
@@ -175,16 +181,16 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
 
     @Override
     public int analyze() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return PlatformStatusEnum.OK.value();
     }
     @Override
     public double getAccuracy() {
-        return 0.00003; // this is used in a Lat/Long comparison, so it needs to be very small. 0.00001 degrees is about 1 meter
+        return 2.0/METERS_PER_LATLONG_DEGREE; // this is used in a Lat/Long comparison, so it needs to be very small. 0.00001 degrees is about 1 meter
         // The control uses UTM easting,northing. Converting this to lat,long is not perfect. 
     }
     @Override
     public double getPositionAccuracy() {
-        return 2; ////////////// this value is irrelevant for the waypoints algorithm, but not for the platform's effort to reach the waypoint
+        return 0.0;//getAccuracy()*METERS_PER_LATLONG_DEGREE; ////////////// this value is irrelevant for the waypoints algorithm, but not for the platform's effort to reach the waypoint
     }
     @Override
     public Position getPosition() {
@@ -194,11 +200,11 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     }
     @Override
     public int home() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return PlatformStatusEnum.OK.value();
     }
     @Override
     public int land() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return PlatformStatusEnum.OK.value();
     }
     @Override
     public int move(Position target, double proximity) {                   
@@ -208,13 +214,17 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         targetDA[0] = target.getX();
         targetDA[1] = target.getY();        
         if (!Arrays.equals(currentDestination, targetDA)) {
-            currentDestination = targetDA.clone();            
+            currentDestination = targetDA.clone();
             UTM utmLoc = UTM.latLongToUtm(LatLong.valueOf(target.getX(),target.getY(), NonSI.DEGREE_ANGLE),ReferenceEllipsoid.WGS84);
-            self.device.dest.set(0,utmLoc.eastingValue(SI.METER));
-            self.device.dest.set(1,utmLoc.northingValue(SI.METER));        
+            double easting = utmLoc.eastingValue(SI.METER);
+            double northing = utmLoc.northingValue(SI.METER);
+            self.device.dest.set(0,easting);
+            self.device.dest.set(1,northing);
             self.device.source.set(0,self.device.location.get(0));
             self.device.source.set(1,self.device.location.get(1));
-            self.device.source.set(2,self.device.location.get(2));                    
+            self.device.source.set(2,self.device.location.get(2));
+            
+            System.out.println(String.format("New destination: X,Y =  %f,  %f",easting,northing));
         }        
         return PlatformStatusEnum.OK.value();
     }
@@ -228,15 +238,15 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     
     @Override
     public int rotate(Axes axes) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return PlatformStatusEnum.OK.value();
     }
     @Override
     public double getMinSensorRange() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 0.0;
     }
     @Override
     public double getMoveSpeed() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return VEL_MAX;
     }
     @Override
     public String getId() {
@@ -247,20 +257,20 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         return name;
     }
     @Override
-    public int sense() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int sense() {        
+        return PlatformStatusEnum.OK.value();
     }
     @Override
     public void setMoveSpeed(double speed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                
     }
     @Override
     public int takeoff() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return PlatformStatusEnum.OK.value();
     }
     @Override
     public void stopMove() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
 }

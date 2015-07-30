@@ -86,6 +86,7 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                     vertexNDV.set(1,positions.get(i).longitude.degrees);
                     vertexNDV.free();
                 }
+                //knowledge.set("I'mma Firin' My","LAYZAR!!!");
                 knowledge.sendModifieds();
             }                        
             
@@ -128,11 +129,13 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                 int numFollowers = numProxies - 1;
                 int followerCount = 0;
                 double anglePerFollower = 2*Math.PI/numFollowers;
+                int regionVertexCount = (int)(knowledge.get(String.format("region.%d.size",regionNo)).toLong());
                                                                
                 for (int member = 0; member < numProxies; member++) { // for each team member
                     int boatNo = boatProxies.get(member).getBoatNo();
                     String prefix = String.format("device.%d.command",boatNo);
                     knowledge.set(prefix + ".size",6,delay);
+                    //knowledge.set(prefix + ".size",5+regionVertexCount,delay);
                     knowledge.set(prefix,"formation coverage",delay);
                     knowledge.set(prefix + ".0",leaderNo,delay);
                     if (boatNo == leaderNo) {
@@ -145,10 +148,33 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                     knowledge.set(prefix + ".2",teamMembers,delay);
                     knowledge.set(prefix + ".3",modifier,delay);
                     knowledge.set(prefix + ".4",coverageType,delay);
-                    knowledge.set(prefix + ".5",String.format("region.%d",regionNo),delay);
+                    knowledge.set(prefix + ".5",String.format("region.%d",regionNo),delay); //////////////////////////////////////
+                    
+                    /*
+                    // Attempt to manually send waypoints as an debugging measure
+                    for (int i = 0; i < regionVertexCount; i++) {                                    
+                        //UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
+                        //double lat = utmCoordTemp.getLatitude().degrees;
+                        //double lon = utmCoordTemp.getLongitude().degrees;            
+                        double[] latLon = knowledge.get(String.format("region.%d.%d",regionNo,i)).toDoubleArray();
+                        double lat = latLon[0];
+                        double lon = latLon[1];
+
+                        // TODO: switch to DoubleVector
+                        NativeDoubleVector wpNDV = new NativeDoubleVector();
+                        wpNDV.setName(knowledge, java.lang.String.format("%s.%d",prefix,i+5));
+                        wpNDV.resize(3);            
+                        wpNDV.set(0,lat);
+                        wpNDV.set(1,lon);
+                        wpNDV.set(2,0.0); // altitude
+                        wpNDV.free();
+                    }                      
+                            */
+                    
+                    
                 }
                 knowledge.sendModifieds();                
-                //knowledge.print();////////////////////////////////                
+                knowledge.print();////////////////////////////////                
                 delay.free();      
                 
                 // TODO: create input event
