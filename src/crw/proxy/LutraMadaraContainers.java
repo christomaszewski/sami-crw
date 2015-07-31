@@ -50,7 +50,7 @@ public class LutraMadaraContainers {
     final double defaultPeakVelocity = 2.0;
     final double defaultAccelTime = 5.0;
     final double defaultDecelTime = 5.0;
-    final long defaultTeleopStatus = 0L;
+    final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_MS.getLongValue();
     final double[] bearingPIDGainsDefaults = new double[]{0.5,0.5,0.5}; // cols: P,I,D
     final double[] thrustPIDGainsDefaults = new double[]{0.2,0,0.3}; // cols: P,I,D
     final double[] thrustPPIGainsDefaults = new double[]{1.0,1.0,1.0}; // cols: Pos-P, Vel-P, Vel-I    
@@ -94,6 +94,7 @@ public class LutraMadaraContainers {
         dest = new NativeDoubleVector();
         dest.setName(knowledge, prefix + "dest");
         dest.resize(3);              
+        
         
         waypointsFinishedStatus = new Integer();
         waypointsFinishedStatus.setName(knowledge, prefix + "algorithm.waypoints.finished");
@@ -163,9 +164,12 @@ public class LutraMadaraContainers {
     }
     
     public void keepCurrentLocation() {
+        UpdateSettings makeItGlobal = new UpdateSettings();
+        dest.setSettings(makeItGlobal);
         dest.set(0, eastingNorthingBearing.get(0));
         dest.set(1, eastingNorthingBearing.get(1));
         dest.set(2, eastingNorthingBearing.get(2));            
+        makeItGlobal.free();
     }
     
     public void stopMotors() {
