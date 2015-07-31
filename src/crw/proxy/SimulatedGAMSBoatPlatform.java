@@ -88,8 +88,18 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         t = System.currentTimeMillis();
         threader = new Threader(knowledge);
         threader.run(25.0,"movement",new MovementThread());
+        //threader.run(0.2,"KB printout",new KnowledgeBasePrintoutThread());
         
         knowledge.sendModifieds();
+    }
+    
+    class KnowledgeBasePrintoutThread extends BaseThread {
+        @Override
+        public void run() {
+            System.out.println(String.format("Boat # %d's KB:",id));
+            knowledge.print();            
+        }
+        
     }
     
     class MovementThread extends BaseThread { // permanent thread to ensure that platform is always trying to get to the current destination
@@ -105,20 +115,22 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
             
             double[] x = containers.eastingNorthingBearing.toRecord().toDoubleArray();
             
-            System.out.println(String.format("Current teleop status = %d",containers.teleopStatus.get()));
+            //System.out.println(String.format("Current teleop status = %d",containers.teleopStatus.get()));            
             
-            if (containers.teleopStatus.get() != TELEOPERATION_TYPES.NONE.getLongValue()) {
+            if (containers.teleopStatus.get() != TELEOPERATION_TYPES.NONE.getLongValue()) {                
                 double[] desiredVELs = thrustAndRudderFractionToVelocityMap();
                 VEL = desiredVELs[0];
                 ROTVEL = desiredVELs[1];
-                double VELX = Math.abs(VEL*Math.cos(x[2]));
-                double VELY = Math.abs(VEL*Math.sin(x[2]));                  
+                double VELX = VEL*Math.cos(x[2]);
+                double VELY = VEL*Math.sin(x[2]);                  
                 containers.eastingNorthingBearing.set(0,x[0] + VELX*dt);
                 containers.eastingNorthingBearing.set(1,x[1] + VELY*dt);
                 containers.eastingNorthingBearing.set(2,x[2] + ROTVEL*dt);
                 updateLatLong();
             }
             else {
+                //System.out.println("AGENT TELEOPSTATUS STILL = 0");
+                
                 VEL = VEL_MAX;
                 ROTVEL = ROTVEL_MAX;
                 if (containers.distToDest.get() > getPositionAccuracy()) {                                                                       

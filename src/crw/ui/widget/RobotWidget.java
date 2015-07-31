@@ -39,6 +39,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.TimerTask;
@@ -488,7 +489,8 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                 cancelAssignedWaypoints();
                 showExpandables();
                 enableTeleop();
-                selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.GUI_MS);////////////////////////////////////////
+                selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.GUI_MS);////////////////////////////////////////                
+                knowledge.sendModifieds();
                 break;
             case POINT:
                 hideExpandables();
@@ -502,6 +504,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                 hideExpandables();
                 disableTeleop();
                 selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.NONE);////////////////////////////////////////
+                knowledge.sendModifieds();
                 break;
         }
     }
@@ -782,6 +785,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         }
         */
         selectedProxy.containers.setThrustAndRudderFraction(telThrustFrac,telRudderFrac);
+        knowledge.sendModifieds();
     }
 
     // Simple update task that periodically checks whether velocity needs updating
@@ -809,7 +813,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         }
                 */
         
-        //selectedProxy.containers.setThrustAndRudderFraction(telThrustFrac,telRudderFrac);
+        
     }
 
     public void stopBoat() {
@@ -823,6 +827,8 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         
         selectedProxy.containers.setThrustAndRudderFraction(0.0,0.0);
         selectedProxy.containers.stopMotors();
+        selectedProxy.containers.keepCurrentLocation();
+        knowledge.sendModifieds();
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

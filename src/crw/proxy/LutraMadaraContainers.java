@@ -33,7 +33,7 @@ public class LutraMadaraContainers {
     Double peakVelocity;
     Double accel;
     Double decel;
-    Integer teleopStatus; // see TELEOPERATION_TYPES enum
+    public Integer teleopStatus; // see TELEOPERATION_TYPES enum
     NativeDoubleVector motorCommands;
     Double thrustFraction;
     Double bearingFraction;
