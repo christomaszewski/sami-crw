@@ -149,15 +149,18 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         if (enabledModes == null) {
             this.enabledModes = new ArrayList<ControlMode>();
         }
+        
+        ProxyServerInt proxyServer = Engine.getInstance().getProxyServer(); ///////////////////////////////////////
+        if (proxyServer instanceof CrwProxyServer) {          
+            knowledge = ((CrwProxyServer)proxyServer).getKnowledgeBase();
+        }        
+        
         initRenderableLayer();
         initButtons();
         initExpandables();
         Engine.getInstance().getProxyServer().addListener(this);        
         
-        ProxyServerInt proxyServer = Engine.getInstance().getProxyServer(); ///////////////////////////////////////
-        if (proxyServer instanceof CrwProxyServer) {          
-            knowledge = ((CrwProxyServer)proxyServer).getKnowledgeBase();
-        }
+
 
         // Set up a SelectListener to know when the cursor is over a BoatMarker
         wwPanel.wwCanvas.addSelectListener(new SelectListener() {
@@ -452,7 +455,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         videoP.setVisible(false);
         velocityP = new VelocityPanel(this, knowledge); ////////////////////////////
         velocityP.setVisible(false);
-        gainsP = new GainsPanel();
+        gainsP = new GainsPanel(knowledge);
         gainsP.setVisible(false);
         expandedP.add(videoP);
         expandedP.add(velocityP);

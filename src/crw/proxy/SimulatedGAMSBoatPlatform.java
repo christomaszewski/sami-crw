@@ -88,7 +88,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         t = System.currentTimeMillis();
         threader = new Threader(knowledge);
         threader.run(25.0,"movement",new MovementThread());
-        //threader.run(0.2,"KB printout",new KnowledgeBasePrintoutThread());
+        threader.run(0.2,"KB printout",new KnowledgeBasePrintoutThread());
         
         knowledge.sendModifieds();
     }

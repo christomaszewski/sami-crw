@@ -1,5 +1,6 @@
 package crw.ui.teleop;
 
+import com.madara.KnowledgeBase;
 import crw.proxy.BoatProxy;
 import edu.cmu.ri.crw.AsyncVehicleServer;
 import edu.cmu.ri.crw.FunctionObserver;
@@ -31,21 +32,23 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     public static final int THRUST_GAINS_AXIS = 0;
     public static final int RUDDER_GAINS_AXIS = 5;
     public static final int WINCH_GAINS_AXIS = 3;
-    private JPanel contentP, velMultP, thrustPidP, rudderPidP, winchPidP;
+    private JPanel contentP, velMultP, thrustPidP, rudderPidP, winchPidP, PPI_P;
     public JTextField velocityMultF, winchTF, thrustPTF, thrustITF, thrustDTF, rudderPTF, rudderITF, rudderDTF;
+    public JTextField PPI_PosP_TF, PPI_VelP_TF, PPI_VelI_TF;
     public JLabel winchL;
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
     public JButton applyB;
-    public double velocityMult = 0.12, winch, thrustP, thrustI, thrustD, rudderP, rudderI, rudderD;
+    public double velocityMult = 0.12, winch, thrustP, thrustI, thrustD, rudderP, rudderI, rudderD, PPI_PosP, PPI_VelP, PPI_VelI;
     private BoatProxy activeProxy = null;
     /////////////////////////////////////////////////////////////////////////
     //private AsyncVehicleServer activeVehicle = null;
-    
+    KnowledgeBase knowledge;
     /////////////////////////////////////////////////////////////////////////
     private ObserverInt activeWinchObserver = null;    
     
-    public GainsPanel() {
+    public GainsPanel(KnowledgeBase knowledge) {        
         super();
+        this.knowledge = knowledge;
         velocityMultF = new JTextField(velocityMult + "");
         velocityMultF.setPreferredSize(new Dimension(50, velocityMultF.getPreferredSize().height));
         winchTF = new JTextField("");
@@ -62,6 +65,13 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         rudderITF.setPreferredSize(new Dimension(50, rudderITF.getPreferredSize().height));
         rudderDTF = new JTextField("");
         rudderDTF.setPreferredSize(new Dimension(50, rudderDTF.getPreferredSize().height));
+        
+        PPI_PosP_TF = new JTextField("");
+        PPI_PosP_TF.setPreferredSize(new Dimension(50, PPI_PosP_TF.getPreferredSize().height));
+        PPI_VelP_TF = new JTextField("");
+        PPI_VelP_TF.setPreferredSize(new Dimension(50, PPI_VelP_TF.getPreferredSize().height));
+        PPI_VelI_TF = new JTextField("");
+        PPI_VelI_TF.setPreferredSize(new Dimension(50, PPI_VelI_TF.getPreferredSize().height));
 
         velMultP = new JPanel();
         velMultP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -87,6 +97,16 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         rudderPidP.add(rudderITF);
         rudderPidP.add(new JLabel("D:"));
         rudderPidP.add(rudderDTF);
+        
+        PPI_P = new JPanel();
+        PPI_P.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        PPI_P.add(new JLabel("PPI"));
+        PPI_P.add(new JLabel("PosP:"));
+        PPI_P.add(PPI_PosP_TF);
+        PPI_P.add(new JLabel("VelP:"));
+        PPI_P.add(PPI_VelP_TF);
+        PPI_P.add(new JLabel("VelI:"));
+        PPI_P.add(PPI_VelI_TF);
 
         winchPidP = new JPanel();
         winchPidP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -108,6 +128,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
 //        contentP.add(velMultP);
         contentP.add(thrustPidP);
         contentP.add(rudderPidP);
+        contentP.add(PPI_P);
         contentP.add(winchPidP);
         contentP.add(applyB);
         getViewport().add(contentP);
@@ -157,6 +178,21 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         if (Double.isFinite(temp)) {
             rudderD = temp;
         }
+        
+        // PPI
+        temp = stringToDouble(PPI_PosP_TF.getText());
+        if (Double.isFinite(temp)) {
+            PPI_PosP = temp;
+        }
+        temp = stringToDouble(PPI_VelP_TF.getText());
+        if (Double.isFinite(temp)) {
+            PPI_VelP = temp;
+        }
+        temp = stringToDouble(PPI_VelI_TF.getText());
+        if (Double.isFinite(temp)) {
+            PPI_VelI = temp;
+        }        
+        
         // Winch
         temp = stringToDouble(winchTF.getText());
         if (Double.isFinite(temp)) {
@@ -166,6 +202,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         activeProxy.containers.setThrustPIDGains(thrustP, thrustI, thrustD);
         activeProxy.containers.setBearingPIDGains(rudderP, rudderI, rudderD);
+        activeProxy.containers.setThrustPPIGains(PPI_PosP, PPI_VelP, PPI_VelI);
+        knowledge.sendModifieds();
 
         /*
         // Always send in case of communication problems
