@@ -75,19 +75,25 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                 delay.setDelaySendingModifieds(true);
                 
                 // manually create Madara keys for a region
+                
                 knowledge.set(prefix + "type", 0, delay);
-                knowledge.set(prefix + "priority", 0, delay);
+                //knowledge.set(prefix + "priority", 0, delay);
                 knowledge.set(prefix + "size", positions.size() ,delay);
+                com.madara.containers.Integer object_type = new com.madara.containers.Integer();
+                object_type.setName(knowledge,prefix + "object_type");
+                object_type.set(1);
+                object_type.free();
                 for (int i = 0; i < positions.size(); i++) {
                     NativeDoubleVector vertexNDV = new NativeDoubleVector();                    
                     vertexNDV.setName(knowledge, java.lang.String.format("%s%d",prefix,i));
                     vertexNDV.resize(2);                                                               
                     vertexNDV.set(0,positions.get(i).latitude.degrees);
                     vertexNDV.set(1,positions.get(i).longitude.degrees);
-                    vertexNDV.free();
+                    vertexNDV.free();                                        
                 }
                 //knowledge.set("I'mma Firin' My","LAYZAR!!!");
                 knowledge.sendModifieds();
+                
             }                        
             
             OperatorCreatesRegion myIE = new OperatorCreatesRegion(oe.getId(),oe.getMissionId());
@@ -174,7 +180,7 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                     
                 }
                 knowledge.sendModifieds();                
-                knowledge.print();////////////////////////////////                
+                //knowledge.print();////////////////////////////////                
                 delay.free();      
                 
                 // TODO: create input event
@@ -210,7 +216,7 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                     knowledge.set(prefix,"perimeter patrol",delay);
                 }          
                 knowledge.sendModifieds();                
-                knowledge.print();////////////////////////////////                
+                //knowledge.print();////////////////////////////////                
                 delay.free();    
                 
                 // TODO: create input event
@@ -246,7 +252,7 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                     knowledge.set(prefix,"urec",delay);
                 }          
                 knowledge.sendModifieds();                
-                knowledge.print();////////////////////////////////                
+                //knowledge.print();////////////////////////////////                
                 delay.free();    
                 
                 // TODO: create input event

@@ -34,8 +34,6 @@ public class SimulatedGAMSBoat implements Runnable {
         settings = new QoSTransportSettings();
         settings.setHosts(new String[]{"239.255.0.1:4150"});
         settings.setType(TransportType.MULTICAST_TRANSPORT);
-        //settings.setHosts(new String[]{"192.168.1.255:15000"});
-        //settings.setType(TransportType.BROADCAST_TRANSPORT);
         settings.setRebroadcastTtl(2);
         settings.enableParticipantTtl(1);
         name = String.format("SimBoat#%d",id);
@@ -52,7 +50,6 @@ public class SimulatedGAMSBoat implements Runnable {
         algorithm = new DwellAlgorithm();
         controller.initPlatform(platform);
         controller.initAlgorithm(algorithm);
-        //platform.start();
         new Thread(new Runnable() {
             @Override
             public void run() {    

@@ -132,7 +132,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     public static final double RUDDER_MAX = -1.0;
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    KnowledgeBase knowledge;
+    KnowledgeBase knowledge;    
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public RobotWidget() {
@@ -451,20 +451,20 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     }
 
     public void initExpandables() {
-        videoP = new VideoFeedPanel();
-        videoP.setVisible(false);
-        velocityP = new VelocityPanel(this, knowledge); ////////////////////////////
+        //videoP = new VideoFeedPanel(); ///////////////////////////////////////////////////////////////////////////////////////////////
+        //videoP.setVisible(false);
+        velocityP = new VelocityPanel(this, knowledge); 
         velocityP.setVisible(false);
         gainsP = new GainsPanel(knowledge);
         gainsP.setVisible(false);
-        expandedP.add(videoP);
+        //expandedP.add(videoP);
         expandedP.add(velocityP);
         expandedP.add(gainsP);
         wwPanel.buttonPanels.revalidate();
     }
 
     public void hideExpandables() {
-        videoP.setVisible(false);
+        //videoP.setVisible(false);
         velocityP.setVisible(false);
         gainsP.setVisible(false);
         cancelButton.setText("Cancel");
@@ -475,8 +475,8 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         Dimension mapDim = wwPanel.wwCanvas.getSize();
         int height = Math.min(mapDim.width, mapDim.height) / 4;
         velocityP.setPreferredSize(new Dimension(mapDim.width / 2, height));
-        videoP.setPreferredSize(new Dimension(mapDim.width / 2, height));
-        videoP.setVisible(true);
+        //videoP.setPreferredSize(new Dimension(mapDim.width / 2, height));
+        //videoP.setVisible(true);
         velocityP.setVisible(true);
         gainsP.setVisible(true);
         cancelButton.setText("Collapse");
@@ -787,6 +787,15 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             _queuedVelCommand.set(true);
         }
         */
+        if (gainsP.thrustFractionIsFixed) {
+            if (Math.abs(telRudderFrac) < 0.2 && Math.abs(telRudderFrac) > 0) { // any signal near moving straight forward
+                telRudderFrac = 0.0;
+                telThrustFrac = gainsP.thrustFractionFixedValue;
+            }            
+            else { // any signal away from moving straight forward
+                telThrustFrac = 0.0;
+            }
+        }
         selectedProxy.containers.setThrustAndRudderFraction(telThrustFrac,telRudderFrac);
         knowledge.sendModifieds();
     }
@@ -827,11 +836,12 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             updateVelocity();
         }
                 */
-        
-        selectedProxy.containers.setThrustAndRudderFraction(0.0,0.0);
-        selectedProxy.containers.stopMotors();
-        selectedProxy.containers.keepCurrentLocation();
-        knowledge.sendModifieds();
+        if (selectedProxy != null) {
+            selectedProxy.containers.setThrustAndRudderFraction(0.0,0.0);
+            selectedProxy.containers.stopMotors();
+            selectedProxy.containers.keepCurrentLocation();
+            knowledge.sendModifieds();
+        }
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@ package crw.proxy;
 import com.madara.KnowledgeBase;
 import com.madara.transport.QoSTransportSettings;
 import com.madara.transport.TransportType;
+import com.madara.transport.filters.LogAggregate;
 import com.perc.mitpas.adi.common.datamodels.AbstractAsset;
 import com.perc.mitpas.adi.common.datamodels.Feature;
 import com.perc.mitpas.adi.common.datamodels.FeatureType;
@@ -62,13 +63,22 @@ public class CrwProxyServer implements ProxyServerInt {
 
     public CrwProxyServer() {
         QoSTransportSettings settings = new QoSTransportSettings();
-        //settings.setHosts(new String[]{"239.255.0.1:4150"});
-        //settings.setType(TransportType.MULTICAST_TRANSPORT);
         settings.setHosts(new String[]{"192.168.1.255:15000"});
         settings.setType(TransportType.BROADCAST_TRANSPORT);
         settings.setRebroadcastTtl(2);
         settings.enableParticipantTtl(1);
+        settings.addSendFilter(new LogAggregate());
         knowledge = new KnowledgeBase("base_station", settings);
+        
+        QoSTransportSettings simSettings = new QoSTransportSettings();
+        simSettings.setHosts(new String[]{"239.255.0.1:4150"});
+        simSettings.setType(TransportType.MULTICAST_TRANSPORT);
+        simSettings.setRebroadcastTtl(2);
+        simSettings.enableParticipantTtl(1);
+        knowledge.attachTransport("base_station", simSettings);
+        
+        //com.madara.logger.GlobalLogger.setLevel(6);
+        
     }
 
     public KnowledgeBase getKnowledgeBase() {

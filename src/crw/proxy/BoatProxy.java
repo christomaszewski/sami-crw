@@ -189,11 +189,6 @@ public class BoatProxy extends Thread implements ProxyInt {
         //ipAddress = address.toString().substring(address.toString().indexOf("/") + 1);
 
         containers = new LutraMadaraContainers(knowledge, boatNo);
-        UpdateSettings settings = new UpdateSettings();
-        settings = new UpdateSettings();
-        settings.setTreatGlobalsAsLocals(true);
-        containers.waypointsFinishedStatus.setSettings(settings);
-        settings.free();
         
         madaraListenerThreader = new Threader(knowledge);
         startListeners();
@@ -891,7 +886,9 @@ public class BoatProxy extends Thread implements ProxyInt {
         
         @Override
         public void run() {            
-            double yaw = knowledge.get(containers.prefix + "eastingNorthingBearing.2").toDouble();
+            //double yaw = knowledge.get(containers.prefix + "eastingNorthingBearing.2").toDouble();
+            double[] eastingNorthingBearing = containers.eastingNorthingBearing.toRecord().toDoubleArray();
+            double yaw = eastingNorthingBearing[2];
 
             double altitude = 0.0;
             double roll = 0.0;

@@ -5,11 +5,13 @@ import com.madara.KnowledgeBase;
 import crw.Conversion;
 import crw.CrwHelper;
 import crw.event.input.proxy.GainsSent;
+import crw.event.input.proxy.ProxyAutonomyReHomed;
 import crw.event.input.proxy.ProxyCreated;
 import crw.event.input.proxy.ProxyEndsGAMSAlgorithm;
 import crw.event.input.proxy.ProxyPathCompleted;
 import crw.event.input.proxy.ProxyPathFailed;
 import crw.event.input.proxy.ProxyPoseUpdated;
+import crw.event.input.proxy.ProxyResetsLocalization;
 import crw.event.input.service.AssembleLocationResponse;
 import crw.event.input.service.QuantityEqual;
 import crw.event.input.service.QuantityGreater;
@@ -22,13 +24,16 @@ import crw.event.output.proxy.ProxyEndGAMSAlgorithm;
 import crw.event.output.proxy.ProxyExecutePath;
 import crw.event.output.proxy.ProxyExploreArea;
 import crw.event.output.proxy.ProxyGotoPoint;
+import crw.event.output.proxy.ProxyReHomeAutonomy;
 import crw.event.output.proxy.ProxyResendWaypoints;
+import crw.event.output.proxy.ProxyResetLocalization;
 import crw.event.output.proxy.SetGains;
 import crw.event.output.service.ProxyCompareDistanceRequest;
 import crw.general.FastSimpleBoatSimulator;
 import crw.proxy.BoatProxy;
 import crw.proxy.CrwProxyServer;
 import crw.proxy.SimulatedGAMSBoat;
+import crw.proxy.TELEOPERATION_TYPES;
 import crw.ui.ImagePanel;
 import static crw.ui.teleop.GainsPanel.RUDDER_GAINS_AXIS;
 import static crw.ui.teleop.GainsPanel.THRUST_GAINS_AXIS;
@@ -422,8 +427,61 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             ProxyEndsGAMSAlgorithm ie = new ProxyEndsGAMSAlgorithm(oe.getId(), oe.getMissionId());
             for (GeneratedEventListenerInt listener : listeners) {
                 listener.eventGenerated(ie);
+            }
+        }
+        
+        else if (oe instanceof ProxyReHomeAutonomy) {
+            int numProxies = 0;     
+            ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
+            ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
+            ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();            
+            for (Token token : tokens) {
+                if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
+                    BoatProxy bp = (BoatProxy)token.getProxy();
+                    bp.containers.setTeleopStatus(TELEOPERATION_TYPES.NONE);
+                    bp.containers.keepCurrentLocation();
+                    bp.containers.reHome();                    
+                }                
+            }            
+            if (numProxies == 0) {
+                LOGGER.log(Level.WARNING, "ProxyEndGAMSAlgorithm had no relevant proxies attached: " + oe);
+            }
+            KnowledgeBase knowledge;
+            if (proxyServer instanceof CrwProxyServer) {            
+                knowledge = ((CrwProxyServer)proxyServer).knowledge;            
+                knowledge.sendModifieds();
             }            
             
+            ProxyAutonomyReHomed ie = new ProxyAutonomyReHomed(oe.getId(), oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }                        
+        }
+        
+        else if (oe instanceof ProxyResetLocalization) {
+            int numProxies = 0;     
+            ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
+            ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
+            for (Token token : tokens) {
+                if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
+                    BoatProxy bp = (BoatProxy)token.getProxy();
+                    bp.containers.resetLocalization();
+                }                
+            }
+            if (numProxies == 0) {
+                LOGGER.log(Level.WARNING, "ProxyEndGAMSAlgorithm had no relevant proxies attached: " + oe);
+            }
+            ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();            
+            KnowledgeBase knowledge;
+            if (proxyServer instanceof CrwProxyServer) {            
+                knowledge = ((CrwProxyServer)proxyServer).knowledge;            
+                knowledge.sendModifieds();
+            }                        
+            
+            ProxyResetsLocalization ie = new ProxyResetsLocalization(oe.getId(), oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }
         }
         
         else if (oe instanceof ProxyExecutePath
@@ -453,7 +511,10 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 || sub.getSubscriptionClass() == QuantityLess.class
                 || sub.getSubscriptionClass() == QuantityEqual.class
                 || sub.getSubscriptionClass() == ProxyPoseUpdated.class
-                || sub.getSubscriptionClass() == SetGains.class) {
+                || sub.getSubscriptionClass() == SetGains.class
+                || sub.getSubscriptionClass() == ProxyEndsGAMSAlgorithm.class
+                || sub.getSubscriptionClass() == ProxyAutonomyReHomed.class
+                || sub.getSubscriptionClass() == ProxyResetsLocalization.class) {
             LOGGER.log(Level.FINE, "\tProxyEventHandler taking subscription: " + sub);
             if (!listeners.contains(sub.getListener())) {
                 LOGGER.log(Level.FINE, "\t\tProxyEventHandler adding listener: " + sub.getListener());
@@ -479,7 +540,10 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 || sub.getSubscriptionClass() == QuantityLess.class
                 || sub.getSubscriptionClass() == QuantityEqual.class
                 || sub.getSubscriptionClass() == ProxyPoseUpdated.class
-                || sub.getSubscriptionClass() == SetGains.class)
+                || sub.getSubscriptionClass() == SetGains.class
+                || sub.getSubscriptionClass() == ProxyEndsGAMSAlgorithm.class
+                || sub.getSubscriptionClass() == ProxyAutonomyReHomed.class
+                || sub.getSubscriptionClass() == ProxyResetsLocalization.class)
                 && listeners.contains(sub.getListener())) {
             LOGGER.log(Level.FINE, "\tProxyEventHandler canceling subscription: " + sub);
             if (listenerGCCount.get(sub.getListener()) == 1) {

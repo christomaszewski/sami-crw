@@ -88,7 +88,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         t = System.currentTimeMillis();
         threader = new Threader(knowledge);
         threader.run(25.0,"movement",new MovementThread());
-        threader.run(0.2,"KB printout",new KnowledgeBasePrintoutThread());
+        threader.run(1.0/30.0,"KB printout",new KnowledgeBasePrintoutThread());
         
         knowledge.sendModifieds();
     }
@@ -179,9 +179,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         // remember, GUI listens to latitude and longitude, so they must also be updated
         LatLong latLong = UTM.utmToLatLong(utm, ReferenceEllipsoid.WGS84);
         double lat = latLong.latitudeValue(NonSI.DEGREE_ANGLE);
-        double lon = latLong.longitudeValue(NonSI.DEGREE_ANGLE);
-        //containers.latLong.set(0,lat);
-        //containers.latLong.set(1,lon);                    
+        double lon = latLong.longitudeValue(NonSI.DEGREE_ANGLE);                
         self.device.location.set(0, lat);
         self.device.location.set(1, lon);
         self.device.location.set(2, 0.0); 

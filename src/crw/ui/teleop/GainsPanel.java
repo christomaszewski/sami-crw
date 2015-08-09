@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,6 +44,11 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     /////////////////////////////////////////////////////////////////////////
     //private AsyncVehicleServer activeVehicle = null;
     KnowledgeBase knowledge;
+    private JPanel thrustFractionFixP;
+    private JCheckBox thrustFractionFixCB;    
+    public JTextField fixThrustFractionTF;
+    public boolean thrustFractionIsFixed = false;
+    public double thrustFractionFixedValue;
     /////////////////////////////////////////////////////////////////////////
     private ObserverInt activeWinchObserver = null;    
     
@@ -116,12 +122,28 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
 
         applyB = new JButton("Apply");
         applyB.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent ae) {
                 applyFieldValues();
             }
         });
+        
+        fixThrustFractionTF = new JTextField();
+        fixThrustFractionTF.setPreferredSize(new Dimension(50, fixThrustFractionTF.getPreferredSize().height));
+        
+        thrustFractionFixP = new JPanel();
+        thrustFractionFixP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        thrustFractionFixP.setLayout(new BoxLayout(thrustFractionFixP, BoxLayout.X_AXIS));
+        thrustFractionFixCB = new JCheckBox("fix thrust?",false);              
+        thrustFractionFixCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fixThrustFraction();
+            }
+        });
+        
+        thrustFractionFixP.add(thrustFractionFixCB);
+        thrustFractionFixP.add(fixThrustFractionTF);
 
         contentP = new JPanel();
         contentP.setLayout(new BoxLayout(contentP, BoxLayout.Y_AXIS));
@@ -131,6 +153,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         contentP.add(PPI_P);
         contentP.add(winchPidP);
         contentP.add(applyB);
+        contentP.add(thrustFractionFixP);
         getViewport().add(contentP);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -144,6 +167,23 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         }
         return ret;
     }
+    
+    
+    public void fixThrustFraction() {
+        if (thrustFractionFixCB.isSelected()) {
+            //System.out.println("FIXING thrust fraction...");
+            thrustFractionIsFixed = true;
+            double temp = stringToDouble(fixThrustFractionTF.getText());
+            if (Double.isFinite(temp)) {
+                 thrustFractionFixedValue = temp;
+            }
+        }
+        else {
+            //System.out.println("thrust fraction UNFIXED");
+            thrustFractionIsFixed = false;
+        }
+    }
+    
 
     public void applyFieldValues() {
         //if (activeVehicle == null) {
@@ -250,7 +290,19 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         if (activeProxy != null) {
             //activeVehicle = boatProxy.getVehicleServer();
             
-            
+            double[] thrustPIDGains = activeProxy.containers.getThrustPIDGains();
+            double[] bearingPIDGains = activeProxy.containers.getBearingPIDGains();
+            double[] thrustPPIGains = activeProxy.containers.getThrustPPIGains();
+            thrustPTF.setText(String.format("%.2f", thrustPIDGains[0]));
+            thrustITF.setText(String.format("%.2f", thrustPIDGains[0]));
+            thrustDTF.setText(String.format("%.2f", thrustPIDGains[0]));
+            rudderPTF.setText(String.format("%.2f", bearingPIDGains[0]));
+            rudderITF.setText(String.format("%.2f", bearingPIDGains[0]));
+            rudderDTF.setText(String.format("%.2f", bearingPIDGains[0]));
+            PPI_PosP_TF.setText(String.format("%.2f", thrustPPIGains[0]));
+            PPI_VelP_TF.setText(String.format("%.2f", thrustPPIGains[0]));
+            PPI_VelI_TF.setText(String.format("%.2f", thrustPPIGains[0]));            
+              
 
             // Retrieve vehicle specific values
             //@todo Ideally we would only do this if the teleop panel is opened
