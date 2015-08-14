@@ -3,7 +3,6 @@ package crw.proxy;
 import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import com.madara.KnowledgeRecord;
-import com.madara.UpdateSettings;
 import com.madara.containers.NativeDoubleVector;
 import com.madara.threads.Threader;
 import com.madara.threads.BaseThread;
@@ -128,52 +127,12 @@ public class BoatProxy extends Thread implements ProxyInt {
     
     public LutraMadaraContainers containers;
     Threader madaraListenerThreader;    
+    double[] errorEllipse;
     
-    public boolean isTeleop() {
-        return ((int)containers.teleopStatus.get() > 0);
-    }    
-    
-    void sendWaypointsQueue() {
-        int N = _curWaypoints.size();
-        EvalSettings delay = new EvalSettings();
-        delay.setDelaySendingModifieds(true);
-        knowledge.set(containers.prefix + "command","waypoints",delay); // note the delay
-        knowledge.set(containers.prefix + "command.size", N,delay);        
-        
-        Position[] wps = _curWaypoints.toArray(new Position[N]);
-        for (int i = 0; i < N; i++) {                                    
-            //UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
-            //double lat = utmCoordTemp.getLatitude().degrees;
-            //double lon = utmCoordTemp.getLongitude().degrees;            
-            double lat = wps[i].latitude.degrees;            
-            double lon = wps[i].longitude.degrees;
-            
-            // TODO: switch to DoubleVector
-            NativeDoubleVector wpNDV = new NativeDoubleVector();
-            wpNDV.setName(knowledge, java.lang.String.format("%scommand.%d",containers.prefix,i));
-            wpNDV.resize(3);            
-            wpNDV.set(0,lat);
-            wpNDV.set(1,lon);
-            wpNDV.set(2,0.0); // altitude
-            wpNDV.free();
-        }      
-        knowledge.sendModifieds();
-        delay.free();
-    }
-    
-    public void endGAMSAlgorithm() {        
-        containers.keepCurrentLocation();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ex) {
-            //
-        }        
-        knowledge.set(containers.prefix + "command", "null"); // this must happen AFTER at least one call from the GAMS algorithm to the platform's move()
-    }
-    
-    // MADARA threads
     static final int MADARA_POSE_UPDATE_RATE = 10; // Hz
     static final int MADARA_WP_UPDATE_RATE = 4; // Hz
+    static final int MADARA_CONNECTIVITY_WATCHDOG_RATE = 1; // Hz
+    static final int MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH = -75; // dBi
 
     public String getIpAddress() {
         //return ipAddress;
@@ -219,10 +178,59 @@ public class BoatProxy extends Thread implements ProxyInt {
 
         // startCamera();
     }
+    
+    public void shutdown() {
+        madaraListenerThreader.free();
+        containers.freeAll();
+        knowledge.free();
+    }
+    
+    public boolean isTeleop() {
+        return ((int)containers.teleopStatus.get() > 0);
+    }    
+    
+    void sendWaypointsQueue() {
+        int N = _curWaypoints.size();
+        EvalSettings delay = new EvalSettings();
+        delay.setDelaySendingModifieds(true);
+        knowledge.set(containers.prefix + "command","waypoints",delay); // note the delay
+        knowledge.set(containers.prefix + "command.size", N,delay);        
+        
+        Position[] wps = _curWaypoints.toArray(new Position[N]);
+        for (int i = 0; i < N; i++) {                                    
+            //UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
+            //double lat = utmCoordTemp.getLatitude().degrees;
+            //double lon = utmCoordTemp.getLongitude().degrees;            
+            double lat = wps[i].latitude.degrees;            
+            double lon = wps[i].longitude.degrees;
+            
+            // TODO: switch to DoubleVector
+            NativeDoubleVector wpNDV = new NativeDoubleVector();
+            wpNDV.setName(knowledge, java.lang.String.format("%scommand.%d",containers.prefix,i));
+            wpNDV.resize(3);            
+            wpNDV.set(0,lat);
+            wpNDV.set(1,lon);
+            wpNDV.set(2,0.0); // altitude
+            wpNDV.free();
+        }      
+        knowledge.sendModifieds();
+        delay.free();
+    }
+    
+    public void endGAMSAlgorithm() {        
+        containers.keepCurrentLocation();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+            //
+        }        
+        knowledge.set(containers.prefix + "command", "null"); // this must happen AFTER at least one call from the GAMS algorithm to the platform's move()
+    }    
 
     public void startListeners() {
         madaraListenerThreader.run(MADARA_POSE_UPDATE_RATE,"poseListener", new MadaraPoseListener());
         madaraListenerThreader.run(MADARA_WP_UPDATE_RATE,"wpListener", new MadaraWaypointListener());        
+        madaraListenerThreader.run(MADARA_CONNECTIVITY_WATCHDOG_RATE, "wifiWatchdog", new MadaraConnectivityWatchdogListener());
     }
 
     public AsyncVehicleServer getServer() {
@@ -564,6 +572,10 @@ public class BoatProxy extends Thread implements ProxyInt {
     public Location getLocation() {
         return location;
     }
+    
+    public double[] getErrorEllipse() {
+        return errorEllipse;
+    }
 
     //public Queue<UtmPose> getCurrentWaypoints() {
     public Queue<Position> getCurrentWaypoints() {
@@ -879,15 +891,31 @@ public class BoatProxy extends Thread implements ProxyInt {
     public void completeMission(UUID missionId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    class MadaraConnectivityWatchdogListener extends BaseThread {
+        @Override
+        public void run() {
+            if (containers.connectivityWatchdog.get() == 1L) {
+                containers.connectivityWatchdog.set(0L);
+            }
+            else {
+                // TODO: how to alert the user that the boat isn't connected?
+                // A crw.event.output.ui event?
+                System.out.println(String.format("WARNING: Madara connectivity NOT available for boat # %d",_boatNo));
+            }
+            if (containers.wifiStrength.get() < MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH) {
+                // TODO: alert the user that the wifi signal is weak
+                System.out.println(String.format("WARNING: Wifi signal strength is low: %d", containers.wifiStrength.get()));
+            }
+        }
+    }
 
     class MadaraPoseListener extends BaseThread {
-        
-        KnowledgeRecord kr;
-        
         @Override
         public void run() {            
-            //double yaw = knowledge.get(containers.prefix + "eastingNorthingBearing.2").toDouble();
-            double[] eastingNorthingBearing = containers.eastingNorthingBearing.toRecord().toDoubleArray();
+            KnowledgeRecord kr = containers.eastingNorthingBearing.toRecord();
+            double[] eastingNorthingBearing = kr.toDoubleArray();
+            kr.free();
             double yaw = eastingNorthingBearing[2];
 
             double altitude = 0.0;
@@ -912,6 +940,8 @@ public class BoatProxy extends Thread implements ProxyInt {
             double easting = boatPos.getEasting();
             double northing = boatPos.getNorthing();
             
+            errorEllipse = containers.getErrorEllipse();
+            
             // update local variables
             try {                                
                 Position p = new Position(latlon, 0.0);
@@ -920,6 +950,7 @@ public class BoatProxy extends Thread implements ProxyInt {
                 _pose = new UtmPose(new Pose3D(easting, northing, altitude, roll, pitch, yaw), new Utm(zone, (hemisphere.startsWith("N") || hemisphere.startsWith("n"))));
                 position = p;
                 location = Conversion.positionToLocation(position);
+                
 
                 for (ProxyListenerInt boatProxyListener : listeners) {
                     boatProxyListener.poseUpdated();
@@ -935,7 +966,7 @@ public class BoatProxy extends Thread implements ProxyInt {
                 }
             } catch (java.lang.IllegalArgumentException iae) {
                 //iae.printStackTrace();
-            }
+            }                                    
         }
     }
     

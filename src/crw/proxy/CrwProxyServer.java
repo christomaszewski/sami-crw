@@ -1,6 +1,8 @@
 package crw.proxy;
 
 import com.madara.KnowledgeBase;
+import com.madara.UpdateSettings;
+import com.madara.containers.FlexMap;
 import com.madara.transport.QoSTransportSettings;
 import com.madara.transport.TransportType;
 import com.madara.transport.filters.LogAggregate;
@@ -36,6 +38,7 @@ public class CrwProxyServer implements ProxyServerInt {
     HashMap<ProxyInt, AbstractAsset> proxyToAssetMap = new HashMap<ProxyInt, AbstractAsset>();
     // MADARA knowlege base
     public KnowledgeBase knowledge;
+    FlexMap environmentalData;
     
     ///////////////////////////////////////////////////////
     @Override
@@ -77,8 +80,14 @@ public class CrwProxyServer implements ProxyServerInt {
         simSettings.enableParticipantTtl(1);
         knowledge.attachTransport("base_station", simSettings);
         
-        //com.madara.logger.GlobalLogger.setLevel(6);
+        environmentalData = new FlexMap();
+        environmentalData.setName(knowledge, "environmentalData");
+        UpdateSettings updateSettings = new UpdateSettings();
+        updateSettings.setTreatGlobalsAsLocals(true);
+        environmentalData.setSettings(updateSettings);
+        updateSettings.free();
         
+        //com.madara.logger.GlobalLogger.setLevel(6);        
     }
 
     public KnowledgeBase getKnowledgeBase() {
@@ -168,6 +177,13 @@ public class CrwProxyServer implements ProxyServerInt {
         if (asset == null) {
             return false;
         }
+        
+        //////// call the BoatProxy shutdown here to free() GAMS and Madara variables
+        if (proxy instanceof BoatProxy) {
+            BoatProxy bp = (BoatProxy)proxy;
+            bp.shutdown();            
+        }
+        
         proxies.remove(proxy);
         assets.remove(asset);
         proxyToAssetMap.remove(proxy);

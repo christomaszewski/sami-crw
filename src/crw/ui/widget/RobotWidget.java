@@ -12,16 +12,17 @@ import crw.ui.VideoFeedPanel;
 import crw.ui.teleop.GainsPanel;
 import crw.ui.teleop.VelocityPanel;
 import edu.cmu.ri.crw.AsyncVehicleServer;
-import edu.cmu.ri.crw.data.Twist;
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.geom.Angle;
+import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.MarkerLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.Polyline;
+import gov.nasa.worldwind.render.SurfaceEllipse;
 import gov.nasa.worldwind.render.markers.BasicMarkerAttributes;
 import gov.nasa.worldwind.render.markers.BasicMarkerShape;
 import gov.nasa.worldwind.render.markers.Marker;
@@ -39,7 +40,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.TimerTask;
@@ -86,12 +86,14 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     //
     // This increases the "grab" radius for proxy markers to make selecting a proxy easier
     private boolean visible = true;
+    private ArrayList<SurfaceEllipse> errorEllipses = new ArrayList<SurfaceEllipse>();
     private ArrayList<Marker> markers = new ArrayList<Marker>();
     private ArrayList<Position> selectedPositions = new ArrayList<Position>();
     private BoatProxy selectedProxy = null;
     private VelocityPanel velocityP;
     private GainsPanel gainsP;
     private ControlMode controlMode = ControlMode.NONE;
+    private final Hashtable<BoatProxy, SurfaceEllipse> proxyToEllipse = new Hashtable<BoatProxy, SurfaceEllipse>();
     private final Hashtable<BoatProxy, BoatMarker> proxyToMarker = new Hashtable<BoatProxy, BoatMarker>();
     private final Hashtable<BoatMarker, BoatProxy> markerToProxy = new Hashtable<BoatMarker, BoatProxy>();
     private final Hashtable<BoatProxy, UUID> proxyToWpEventId = new Hashtable<BoatProxy, UUID>();
@@ -298,9 +300,17 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     @Override
     public void proxyAdded(ProxyInt proxy) {
         if (proxy instanceof BoatProxy) {
-            final BoatProxy boatProxy = (BoatProxy) proxy;
+            final BoatProxy boatProxy = (BoatProxy) proxy;            
+            
+            // Create surface ellipse
+            final SurfaceEllipse se = new SurfaceEllipse();
+            double[] errorEllipse = boatProxy.containers.getErrorEllipse();
+            se.setCenter(new LatLon(boatProxy.getPosition().latitude,boatProxy.getPosition().longitude));
+            se.setRadii(errorEllipse[0],errorEllipse[1]);
+            se.setHeading(Angle.fromRadians(-errorEllipse[2]));
+            
             // Create marker
-            final BoatMarker bm = new BoatMarker(boatProxy, boatProxy.getPosition(), new BasicMarkerAttributes(new Material(boatProxy.getColor()), BasicMarkerShape.ORIENTED_SPHERE, 0.9));
+            final BoatMarker bm = new BoatMarker(boatProxy, boatProxy.getPosition(), new BasicMarkerAttributes(new Material(boatProxy.getColor()), BasicMarkerShape.ORIENTED_SPHERE, 0.9));            
             bm.getAttributes().setHeadingMaterial(UNSELECTED_MAT);
             bm.setPosition(boatProxy.getPosition());
 
@@ -339,6 +349,49 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                 public void waypointsUpdated() {
                 }
             });
+            
+            // Create listener for error ellipse //////////////////////////////////////////////////////////////////////////////////////////////
+            boatProxy.addListener(new ProxyListenerInt() {
+                
+                boolean first = true;
+
+                @Override
+                public void eventOccurred(InputEvent ie) {
+                }
+
+                @Override
+                public void poseUpdated() {       
+                    if (first) {
+                        synchronized (errorEllipses) {
+                            if (!errorEllipses.contains(se)) {
+                                errorEllipses.add(se);
+                                proxyToEllipse.put(boatProxy, se);                                
+                            }
+                        }                        
+                        first = false;
+                    }
+                    //else {
+                        //renderableLayer.removeRenderable(se);
+                    //}
+                                        
+                    double[] ellipse = boatProxy.containers.getErrorEllipse();                    
+                    se.setCenter(new LatLon(boatProxy.getPosition().latitude,boatProxy.getPosition().longitude));
+                    se.setRadii(errorEllipse[0],errorEllipse[1]);
+                    se.setHeading(Angle.fromRadians(-errorEllipse[2]));                    
+
+                    //System.out.println(se.toString());
+                    renderableLayer.addRenderable(se);  
+                    wwPanel.wwCanvas.redraw();
+                }
+
+                @Override
+                public void waypointsUpdated() {
+                }
+
+                @Override
+                public void waypointsComplete() {
+                }                
+            });  //////////////////////////////////////////////////////////////////////////////////////////////
         }
     }
 
@@ -491,9 +544,11 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             case TELEOP: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 cancelAssignedWaypoints();
                 showExpandables();
-                enableTeleop();
-                selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.GUI_MS);////////////////////////////////////////                
-                knowledge.sendModifieds();
+                if (selectedProxy != null) {
+                    enableTeleop();
+                    selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.GUI_MS);////////////////////////////////////////                
+                    knowledge.sendModifieds();
+                }
                 break;
             case POINT:
                 hideExpandables();
@@ -506,8 +561,10 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             case NONE:
                 hideExpandables();
                 disableTeleop();
-                selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.NONE);////////////////////////////////////////
-                knowledge.sendModifieds();
+                if (selectedProxy != null) {
+                    selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.NONE);////////////////////////////////////////
+                    knowledge.sendModifieds();
+                }
                 break;
         }
     }

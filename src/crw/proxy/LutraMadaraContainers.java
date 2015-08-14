@@ -7,6 +7,7 @@ import com.madara.KnowledgeBase;
 import com.madara.UpdateSettings;
 import com.madara.containers.Double;
 import com.madara.containers.DoubleVector;
+import com.madara.containers.FlexMap;
 import com.madara.containers.Integer;
 import com.madara.containers.NativeDoubleVector;
 import com.madara.containers.String;
@@ -41,6 +42,7 @@ public class LutraMadaraContainers {
     NativeDoubleVector thrustPIDGains;
     NativeDoubleVector thrustPPIGains;
     NativeDoubleVector eastingNorthingBearing; // UTM x,y,th
+    NativeDoubleVector errorEllipse; // width, height, angle
     NativeDoubleVector location; // stand in for device.{id}.location
     NativeDoubleVector dest; // stand in for device.{.id}.dest
     NativeDoubleVector home; // stand in for device.{.id}.ome
@@ -48,6 +50,8 @@ public class LutraMadaraContainers {
     String latitudeZone; // a single character (see UTM) http://jscience.org/api/org/jscience/geography/coordinates/UTM.html
     Integer waypointsFinishedStatus; // used as a stand in for device.{id}.algorithm.waypoints.finished
     Integer resetLocalization;
+    Integer connectivityWatchdog;
+    Integer wifiStrength;
     final double defaultSufficientProximity = 3.0;
     final double defaultPeakVelocity = 2.0;
     final double defaultAccelTime = 5.0;
@@ -92,6 +96,12 @@ public class LutraMadaraContainers {
         eastingNorthingBearing = new NativeDoubleVector();
         eastingNorthingBearing.setName(knowledge, prefix + "eastingNorthingBearing");
         eastingNorthingBearing.resize(3);
+        
+        errorEllipse = new NativeDoubleVector();
+        errorEllipse.setSettings(settings);   
+        errorEllipse.setName(knowledge, prefix + "errorEllipse");
+        errorEllipse.resize(3);
+        
         location = new NativeDoubleVector();
         location.setName(knowledge, prefix + "location");
         location.setSettings(settings);   
@@ -132,9 +142,13 @@ public class LutraMadaraContainers {
         thrustFraction.setName(knowledge, prefix + "thrustFraction");
         bearingFraction.setName(knowledge, prefix + "bearingFraction");        
                
-        
-        
-        
+        connectivityWatchdog = new Integer();
+        connectivityWatchdog.setName(knowledge, prefix + "connectivityWatchdog");
+        connectivityWatchdog.set(0L); // boat sets to 1, GUI sets to 0, if the GUI doesn't see a 1, there is an issue with the connection
+
+        wifiStrength = new Integer();
+        wifiStrength.setName(knowledge, prefix + "wifiStrength");        
+                
         restoreDefaults();
         
         settings.free();
@@ -160,6 +174,9 @@ public class LutraMadaraContainers {
         thrustFraction.free();
         bearingFraction.free();
         resetLocalization.free();
+        errorEllipse.free();
+        connectivityWatchdog.free();
+        wifiStrength.free();
     }
 
     public void restoreDefaults() {
@@ -263,7 +280,15 @@ public class LutraMadaraContainers {
         result[1] = thrustPPIGains.get(1);
         result[2] = thrustPPIGains.get(2);
         return result;
-    }       
+    }      
+    
+    public double[] getErrorEllipse() {
+        double[] result = new double[3];
+        result[0] = errorEllipse.get(0);
+        result[1] = errorEllipse.get(1);
+        result[2] = errorEllipse.get(2);
+        return result;        
+    }
     
     
 

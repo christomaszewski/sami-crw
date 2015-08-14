@@ -153,7 +153,7 @@ public class RobotTrackWidget implements MarkupComponentWidget, WorldWindWidgetI
 
     class BoatProxyListener implements ProxyListenerInt {
 
-        Polyline curPolyline = null, futurePolyline = null;
+        Polyline curPolyline = null, futurePolyline = null;        
         BoatProxy boatProxy;
 
         public BoatProxyListener(BoatProxy boatProxy) {
