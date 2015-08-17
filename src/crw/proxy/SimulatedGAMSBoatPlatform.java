@@ -287,6 +287,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     }
     @Override
     public int sense() {        
+        containers.connectivityWatchdog.set(1L);
         return PlatformStatusEnum.OK.value();
     }
     @Override

@@ -6,14 +6,9 @@ import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import com.madara.UpdateSettings;
 import com.madara.containers.Double;
-import com.madara.containers.DoubleVector;
-import com.madara.containers.FlexMap;
 import com.madara.containers.Integer;
 import com.madara.containers.NativeDoubleVector;
 import com.madara.containers.String;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 
 /**
@@ -63,10 +58,7 @@ public class LutraMadaraContainers {
 
     Self self;
     
-    public LutraMadaraContainers(KnowledgeBase knowledge, int id) {
-        
-        System.out.println("******** LutraMadaraContrainers CONSTRUCTOR ********");
-        
+    public LutraMadaraContainers(KnowledgeBase knowledge, int id) {        
         this.knowledge = knowledge;
         this.prefix = java.lang.String.format("device.%d.",id);
         this.settings = new UpdateSettings();

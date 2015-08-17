@@ -7,6 +7,7 @@ import com.gams.controllers.BaseController;
 import com.madara.KnowledgeBase;
 import com.madara.transport.QoSTransportSettings;
 import com.madara.transport.TransportType;
+import crw.sensor.BoatSensor;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 
 /**
@@ -25,12 +26,14 @@ public class SimulatedGAMSBoat implements Runnable {
     BaseAlgorithm algorithm;
     UTMCoord initialUTMCoord;
     BoatProxy bp;
+    BoatSensor sensor;
     
     public SimulatedGAMSBoat(int id, int teamSize, UTMCoord initialUTMCoord, BoatProxy bp) {
         this.id = id;
         this.teamSize = teamSize;
         this.initialUTMCoord = initialUTMCoord;
         this.bp = bp;        
+        sensor = new BoatSensor(this.bp, 0); // one fake sensor on channel 0
         settings = new QoSTransportSettings();
         settings.setHosts(new String[]{"239.255.0.1:4150"});
         settings.setType(TransportType.MULTICAST_TRANSPORT);
