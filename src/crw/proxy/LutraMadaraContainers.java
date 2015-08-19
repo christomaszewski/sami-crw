@@ -47,12 +47,12 @@ public class LutraMadaraContainers {
     Integer resetLocalization;
     Integer connectivityWatchdog;
     Integer wifiStrength;
-    final double defaultSufficientProximity = 3.0;
+    final double defaultSufficientProximity = 2.0;
     final double defaultPeakVelocity = 2.0;
     final double defaultAccelTime = 5.0;
     final double defaultDecelTime = 5.0;
     final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_MS.getLongValue();
-    final double[] bearingPIDGainsDefaults = new double[]{0.5,0.0,0.5}; // cols: P,I,D
+    final double[] bearingPIDGainsDefaults = new double[]{0.25,0.0,2.0}; // cols: P,I,D
     final double[] thrustPIDGainsDefaults = new double[]{0.2,0,0.3}; // cols: P,I,D
     final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.2}; // cols: Pos-P, Vel-P, Vel-I    
 
@@ -119,14 +119,17 @@ public class LutraMadaraContainers {
         
         bearingPIDGains= new NativeDoubleVector();
         bearingPIDGains.setName(knowledge, prefix + "bearingPIDGains");
+        bearingPIDGains.setSettings(settings);
         bearingPIDGains.resize(3);
 
         thrustPIDGains= new NativeDoubleVector();
         thrustPIDGains.setName(knowledge, prefix + "thrustPIDGains");
+        thrustPIDGains.setSettings(settings);
         thrustPIDGains.resize(3);
 
         thrustPPIGains= new NativeDoubleVector();
         thrustPPIGains.setName(knowledge, prefix + "thrustPPIGains");
+        thrustPPIGains.setSettings(settings);
         thrustPPIGains.resize(3);
         
         thrustFraction = new Double();
@@ -236,9 +239,12 @@ public class LutraMadaraContainers {
     }
     
     public void setBearingPIDGains(double P, double I, double D) {
+        UpdateSettings makeItGlobal = new UpdateSettings();
+        bearingPIDGains.setSettings(makeItGlobal);
         bearingPIDGains.set(0, P);
         bearingPIDGains.set(1, I);
         bearingPIDGains.set(2, D);
+        makeItGlobal.free();
     }
     public double[] getBearingPIDGains() {
         double[] result = new double[3];
@@ -249,9 +255,12 @@ public class LutraMadaraContainers {
     }
     
     public void setThrustPIDGains(double P, double I, double D) {
+        UpdateSettings makeItGlobal = new UpdateSettings();
+        thrustPIDGains.setSettings(makeItGlobal);
         thrustPIDGains.set(0, P);
         thrustPIDGains.set(1, I);
-        thrustPIDGains.set(2, D);        
+        thrustPIDGains.set(2, D);  
+        makeItGlobal.free();
     }    
     public double[] getThrustPIDGains() {
         double[] result = new double[3];
@@ -262,9 +271,12 @@ public class LutraMadaraContainers {
     }    
     
     public void setThrustPPIGains(double PosP, double VelP, double VelI) {
+        UpdateSettings makeItGlobal = new UpdateSettings();
+        thrustPPIGains.setSettings(makeItGlobal);        
         thrustPPIGains.set(0,PosP);
         thrustPPIGains.set(1,VelP);
         thrustPPIGains.set(2,VelI);
+        makeItGlobal.free();
     }
     public double[] getThrustPPIGains() {
         double[] result = new double[3];

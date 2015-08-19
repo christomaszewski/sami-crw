@@ -70,7 +70,7 @@ public class CrwProxyServer implements ProxyServerInt {
         settings.setType(TransportType.BROADCAST_TRANSPORT);
         settings.setRebroadcastTtl(2);
         settings.enableParticipantTtl(1);
-        settings.addSendFilter(new LogAggregate());
+        //settings.addSendFilter(new LogAggregate());
         knowledge = new KnowledgeBase("base_station", settings);
         
         QoSTransportSettings simSettings = new QoSTransportSettings();
@@ -80,12 +80,14 @@ public class CrwProxyServer implements ProxyServerInt {
         simSettings.enableParticipantTtl(1);
         knowledge.attachTransport("base_station", simSettings);
         
+        /*
         environmentalData = new FlexMap();
         environmentalData.setName(knowledge, "environmentalData");
         UpdateSettings updateSettings = new UpdateSettings();
         updateSettings.setTreatGlobalsAsLocals(true);
         environmentalData.setSettings(updateSettings);
         updateSettings.free();
+                */
         
         //com.madara.logger.GlobalLogger.setLevel(6);        
     }
