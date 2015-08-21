@@ -1,6 +1,9 @@
 package crw.sensor;
 
+import com.madara.KnowledgeRecord;
+import com.madara.containers.FlexMap;
 import crw.proxy.BoatProxy;
+import static crw.sensor.Datum.df;
 import sami.event.OutputEvent;
 import sami.path.Location;
 import sami.sensor.Observation;
@@ -10,7 +13,10 @@ import edu.cmu.ri.crw.SensorListener;
 import edu.cmu.ri.crw.VehicleServer;
 import edu.cmu.ri.crw.data.SensorData;
 import gov.nasa.worldwind.geom.Position;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +34,7 @@ public class BoatSensor implements ObserverInt, SensorListener {
     int channel;
     ArrayList<ObservationListenerInt> listeners = new ArrayList<ObservationListenerInt>();
     Hashtable<ObservationListenerInt, Integer> listenerCounter = new Hashtable<ObservationListenerInt, Integer>();
+    boolean firstSimulatedData = true;
 
     // Stuff for simulated data creation
     static double base = 100.0;
@@ -36,6 +43,7 @@ public class BoatSensor implements ObserverInt, SensorListener {
     static double sigmaIncreaseRate = 0.00;
     static double valueDecreaseRate = 1.00;
     static double addRate = 0.01;
+    static double noiseLevel = 1.0;
     static ArrayList<Double> xs = new ArrayList<Double>();
     static ArrayList<Double> ys = new ArrayList<Double>();
     static ArrayList<Double> vs = new ArrayList<Double>();
@@ -47,7 +55,7 @@ public class BoatSensor implements ObserverInt, SensorListener {
     public BoatSensor(final BoatProxy proxy, int channel) {
         this.proxy = proxy;
         this.channel = channel;
-        proxy.getVehicleServer().addSensorListener(channel, this, null);
+        //proxy.getVehicleServer().addSensorListener(channel, this, null); /////////////////////////////////////////////////////
 
         // Cheating dummy data, another version of this is in SimpleBoatSimulator, 
         // effectively overridden by overridding addSensorListener in FastSimpleBoatSimulator
@@ -66,6 +74,9 @@ public class BoatSensor implements ObserverInt, SensorListener {
                         double[] prev = null;
 
                         currLoc = proxy.getPosition();
+                        
+                        System.out.println(String.format("BoatSensor: LAT = %f, LON = %f", currLoc.latitude.degrees, currLoc.longitude.degrees));
+                        
                         if (currLoc != null) {
                             SensorData sd = new SensorData();
 
@@ -149,15 +160,17 @@ public class BoatSensor implements ObserverInt, SensorListener {
                 double dx = xs.get(i) - lon;
                 double dy = ys.get(i) - lat;
                 double distSq = dx * dx + dy * dy;
+                double noise = noiseLevel*CoreHelper.RANDOM.nextGaussian();
 
                 double dv = vs.get(i) * (1.0 / Math.sqrt(2.0 * Math.PI * sigmas.get(i) * sigmas.get(i))) * Math.pow(Math.E, -(distSq / (2.0 * sigmas.get(i) * sigmas.get(i))));
                 // if (i == 0) System.out.println("Delta at dist " + Math.sqrt(distSq) + " for " + sigmas.get(i) + " is " + dv);
-                v += dv;
+                v += dv + noise;
             }
         }
         return v;
     }
 
+    
     @Override
     public void addListener(ObservationListenerInt l) {
         if (!listenerCounter.containsKey(l)) {
@@ -183,20 +196,43 @@ public class BoatSensor implements ObserverInt, SensorListener {
             listenerCounter.put(l, listenerCounter.get(l) - 1);
         }
     }
-
+        
     @Override
     public void handleEvent(OutputEvent oe) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
 
     @Override
     public void receivedSensor(SensorData sd) {
         Position curP = proxy.getPosition();
         Long timeReceived = System.currentTimeMillis();
-        Location curLocation = new Location(curP.latitude.degrees, curP.longitude.degrees, 0);
-        Observation obs = new Observation(sd.type.toString(), sd.data[0], proxy.getName(), curLocation, timeReceived);
-        for (ObservationListenerInt listener : listeners) {
-            listener.newObservation(obs);
+        //Location curLocation = new Location(curP.latitude.degrees, curP.longitude.degrees, 0);
+        //Observation obs = new Observation(sd.type.toString(), sd.data[0], proxy.getName(), curLocation, timeReceived);
+        //for (ObservationListenerInt listener : listeners) {
+        //    listener.newObservation(obs);
+        //}
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Madara version:        
+        if (!(curP.latitude.degrees == 0.0 && curP.longitude.degrees == 0.0)) {
+            FlexMap newDatum = new FlexMap();
+            newDatum.setName(proxy.getKnowledgeBase(),proxy.containers.prefix + "environmentalData.SIMULATED");
+            KnowledgeRecord KR = newDatum.get("count").toRecord();
+            long currentCount = KR.toLong();
+            KR.free();
+            newDatum.get("count").set(currentCount + 1);
+            String n = String.format("%d",currentCount);
+            newDatum.get(n).get("latitude").set(curP.latitude.degrees);
+            newDatum.get(n).get("longitude").set(curP.longitude.degrees);
+            DateFormat df = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
+            Date dateobj = new Date();
+            newDatum.get(n).get("time").set(df.format(dateobj));
+            newDatum.get(n).get("value").set(sd.data[0]);
+            proxy.sendMadaraModifieds();
+            newDatum.free();
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
 }

@@ -6,6 +6,7 @@ import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import com.madara.UpdateSettings;
 import com.madara.containers.Double;
+import com.madara.containers.FlexMap;
 import com.madara.containers.Integer;
 import com.madara.containers.NativeDoubleVector;
 import com.madara.containers.String;
@@ -21,9 +22,10 @@ public class LutraMadaraContainers {
     // Then just pass this object around in the constructors for things like the EFK and controller
 
     KnowledgeBase knowledge;
-    java.lang.String prefix;
+    public java.lang.String prefix;
     UpdateSettings settings; // used to force a global variable to not broadcast as if it were local
 
+    FlexMap environmentalData;
     Double distToDest;
     Double sufficientProximity;
     Double peakVelocity;
@@ -143,6 +145,10 @@ public class LutraMadaraContainers {
 
         wifiStrength = new Integer();
         wifiStrength.setName(knowledge, prefix + "wifiStrength");        
+        
+        environmentalData = new FlexMap();
+        environmentalData.setName(knowledge, prefix + "environmentalData");
+        
                 
         restoreDefaults();
         
@@ -172,6 +178,7 @@ public class LutraMadaraContainers {
         errorEllipse.free();
         connectivityWatchdog.free();
         wifiStrength.free();
+        environmentalData.free();
     }
 
     public void restoreDefaults() {
@@ -193,6 +200,14 @@ public class LutraMadaraContainers {
     
     public void setTeleopStatus(TELEOPERATION_TYPES type) {
         teleopStatus.set(type.getLongValue());
+    }
+    
+    public double[] getLocation() {
+        double[] result = new double[3];
+        result[0] = location.get(0);
+        result[1] = location.get(1);
+        result[2] = 0.0;
+        return result;
     }
     
     public void resetLocalization() {

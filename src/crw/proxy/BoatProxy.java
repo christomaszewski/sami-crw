@@ -93,8 +93,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     HashMap<OutputEvent, Task> oeToTask = new HashMap<OutputEvent, Task>();
     protected ArrayList<ProxyListenerInt> listeners = new ArrayList<ProxyListenerInt>();
     protected Hashtable<ProxyListenerInt, Integer> listenerCounter = new Hashtable<ProxyListenerInt, Integer>();
-    // ROS update
-    //UdpVehicleServer _server;
+    
     PoseListener _stateListener;
     SensorListener _sensorListener;
     WaypointListener _waypointListener;
@@ -105,9 +104,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     private Location location = null;
     private BufferedImage latestImg = null;
     // Waypoints
-    //final Queue<UtmPose> _curWaypoints = new LinkedList<UtmPose>();
     final Queue<Position> _curWaypoints = new LinkedList<Position>();
-    //final Queue<UtmPose> _futureWaypoints = new LinkedList<UtmPose>();
     final Queue<Position> _futureWaypoints = new LinkedList<Position>();
     
     Iterable<Position> _curWaypointsPos = null;
@@ -134,18 +131,12 @@ public class BoatProxy extends Thread implements ProxyInt {
     static final int MADARA_CONNECTIVITY_WATCHDOG_RATE = 1; // Hz
     static final int MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH = -75; // dBi
 
-    public String getIpAddress() {
-        //return ipAddress;
-        return "IHaveNoIpAddress";
-    }
-
     // End stuff for simulated data creation
     //public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
     public BoatProxy(final String name, Color color, final int boatNo, KnowledgeBase knowledge) {
         this._boatNo = boatNo;
         //this.address = addr;
         this.knowledge = knowledge;
-        //ipAddress = address.toString().substring(address.toString().indexOf("/") + 1);
 
         containers = new LutraMadaraContainers(knowledge, boatNo);
         
@@ -179,6 +170,7 @@ public class BoatProxy extends Thread implements ProxyInt {
         // startCamera();
     }
     
+    
     public void shutdown() {
         madaraListenerThreader.free();
         containers.freeAll();
@@ -188,6 +180,19 @@ public class BoatProxy extends Thread implements ProxyInt {
     public boolean isTeleop() {
         return ((int)containers.teleopStatus.get() > 0);
     }    
+    
+    public String getIpAddress() {
+        //return ipAddress;
+        return "IHaveNoIpAddress";
+    }
+    
+    public KnowledgeBase getKnowledgeBase() {
+        return knowledge;
+    }
+    
+    public void sendMadaraModifieds() {
+        knowledge.sendModifieds();
+    }
     
     void sendWaypointsQueue() {
         int N = _curWaypoints.size();
