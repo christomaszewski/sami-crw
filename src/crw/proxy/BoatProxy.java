@@ -130,6 +130,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     static final int MADARA_WP_UPDATE_RATE = 4; // Hz
     static final int MADARA_CONNECTIVITY_WATCHDOG_RATE = 1; // Hz
     static final int MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH = -75; // dBi
+    static final int GPS_WATCHDOG_RATE = 1; // Hz
 
     // End stuff for simulated data creation
     //public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
@@ -236,6 +237,7 @@ public class BoatProxy extends Thread implements ProxyInt {
         madaraListenerThreader.run(MADARA_POSE_UPDATE_RATE,"poseListener", new MadaraPoseListener());
         madaraListenerThreader.run(MADARA_WP_UPDATE_RATE,"wpListener", new MadaraWaypointListener());        
         madaraListenerThreader.run(MADARA_CONNECTIVITY_WATCHDOG_RATE, "wifiWatchdog", new MadaraConnectivityWatchdogListener());
+        madaraListenerThreader.run(GPS_WATCHDOG_RATE, "gpsWatchdog", new GPSWatchdogListener());
     }
 
     public AsyncVehicleServer getServer() {
@@ -895,6 +897,21 @@ public class BoatProxy extends Thread implements ProxyInt {
     @Override
     public void completeMission(UUID missionId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    class GPSWatchdogListener extends BaseThread {
+        @Override
+        public void run() {
+            if (containers.gpsWatchdog.get() == 1L) {
+                containers.gpsWatchdog.set(0L);
+            }
+            else {
+                // TODO: how to alert the user that the boat has lost GPS?
+                // A crw.event.output.ui event?
+                System.out.println(String.format("WARNING: GPS may not available for boat # %d",_boatNo));
+            }
+        }
+        
     }
     
     class MadaraConnectivityWatchdogListener extends BaseThread {

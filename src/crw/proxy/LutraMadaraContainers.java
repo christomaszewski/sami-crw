@@ -49,14 +49,15 @@ public class LutraMadaraContainers {
     Integer resetLocalization;
     Integer connectivityWatchdog;
     Integer wifiStrength;
+    Integer gpsWatchdog;
     final double defaultSufficientProximity = 2.0;
     final double defaultPeakVelocity = 2.0;
     final double defaultAccelTime = 5.0;
     final double defaultDecelTime = 5.0;
     final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_MS.getLongValue();
-    final double[] bearingPIDGainsDefaults = new double[]{0.25,0.0,2.0}; // cols: P,I,D
-    final double[] thrustPIDGainsDefaults = new double[]{0.2,0,0.3}; // cols: P,I,D
-    final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.2}; // cols: Pos-P, Vel-P, Vel-I    
+    final double[] bearingPIDGainsDefaults = new double[]{0.3,0.01,0.5}; // cols: P,I,D
+    final double[] thrustPIDGainsDefaults = new double[]{0.1,0,0.2}; // cols: P,I,D
+    final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.05}; // cols: Pos-P, Vel-P, Vel-I
 
     Self self;
     
@@ -142,6 +143,10 @@ public class LutraMadaraContainers {
         connectivityWatchdog = new Integer();
         connectivityWatchdog.setName(knowledge, prefix + "connectivityWatchdog");
         connectivityWatchdog.set(0L); // boat sets to 1, GUI sets to 0, if the GUI doesn't see a 1, there is an issue with the connection
+        
+        gpsWatchdog = new Integer();
+        gpsWatchdog.setName(knowledge, prefix + "gpsWatchdog");
+        gpsWatchdog.set(0L); // boat sets to 1, GUI sets to 0, if the GUI doesn't see a 1, there is an issue with the gps
 
         wifiStrength = new Integer();
         wifiStrength.setName(knowledge, prefix + "wifiStrength");        
@@ -178,6 +183,7 @@ public class LutraMadaraContainers {
         errorEllipse.free();
         connectivityWatchdog.free();
         wifiStrength.free();
+        gpsWatchdog.free();
         environmentalData.free();
     }
 
