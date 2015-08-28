@@ -303,11 +303,13 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             final BoatProxy boatProxy = (BoatProxy) proxy;            
             
             // Create surface ellipse
+            /*
             final SurfaceEllipse se = new SurfaceEllipse();
             double[] errorEllipse = boatProxy.containers.getErrorEllipse();
             se.setCenter(new LatLon(boatProxy.getPosition().latitude,boatProxy.getPosition().longitude));
             se.setRadii(errorEllipse[0],errorEllipse[1]);
             se.setHeading(Angle.fromRadians(-errorEllipse[2]));
+            */
             
             // Create marker
             final BoatMarker bm = new BoatMarker(boatProxy, boatProxy.getPosition(), new BasicMarkerAttributes(new Material(boatProxy.getColor()), BasicMarkerShape.ORIENTED_SPHERE, 0.9));            
@@ -351,6 +353,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             });
             
             // Create listener for error ellipse //////////////////////////////////////////////////////////////////////////////////////////////
+            /*
             boatProxy.addListener(new ProxyListenerInt() {
                 
                 boolean first = true;
@@ -373,7 +376,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                     //else {
                         //renderableLayer.removeRenderable(se);
                     //}
-                                        
+                                                     
                     double[] ellipse = boatProxy.containers.getErrorEllipse();                    
                     se.setCenter(new LatLon(boatProxy.getPosition().latitude,boatProxy.getPosition().longitude));
                     se.setRadii(errorEllipse[0],errorEllipse[1]);
@@ -392,6 +395,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                 public void waypointsComplete() {
                 }                
             });  //////////////////////////////////////////////////////////////////////////////////////////////
+            */
         }
     }
 

@@ -126,11 +126,11 @@ public class BoatProxy extends Thread implements ProxyInt {
     Threader madaraListenerThreader;    
     double[] errorEllipse;
     
-    static final int MADARA_POSE_UPDATE_RATE = 10; // Hz
-    static final int MADARA_WP_UPDATE_RATE = 4; // Hz
-    static final int MADARA_CONNECTIVITY_WATCHDOG_RATE = 1; // Hz
-    static final int MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH = -75; // dBi
-    static final int GPS_WATCHDOG_RATE = 1; // Hz
+    static final double MADARA_POSE_UPDATE_RATE = 10.0; // Hz
+    static final double MADARA_WP_UPDATE_RATE = 4.0; // Hz
+    static final double MADARA_CONNECTIVITY_WATCHDOG_RATE = 0.5; // Hz
+    static final double MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH = -85.0; // dBi
+    static final double GPS_WATCHDOG_RATE = 0.5; // Hz
 
     // End stuff for simulated data creation
     //public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
