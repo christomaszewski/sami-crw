@@ -7,6 +7,7 @@
 "crw.event.output.proxy.ProxyEmergencyAbort" "crw.handler.ProxyEventHandler"
 "crw.event.output.proxy.SetGains" "crw.handler.ProxyEventHandler"
 "crw.event.output.proxy.ProxyReHomeAutonomy" "crw.handler.ProxyEventHandler"
+"crw.event.output.proxy.ProxyResetLocalization" "crw.handler.ProxyEventHandler"
 "crw.event.output.proxy.ProxyFormationCoverage" "crw.handler.RegionHandler"
 "crw.event.output.proxy.ProxyPerimeterPatrol" "crw.handler.RegionHandler"
 "crw.event.output.proxy.ProxyRandomEdgeCoverage" "crw.handler.RegionHandler"
