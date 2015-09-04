@@ -5,6 +5,7 @@ import com.madara.KnowledgeBase;
 import com.madara.containers.NativeDoubleVector;
 import crw.Conversion;
 import crw.event.input.operator.OperatorCreatesRegion;
+import crw.event.input.proxy.GenericGAMSCommandSent;
 import crw.event.output.operator.OperatorCreateRegion;
 import crw.event.output.proxy.ProxyPerimeterPatrol;
 import crw.event.output.proxy.ProxyFormationCoverage;
@@ -154,36 +155,14 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                     knowledge.set(prefix + ".2",teamMembers,delay);
                     knowledge.set(prefix + ".3",modifier,delay);
                     knowledge.set(prefix + ".4",coverageType,delay);
-                    knowledge.set(prefix + ".5",String.format("region.%d",regionNo),delay); //////////////////////////////////////
-                    
-                    /*
-                    // Attempt to manually send waypoints as an debugging measure
-                    for (int i = 0; i < regionVertexCount; i++) {                                    
-                        //UTMCoord utmCoordTemp = Conversion.UtmPoseToUTMCoord(utmWaypoints[i]);
-                        //double lat = utmCoordTemp.getLatitude().degrees;
-                        //double lon = utmCoordTemp.getLongitude().degrees;            
-                        double[] latLon = knowledge.get(String.format("region.%d.%d",regionNo,i)).toDoubleArray();
-                        double lat = latLon[0];
-                        double lon = latLon[1];
-
-                        // TODO: switch to DoubleVector
-                        NativeDoubleVector wpNDV = new NativeDoubleVector();
-                        wpNDV.setName(knowledge, java.lang.String.format("%s.%d",prefix,i+5));
-                        wpNDV.resize(3);            
-                        wpNDV.set(0,lat);
-                        wpNDV.set(1,lon);
-                        wpNDV.set(2,0.0); // altitude
-                        wpNDV.free();
-                    }                      
-                            */
-                    
-                    
+                    knowledge.set(prefix + ".5",String.format("region.%d",regionNo),delay); //////////////////////////////////////                                        
                 }
                 knowledge.sendModifieds();                
                 //knowledge.print();////////////////////////////////                
                 delay.free();      
                 
-                // TODO: create input event
+                GenericGAMSCommandSent myIE = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+                ie = myIE;            
             }
         }    
         else if (oe instanceof ProxyPerimeterPatrol) {
@@ -219,7 +198,8 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                 //knowledge.print();////////////////////////////////                
                 delay.free();    
                 
-                // TODO: create input event
+                GenericGAMSCommandSent myIE = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+                ie = myIE;            
             }            
         }        
         else if (oe instanceof ProxyRandomEdgeCoverage) {
@@ -255,7 +235,8 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                 //knowledge.print();////////////////////////////////                
                 delay.free();    
                 
-                // TODO: create input event
+                GenericGAMSCommandSent myIE = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+                ie = myIE;            
             }               
         }
                 

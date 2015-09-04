@@ -22,17 +22,20 @@ public class CreateSimulatedProxy extends OutputEvent {
     public Color color;
     public Location startLocation;
     public int numberToCreate;
+    public boolean spoofData;
 
     static {
         fieldNames.add("name");
         fieldNames.add("color");
         fieldNames.add("startLocation");
         fieldNames.add("numberToCreate");
+        fieldNames.add("spoofData");
 
         fieldNameToDescription.put("name", "Name of the proxy?");
         fieldNameToDescription.put("color", "Visualization color for the proxy?");
         fieldNameToDescription.put("startLocation", "Where to create the proxy?");
         fieldNameToDescription.put("numberToCreate", "Number of proxies to create at this location?");
+        fieldNameToDescription.put("spoofData", "Want spoofed environmental data?");
     }
 
     public CreateSimulatedProxy() {

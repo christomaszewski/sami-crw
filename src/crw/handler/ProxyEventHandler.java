@@ -2,9 +2,11 @@ package crw.handler;
 
 import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
+import com.madara.containers.NativeDoubleVector;
 import crw.Conversion;
 import crw.CrwHelper;
 import crw.event.input.proxy.GainsSent;
+import crw.event.input.proxy.GenericGAMSCommandSent;
 import crw.event.input.proxy.ProxyAutonomyReHomed;
 import crw.event.input.proxy.ProxyCreated;
 import crw.event.input.proxy.ProxyEndsGAMSAlgorithm;
@@ -12,12 +14,14 @@ import crw.event.input.proxy.ProxyPathCompleted;
 import crw.event.input.proxy.ProxyPathFailed;
 import crw.event.input.proxy.ProxyPoseUpdated;
 import crw.event.input.proxy.ProxyResetsLocalization;
+import crw.event.input.proxy.StoppedAllAgents;
 import crw.event.input.service.AssembleLocationResponse;
 import crw.event.input.service.QuantityEqual;
 import crw.event.input.service.QuantityGreater;
 import crw.event.input.service.QuantityLess;
 import crw.event.output.proxy.ConnectExistingProxy;
 import crw.event.output.proxy.CreateSimulatedProxy;
+import crw.event.output.proxy.FormCylindricalFormation;
 import crw.event.output.service.AssembleLocationRequest;
 import crw.event.output.proxy.ProxyEmergencyAbort;
 import crw.event.output.proxy.ProxyEndGAMSAlgorithm;
@@ -28,6 +32,7 @@ import crw.event.output.proxy.ProxyReHomeAutonomy;
 import crw.event.output.proxy.ProxyResendWaypoints;
 import crw.event.output.proxy.ProxyResetLocalization;
 import crw.event.output.proxy.SetGains;
+import crw.event.output.proxy.StopAllAgents;
 import crw.event.output.service.ProxyCompareDistanceRequest;
 import crw.general.FastSimpleBoatSimulator;
 import crw.proxy.BoatProxy;
@@ -319,6 +324,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             String name = createEvent.name;
             Color color = createEvent.color;
             boolean error = false;
+            boolean spoofData = createEvent.spoofData;
             ArrayList<ProxyInt> relevantProxyList = new ArrayList<ProxyInt>();
             ArrayList<String> proxyNames = new ArrayList<String>();
             ArrayList<ProxyInt> proxyList = Engine.getInstance().getProxyServer().getProxyListClone();
@@ -342,7 +348,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     relevantProxyList.add(proxy);
                     if (proxy instanceof BoatProxy) {                        
                         BoatProxy bp = (BoatProxy) proxy;                                                
-                        new Thread(new SimulatedGAMSBoat(boatNo, BoatProxy.DEFAULT_TEAM_SIZE, utmCoord, bp)).start();
+                        new Thread(new SimulatedGAMSBoat(boatNo, BoatProxy.DEFAULT_TEAM_SIZE, utmCoord, bp,spoofData)).start();
                     }
                 } else {
                     LOGGER.severe("Failed to create simulated proxy");
@@ -483,6 +489,110 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 listener.eventGenerated(ie);
             }
         }
+        
+        else if (oe instanceof StopAllAgents) {
+            ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();            
+            KnowledgeBase knowledge;
+            if (proxyServer instanceof CrwProxyServer) {            
+                CrwProxyServer crwProxyServer = (CrwProxyServer)proxyServer;
+                knowledge = crwProxyServer.knowledge;
+                ArrayList<ProxyInt> proxyList = crwProxyServer.getProxyListClone();
+                for (int i = 0; i < proxyList.size(); i++) {
+                    ProxyInt proxyCandidate = proxyList.get(i);
+                    if (proxyCandidate instanceof BoatProxy) {
+                        BoatProxy bp = (BoatProxy)proxyCandidate;
+                        bp.beginTeleop();
+                    }
+                }
+            }                        
+            
+            StoppedAllAgents ie = new StoppedAllAgents(oe.getId(), oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }            
+        }
+        
+        else if (oe instanceof FormCylindricalFormation) {
+            FormCylindricalFormation request = (FormCylindricalFormation) oe;
+            int leaderNo = request.getLeaderNo();
+            double spacing = request.getSpacing();
+            
+            int numProxies = 0;     
+            String teamMembers = "";
+            ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
+            ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
+            for (Token token : tokens) {
+                if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
+                    tokensWithProxy.add(token);
+                    boatProxies.add((BoatProxy)token.getProxy());
+                    numProxies++;
+                    teamMembers = teamMembers.concat(String.format("%d,",((BoatProxy)token.getProxy()).getBoatNo()));
+                }                
+            }
+            teamMembers = teamMembers.substring(0, teamMembers.length()-1); // remove trailing comma            
+            teamMembers = String.format("%d,",numProxies).concat(teamMembers); // append number of members to the front of this list
+            if (numProxies == 0) {
+                LOGGER.log(Level.WARNING, "ProxyFormationCoverage had no relevant proxies attached: " + oe);
+            }            
+            
+            ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
+            if (proxyServer instanceof CrwProxyServer) { 
+                KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
+                EvalSettings delay = new EvalSettings();
+                delay.setDelaySendingModifieds(true);
+                int numFollowers = numProxies - 1;
+                int followerCount = 0;
+                double anglePerFollower = 2*Math.PI/numFollowers;
+                
+                double[] destination = new double[3];
+                String destinationString = "";
+                BoatProxy leaderProxy;
+                for (int member = 0; member < numProxies; member++) { // for each team member
+                    int boatNo = boatProxies.get(member).getBoatNo();
+                    if (boatNo == leaderNo) {
+                        leaderProxy = boatProxies.get(member);
+                        destination = leaderProxy.containers.getLocation().clone();
+                        destinationString = String.format("%f,%f,%f",destination[0],destination[1],destination[2]);
+                        break;
+                    }
+                }
+                
+                if ("".equals(destinationString)) {
+                    LOGGER.log(Level.WARNING, "FormCylindricalFormation could not find leader destination: " + oe);
+                }
+                
+                for (int member = 0; member < numProxies; member++) { // for each team member
+                    int boatNo = boatProxies.get(member).getBoatNo();
+                    String prefix = String.format("device.%d.command",boatNo);
+                    knowledge.set(prefix + ".size",4,delay);
+                    knowledge.set(prefix,"formation",delay);
+                    knowledge.set(prefix + ".0",leaderNo,delay);
+                    if (boatNo == leaderNo) {
+                        knowledge.set(prefix + ".1","0,0,0",delay);
+                    }
+                    else {                        
+                        knowledge.set(prefix + ".1",String.format("%f,%f,0",spacing,anglePerFollower*followerCount),delay);
+                        followerCount++;
+                    }
+                    knowledge.set(prefix + ".2",destinationString);
+                    knowledge.set(prefix + ".3",teamMembers,delay);
+                }
+                knowledge.sendModifieds();                
+                //knowledge.print();////////////////////////////////                
+                delay.free();      
+                
+                GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+                for (GeneratedEventListenerInt listener : listeners) {
+                    listener.eventGenerated(ie);
+                }
+            }
+        }
+        
+        /*
+        else if (oe instanceof) {
+            
+        }
+        */
         
         else if (oe instanceof ProxyExecutePath
                 || oe instanceof ProxyEmergencyAbort

@@ -840,7 +840,7 @@ public class BoatProxy extends Thread implements ProxyInt {
         }
     }
 
-    void beginTeleop() {
+    public void beginTeleop() {
         containers.teleopStatus.set(TELEOPERATION_TYPES.GUI_MS.getLongValue());
         knowledge.set(containers.prefix + "command", "null");
         

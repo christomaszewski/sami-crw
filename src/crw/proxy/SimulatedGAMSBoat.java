@@ -28,12 +28,14 @@ public class SimulatedGAMSBoat implements Runnable {
     BoatProxy bp;
     BoatSensor sensor;
     
-    public SimulatedGAMSBoat(int id, int teamSize, UTMCoord initialUTMCoord, BoatProxy bp) {
+    public SimulatedGAMSBoat(int id, int teamSize, UTMCoord initialUTMCoord, BoatProxy bp, boolean spoofData) {
         this.id = id;
         this.teamSize = teamSize;
         this.initialUTMCoord = initialUTMCoord;
         this.bp = bp;        
-        sensor = new BoatSensor(this.bp, 0); // one fake sensor on channel 0
+        if (spoofData) {
+            sensor = new BoatSensor(this.bp, 0); // one fake sensor on channel 0
+        }
         settings = new QoSTransportSettings();
         settings.setHosts(new String[]{"239.255.0.1:4150"});
         settings.setType(TransportType.MULTICAST_TRANSPORT);
