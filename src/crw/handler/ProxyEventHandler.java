@@ -21,6 +21,7 @@ import crw.event.input.service.QuantityGreater;
 import crw.event.input.service.QuantityLess;
 import crw.event.output.proxy.ConnectExistingProxy;
 import crw.event.output.proxy.CreateSimulatedProxy;
+import crw.event.output.proxy.DARTFormationMove;
 import crw.event.output.proxy.FormCylindricalFormation;
 import crw.event.output.service.AssembleLocationRequest;
 import crw.event.output.proxy.ProxyEmergencyAbort;
@@ -586,6 +587,24 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     listener.eventGenerated(ie);
                 }
             }
+        }
+        
+        else if (oe instanceof DARTFormationMove) {
+            DARTFormationMove request = (DARTFormationMove) oe;
+            Location upperLeft = request.getUpperLeft();
+            Location bottomRight = request.getBottomRight();    
+            int gridXCount = request.getGridXCount();
+            int gridYCount = request.getGridYCount();
+            int gridXDestIndex = request.getGridXDestIndex();
+            int gridYDestIndex = request.getGridYDestIndex();            
+            
+            
+            
+            
+            GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }            
         }
         
         /*
