@@ -63,6 +63,7 @@
 >>"crw.event.output.proxy.ProxyEndGAMSAlgorithm" "Proxy Ends GAMS Algorithm" ""
 >>"crw.event.output.proxy.StopAllAgents" "Stop All Agents" ""
 >>"crw.event.output.proxy.FormCylindricalFormation" "Form Cylindrical Formation" ""
+>>"crw.event.output.proxy.FormGroup" "Form Group" ""
 >"Service Requests"
 >>"crw.event.output.service.AllocationRequest" "Allocation Request" ""
 >>"crw.event.output.service.PathUtmRequest" "Path Request" ""

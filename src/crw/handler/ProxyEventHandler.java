@@ -2,7 +2,10 @@ package crw.handler;
 
 import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
+import com.madara.KnowledgeRecord;
 import com.madara.containers.NativeDoubleVector;
+import com.madara.containers.StringVector;
+import com.madara.containers.Vector;
 import crw.Conversion;
 import crw.CrwHelper;
 import crw.event.input.proxy.GainsSent;
@@ -21,8 +24,9 @@ import crw.event.input.service.QuantityGreater;
 import crw.event.input.service.QuantityLess;
 import crw.event.output.proxy.ConnectExistingProxy;
 import crw.event.output.proxy.CreateSimulatedProxy;
-import crw.event.output.proxy.DARTFormationMove;
 import crw.event.output.proxy.FormCylindricalFormation;
+import crw.event.output.proxy.FormGroup;
+import crw.event.output.proxy.FormationSyncMove;
 import crw.event.output.service.AssembleLocationRequest;
 import crw.event.output.proxy.ProxyEmergencyAbort;
 import crw.event.output.proxy.ProxyEndGAMSAlgorithm;
@@ -587,24 +591,140 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     listener.eventGenerated(ie);
                 }
             }
-        }
-        
-        else if (oe instanceof DARTFormationMove) {
-            DARTFormationMove request = (DARTFormationMove) oe;
-            Location upperLeft = request.getUpperLeft();
-            Location bottomRight = request.getBottomRight();    
-            int gridXCount = request.getGridXCount();
-            int gridYCount = request.getGridYCount();
-            int gridXDestIndex = request.getGridXDestIndex();
-            int gridYDestIndex = request.getGridYDestIndex();            
-            
-            
-            
+        }        
+
+        else if (oe instanceof FormationSyncMove) {
+            FormationSyncMove request = (FormationSyncMove) oe;
+            Location destination = request.getDestination();
+            Position destinationPosition = Conversion.locationToPosition(destination);
+            Location stagingPoint = request.getStagingPoint();
+            Position stagingPosition = Conversion.locationToPosition(stagingPoint);
+            double bufferDistance = request.getBufferDistance();
+            String barrier = request.getBarrier();
+            String formationType = request.getFormationType();             
+            String groupName = request.getGroupName();
+
+            ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
+            if (proxyServer instanceof CrwProxyServer) { 
+                KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
+                EvalSettings delay = new EvalSettings();
+                delay.setDelaySendingModifieds(true);
+                
+                // need to extract group members using the group name
+                //ArrayList<String> groupMembers = new ArrayList<>();
+                StringVector groupMembersContainer = new StringVector();
+                groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));
+                for (int i = 0; i < groupMembersContainer.size(); i++) {
+                    //groupMembers.add(groupMembersContainer.get(i));
+                    Vector args = new Vector();
+                    com.madara.containers.String command = new com.madara.containers.String();
+                    command.setName(knowledge, groupMembersContainer.get(i) + ".command");
+                    command.set("formation sync");                    
+                    command.free();
+                    args.setName(knowledge, groupMembersContainer.get(i) + ".command");
+                    
+                    KnowledgeRecord KR = new KnowledgeRecord("start");
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    double[] latlon = new double[] {stagingPosition.latitude.degrees, stagingPosition.longitude.degrees};                    
+                    KR = new KnowledgeRecord(latlon);
+                    args.pushback(KR);
+                    KR.free();                    
+                    
+                    KR = new KnowledgeRecord("end");
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    latlon = new double[] {destinationPosition.latitude.degrees, destinationPosition.longitude.degrees};
+                    KR = new KnowledgeRecord(latlon);
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord("formation");
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord(formationType);
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord("buffer");
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord(bufferDistance);
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord("group");
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord(groupName);
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord("barrier");
+                    args.pushback(KR);
+                    KR.free();
+                    
+                    KR = new KnowledgeRecord(barrier);
+                    args.pushback(KR);
+                    KR.free();                    
+                    
+                    args.free();
+                    knowledge.sendModifieds();
+                }
+            }            
             
             GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
             for (GeneratedEventListenerInt listener : listeners) {
                 listener.eventGenerated(ie);
-            }            
+            }                        
+        }
+        
+        else if (oe instanceof FormGroup) {
+            FormGroup request = (FormGroup) oe;
+            String groupName = request.getGroupName();
+
+            int numProxies = 0;     
+            ArrayList<String> groupMembers = new ArrayList<>();
+            ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
+            ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
+            for (Token token : tokens) {
+                if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
+                    tokensWithProxy.add(token);
+                    boatProxies.add((BoatProxy)token.getProxy());
+                    numProxies++;
+                    groupMembers.add(String.format("device.%d",((BoatProxy)token.getProxy()).getBoatNo()));
+                }                
+            }
+            if (numProxies == 0) {
+                LOGGER.log(Level.WARNING, "ProxyFormationCoverage had no relevant proxies attached: " + oe);
+            }                        
+            
+            if (groupMembers.size() > 0) {
+                ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
+                if (proxyServer instanceof CrwProxyServer) { 
+                    KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
+                    
+                    StringVector groupMembersContainer = new StringVector();
+                    groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));
+                    
+                    for (int i = 0; i < groupMembers.size(); i++) {
+                        groupMembersContainer.set(i, groupMembers.get(i));
+                    }                    
+                    knowledge.sendModifieds();                
+                    //knowledge.print();////////////////////////////////                
+                    groupMembersContainer.free();
+                }
+            }
+            
+            GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }                                    
         }
         
         /*

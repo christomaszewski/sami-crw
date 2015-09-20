@@ -605,10 +605,10 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             boatMarker.getAttributes().setHeadingMaterial(SELECTED_MAT);
         }
 
-        // Proxy stuff ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Proxy stuff 
         if (selectedProxy != null) {
             // Stop previous boat if it is locked in teleoperation mode
-            disableTeleop();
+            //disableTeleop(); /////////////////////////////////////////////////// DON'T WANT AUTOMATICALLY AUTONOMOUS BOATS, DON'T DISABLE TELEOP!
         }
         BoatProxy boatProxy = null;
         boolean enabled = false;

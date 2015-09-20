@@ -221,6 +221,8 @@ public class BoatProxy extends Thread implements ProxyInt {
         }      
         knowledge.sendModifieds();
         delay.free();
+        
+        _curWaypoints.clear();
     }
     
     public void endGAMSAlgorithm() {        
