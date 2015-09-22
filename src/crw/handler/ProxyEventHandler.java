@@ -623,6 +623,22 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     command.free();
                     args.setName(knowledge, groupMembersContainer.get(i) + ".command");
                     
+                    args.pushback("start");
+                    double[] latlon = new double[] {stagingPosition.latitude.degrees, stagingPosition.longitude.degrees};
+                    args.pushback(latlon);
+                    args.pushback("end");
+                    latlon = new double[] {destinationPosition.latitude.degrees, destinationPosition.longitude.degrees};
+                    args.pushback(latlon);
+                    args.pushback("formation");
+                    args.pushback(formationType);
+                    args.pushback("buffer");
+                    args.pushback(bufferDistance);
+                    args.pushback("group");
+                    args.pushback(groupName);
+                    args.pushback("barrier");
+                    args.pushback(barrier);
+                    
+                    /*
                     KnowledgeRecord KR = new KnowledgeRecord("start");
                     args.pushback(KR);
                     KR.free();
@@ -671,7 +687,8 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     
                     KR = new KnowledgeRecord(barrier);
                     args.pushback(KR);
-                    KR.free();                    
+                    KR.free();  
+                    */
                     
                     args.free();
                     knowledge.sendModifieds();
