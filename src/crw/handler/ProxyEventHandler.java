@@ -613,7 +613,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 // need to extract group members using the group name
                 //ArrayList<String> groupMembers = new ArrayList<>();
                 StringVector groupMembersContainer = new StringVector();
-                groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));
+                groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));                
                 for (int i = 0; i < groupMembersContainer.size(); i++) {
                     //groupMembers.add(groupMembersContainer.get(i));
                     Vector args = new Vector();
@@ -728,7 +728,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     
                     StringVector groupMembersContainer = new StringVector();
                     groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));
-                    
+                    groupMembersContainer.resize(groupMembers.size());
                     for (int i = 0; i < groupMembers.size(); i++) {
                         groupMembersContainer.set(i, groupMembers.get(i));
                     }                    
