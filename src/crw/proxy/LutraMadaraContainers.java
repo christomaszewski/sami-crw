@@ -230,6 +230,11 @@ public class LutraMadaraContainers {
     }
     
     public void keepCurrentLocation() {
+        
+        Exception e = new Exception();
+        e.printStackTrace();
+        
+        
         UpdateSettings makeItGlobal = new UpdateSettings();
         dest.setSettings(makeItGlobal);
         dest.set(0, eastingNorthingBearing.get(0));

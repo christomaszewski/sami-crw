@@ -81,7 +81,7 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
     boolean teleopEnabled;
     private MouseController mouseController;
     private KeyboardController keyboardController;
-    private GamepadController gamepadController;
+    //private GamepadController gamepadController;
     private RobotWidget robotWidget;
 
     private TeleopSourceInt activeTeleopSource = null;
@@ -97,8 +97,8 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
         keyboardController = new KeyboardController(this);
         teleopSources.add(keyboardController);
         addKeyListener(keyboardController);
-        gamepadController = new GamepadController(this);
-        teleopSources.add(gamepadController);
+        //gamepadController = new GamepadController(this);
+        //teleopSources.add(gamepadController);
         map.put(TextAttribute.SIZE, new Float(18.0));
         map.put(TextAttribute.FOREGROUND, Color.RED);
         map.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
@@ -319,7 +319,7 @@ public class VelocityPanel extends JPanel implements VelocityListener, FocusList
             // Reset variables and send stop command
             teleLock = false;           
             
-            robotWidget.stopBoat();
+            //robotWidget.stopBoat(); //****** Need to make sure robotWidget.stopBoat isn't called while a boat is executing a path or point
         }
     }
     

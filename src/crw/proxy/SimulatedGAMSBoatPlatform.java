@@ -215,6 +215,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     public double getPositionAccuracy() {
         return 0.0;//getAccuracy()*METERS_PER_LATLONG_DEGREE; ////////////// this value is irrelevant for the waypoints algorithm, but not for the platform's effort to reach the waypoint
     }
+            
     @Override
     public Position getPosition() {
         //Position position = new Position(containers.latLong.get(0),containers.latLong.get(1),0.0);
@@ -288,6 +289,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     @Override
     public int sense() {        
         containers.connectivityWatchdog.set(1L);
+        containers.gpsWatchdog.set(1);
         return PlatformStatusEnum.OK.value();
     }
     @Override

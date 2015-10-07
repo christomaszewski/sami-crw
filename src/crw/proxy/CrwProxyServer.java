@@ -73,14 +73,14 @@ public class CrwProxyServer implements ProxyServerInt {
         //settings.addSendFilter(new LogAggregate());
         knowledge = new KnowledgeBase("base_station", settings);
         
-        /*
+        
         QoSTransportSettings simSettings = new QoSTransportSettings();
         simSettings.setHosts(new String[]{"239.255.0.1:4150"});
         simSettings.setType(TransportType.MULTICAST_TRANSPORT);
-        simSettings.setRebroadcastTtl(2);
+        //simSettings.setRebroadcastTtl(2);
         simSettings.enableParticipantTtl(1);
         knowledge.attachTransport("base_station", simSettings);
-        */
+        
         
         /*
         environmentalData = new FlexMap();

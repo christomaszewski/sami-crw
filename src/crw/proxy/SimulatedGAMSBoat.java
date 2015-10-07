@@ -57,8 +57,8 @@ public class SimulatedGAMSBoat implements Runnable {
         controller.initAlgorithm(algorithm);
         new Thread(new Runnable() {
             @Override
-            public void run() {    
-                controller.run(1.0/5.0,3600.0); // run --> time interval, duration |  runHz --> run Hz, run duration, send Hz
+            public void run() { 
+                controller.runHz(5.0, 3600.0, 5.0);
             }
         }).start();
     }

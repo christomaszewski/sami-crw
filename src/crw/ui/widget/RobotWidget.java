@@ -541,11 +541,11 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     }
 
     public void setControlMode(ControlMode controlMode) {
-        clearPath();
-        velocityP.stopBoat();
+        clearPath();        
         this.controlMode = controlMode;
         switch (controlMode) {
             case TELEOP: ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                velocityP.stopBoat();
                 cancelAssignedWaypoints();
                 showExpandables();
                 if (selectedProxy != null) {
@@ -555,10 +555,12 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                 }
                 break;
             case POINT:
+                velocityP.stopBoat();
                 hideExpandables();
                 disableTeleop();
                 break;
             case PATH:
+                velocityP.stopBoat();
                 hideExpandables();
                 disableTeleop();
                 break;
@@ -674,7 +676,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         autoButton.setSelected(true);
     }
 
-    public void doPath(ArrayList<Position> positions) {
+    public void doPath(ArrayList<Position> positions) { /////////////////////////////////////////////////////////////////////////
         ArrayList<Location> waypoints = new ArrayList<Location>();
         for (int i = 0; i < positions.size(); i++) {
             waypoints.add(new Location(positions.get(i).latitude.degrees, positions.get(i).longitude.degrees, 0.0));

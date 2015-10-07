@@ -130,7 +130,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     static final double MADARA_WP_UPDATE_RATE = 4.0; // Hz
     static final double MADARA_CONNECTIVITY_WATCHDOG_RATE = 0.5; // Hz
     static final double MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH = -85.0; // dBi
-    static final double GPS_WATCHDOG_RATE = 0.5; // Hz
+
 
     // End stuff for simulated data creation
     //public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
@@ -239,7 +239,6 @@ public class BoatProxy extends Thread implements ProxyInt {
         madaraListenerThreader.run(MADARA_POSE_UPDATE_RATE,"poseListener", new MadaraPoseListener());
         madaraListenerThreader.run(MADARA_WP_UPDATE_RATE,"wpListener", new MadaraWaypointListener());        
         madaraListenerThreader.run(MADARA_CONNECTIVITY_WATCHDOG_RATE, "wifiWatchdog", new MadaraConnectivityWatchdogListener());
-        madaraListenerThreader.run(GPS_WATCHDOG_RATE, "gpsWatchdog", new GPSWatchdogListener());
     }
 
     public AsyncVehicleServer getServer() {
@@ -900,27 +899,23 @@ public class BoatProxy extends Thread implements ProxyInt {
     public void completeMission(UUID missionId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    class GPSWatchdogListener extends BaseThread {
-        @Override
-        public void run() {
-            if (containers.gpsWatchdog.get() == 1L) {
-                containers.gpsWatchdog.set(0L);
-            }
-            else {
-                // TODO: how to alert the user that the boat has lost GPS?
-                // A crw.event.output.ui event?
-                System.out.println(String.format("WARNING: GPS may not available for boat # %d",_boatNo));
-            }
-        }
-        
-    }
+   
     
     class MadaraConnectivityWatchdogListener extends BaseThread {
         @Override
         public void run() {
             if (containers.connectivityWatchdog.get() == 1L) {
                 containers.connectivityWatchdog.set(0L);
+                
+                if (containers.gpsWatchdog.get() == 1L) {
+                    containers.gpsWatchdog.set(0L);
+                }
+                else {
+                    // TODO: how to alert the user that the boat has lost GPS?
+                    // A crw.event.output.ui event?
+                    System.out.println(String.format("WARNING: GPS may not available for boat # %d",_boatNo));
+                }                
+                
             }
             else {
                 // TODO: how to alert the user that the boat isn't connected?
@@ -981,6 +976,7 @@ public class BoatProxy extends Thread implements ProxyInt {
                 }
 
                 // Send out event update
+                /*
                 if (sendEvent.get()) {
                     ProxyPoseUpdated ie = new ProxyPoseUpdated(null, null, bp);
                     for (ProxyListenerInt boatProxyListener : listeners) {
@@ -988,6 +984,7 @@ public class BoatProxy extends Thread implements ProxyInt {
                     }
                     sendEvent.set(false);
                 }
+                */
             } catch (java.lang.IllegalArgumentException iae) {
                 //iae.printStackTrace();
             }                                    
