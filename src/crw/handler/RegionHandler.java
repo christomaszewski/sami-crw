@@ -249,14 +249,15 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
         }
         else {
             LOGGER.log(Level.WARNING, "RegionHandler produces a null input event");
-        }
-        
+        }        
     }
 
     @Override
     public boolean offer(GeneratedInputEventSubscription sub) {
         LOGGER.log(Level.FINE, "RegionHandler offered subscription: " + sub);
-        if (sub.getSubscriptionClass() == OperatorCreatesRegion.class) {
+        if (sub.getSubscriptionClass() == OperatorCreatesRegion.class
+                || sub.getSubscriptionClass() == GenericGAMSCommandSent.class
+                ) {
             LOGGER.log(Level.FINE, "\tRegionHandler taking subscription: " + sub);
             if (!listeners.contains(sub.getListener())) {
                 LOGGER.log(Level.FINE, "\t\tRegionHandler adding listener: " + sub.getListener());
@@ -274,7 +275,9 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
     @Override
     public boolean cancel(GeneratedInputEventSubscription sub) {
         LOGGER.log(Level.FINE, "RegionHandler asked to cancel subscription: " + sub);
-        if ((sub.getSubscriptionClass() == OperatorCreatesRegion.class)
+        if ((sub.getSubscriptionClass() == OperatorCreatesRegion.class
+                || sub.getSubscriptionClass() == GenericGAMSCommandSent.class
+                )
                 && listeners.contains(sub.getListener())) {
             LOGGER.log(Level.FINE, "\tRegionHandler canceling subscription: " + sub);
             if (listenerGCCount.get(sub.getListener()) == 1) {

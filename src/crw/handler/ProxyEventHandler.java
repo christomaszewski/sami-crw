@@ -622,6 +622,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     command.set("formation sync");                    
                     command.free();
                     args.setName(knowledge, groupMembersContainer.get(i) + ".command");
+                    args.resize(0);
                     
                     args.pushback("start");
                     double[] latlon = new double[] {stagingPosition.latitude.degrees, stagingPosition.longitude.degrees};
@@ -689,10 +690,10 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     args.pushback(KR);
                     KR.free();  
                     */
-                    
-                    args.free();
-                    knowledge.sendModifieds();
+                                        
+                    args.free();                    
                 }
+                knowledge.sendModifieds();
             }            
             
             GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
@@ -731,7 +732,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     groupMembersContainer.resize(groupMembers.size());
                     for (int i = 0; i < groupMembers.size(); i++) {
                         groupMembersContainer.set(i, groupMembers.get(i));
-                    }                    
+                    }
                     knowledge.sendModifieds();                
                     //knowledge.print();////////////////////////////////                
                     groupMembersContainer.free();
@@ -780,7 +781,10 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 || sub.getSubscriptionClass() == SetGains.class
                 || sub.getSubscriptionClass() == ProxyEndsGAMSAlgorithm.class
                 || sub.getSubscriptionClass() == ProxyAutonomyReHomed.class
-                || sub.getSubscriptionClass() == ProxyResetsLocalization.class) {
+                || sub.getSubscriptionClass() == ProxyResetsLocalization.class
+                || sub.getSubscriptionClass() == GenericGAMSCommandSent.class
+                || sub.getSubscriptionClass() == StoppedAllAgents.class
+                ) {
             LOGGER.log(Level.FINE, "\tProxyEventHandler taking subscription: " + sub);
             if (!listeners.contains(sub.getListener())) {
                 LOGGER.log(Level.FINE, "\t\tProxyEventHandler adding listener: " + sub.getListener());
@@ -809,7 +813,10 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 || sub.getSubscriptionClass() == SetGains.class
                 || sub.getSubscriptionClass() == ProxyEndsGAMSAlgorithm.class
                 || sub.getSubscriptionClass() == ProxyAutonomyReHomed.class
-                || sub.getSubscriptionClass() == ProxyResetsLocalization.class)
+                || sub.getSubscriptionClass() == ProxyResetsLocalization.class
+                || sub.getSubscriptionClass() == GenericGAMSCommandSent.class
+                || sub.getSubscriptionClass() == StoppedAllAgents.class
+                )
                 && listeners.contains(sub.getListener())) {
             LOGGER.log(Level.FINE, "\tProxyEventHandler canceling subscription: " + sub);
             if (listenerGCCount.get(sub.getListener()) == 1) {
