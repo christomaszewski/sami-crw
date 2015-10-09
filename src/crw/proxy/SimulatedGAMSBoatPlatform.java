@@ -254,7 +254,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
             self.device.source.set(1,self.device.location.get(1));
             self.device.source.set(2,self.device.location.get(2));
             
-            System.out.println(String.format("New destination: X,Y =  %f,  %f",easting,northing));
+            //System.out.println(String.format("New destination: X,Y =  %f,  %f",easting,northing));
         }        
         return PlatformStatusEnum.OK.value();
     }

@@ -3,6 +3,7 @@ package crw.handler;
 import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import com.madara.containers.NativeDoubleVector;
+import com.madara.containers.NativeIntegerVector;
 import crw.Conversion;
 import crw.event.input.operator.OperatorCreatesRegion;
 import crw.event.input.proxy.GenericGAMSCommandSent;
@@ -114,12 +115,14 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
             String teamMembers = "";
             ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
             ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
+            ArrayList<Integer> teamMembersList = new ArrayList<>();
             for (Token token : tokens) {
                 if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
                     tokensWithProxy.add(token);
                     boatProxies.add((BoatProxy)token.getProxy());
                     numProxies++;
                     teamMembers = teamMembers.concat(String.format("%d,",((BoatProxy)token.getProxy()).getBoatNo()));
+                    teamMembersList.add(((BoatProxy)token.getProxy()).getBoatNo());
                 }                
             }
             teamMembers = teamMembers.substring(0, teamMembers.length()-1); // remove trailing comma            
@@ -146,13 +149,28 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                     knowledge.set(prefix,"formation coverage",delay);
                     knowledge.set(prefix + ".0",leaderNo,delay);
                     if (boatNo == leaderNo) {
-                        knowledge.set(prefix + ".1","0,0,0",delay);
+                        NativeDoubleVector NDV = new NativeDoubleVector();
+                        NDV.setName(knowledge,prefix + ".1");
+                        NDV.resize(3);
+                        NDV.set(0, 0.0); NDV.set(1, 0.0); NDV.set(2, 0.0);
+                        NDV.free();
                     }
                     else {                        
-                        knowledge.set(prefix + ".1",String.format("%f,%f,0",spacing,anglePerFollower*followerCount),delay);
+                        NativeDoubleVector NDV = new NativeDoubleVector();
+                        NDV.setName(knowledge,prefix + ".1");
+                        NDV.resize(3);
+                        NDV.set(0, spacing); NDV.set(1, anglePerFollower*followerCount); NDV.set(2, 0.0);
+                        NDV.free();
                         followerCount++;
                     }
-                    knowledge.set(prefix + ".2",teamMembers,delay);
+                    NativeIntegerVector NIV = new NativeIntegerVector();
+                    NIV.setName(knowledge,prefix + ".2");
+                    NIV.resize(teamMembersList.size());
+                    for (int teamMember = 0; teamMember < teamMembersList.size(); teamMember++) {
+                        NIV.set(teamMember, teamMembersList.get(teamMember));
+                    }
+                    NIV.free();                     
+                    
                     knowledge.set(prefix + ".3",modifier,delay);
                     knowledge.set(prefix + ".4",coverageType,delay);
                     knowledge.set(prefix + ".5",String.format("region.%d",regionNo),delay); //////////////////////////////////////                                        

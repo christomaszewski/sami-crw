@@ -4,6 +4,7 @@ import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
 import com.madara.KnowledgeRecord;
 import com.madara.containers.NativeDoubleVector;
+import com.madara.containers.NativeIntegerVector;
 import com.madara.containers.StringVector;
 import com.madara.containers.Vector;
 import crw.Conversion;
@@ -526,12 +527,14 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             String teamMembers = "";
             ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
             ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
+            ArrayList<Integer> teamMembersList = new ArrayList<>();
             for (Token token : tokens) {
                 if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
                     tokensWithProxy.add(token);
                     boatProxies.add((BoatProxy)token.getProxy());
                     numProxies++;
                     teamMembers = teamMembers.concat(String.format("%d,",((BoatProxy)token.getProxy()).getBoatNo()));
+                    teamMembersList.add(((BoatProxy)token.getProxy()).getBoatNo());
                 }                
             }
             teamMembers = teamMembers.substring(0, teamMembers.length()-1); // remove trailing comma            
@@ -551,13 +554,13 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 
                 double[] destination = new double[3];
                 String destinationString = "";
-                BoatProxy leaderProxy;
+                BoatProxy leaderProxy;                
                 for (int member = 0; member < numProxies; member++) { // for each team member
                     int boatNo = boatProxies.get(member).getBoatNo();
                     if (boatNo == leaderNo) {
                         leaderProxy = boatProxies.get(member);
                         destination = leaderProxy.containers.getLocation().clone();
-                        destinationString = String.format("%f,%f,%f",destination[0],destination[1],destination[2]);
+                        destinationString = String.format("%f,%f,%f",destination[0],destination[1],destination[2]);                        
                         break;
                     }
                 }
@@ -573,14 +576,34 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     knowledge.set(prefix,"formation",delay);
                     knowledge.set(prefix + ".0",leaderNo,delay);
                     if (boatNo == leaderNo) {
-                        knowledge.set(prefix + ".1","0,0,0",delay);
+                        NativeDoubleVector NDV = new NativeDoubleVector();
+                        NDV.setName(knowledge,prefix + ".1");
+                        NDV.resize(3);
+                        NDV.set(0, 0.0); NDV.set(1, 0.0); NDV.set(2, 0.0);
+                        NDV.free();
                     }
                     else {                        
-                        knowledge.set(prefix + ".1",String.format("%f,%f,0",spacing,anglePerFollower*followerCount),delay);
+                        NativeDoubleVector NDV = new NativeDoubleVector();
+                        NDV.setName(knowledge,prefix + ".1");
+                        NDV.resize(3);
+                        NDV.set(0, spacing); NDV.set(1, anglePerFollower*followerCount); NDV.set(2, 0.0);
+                        NDV.free();                        
                         followerCount++;
                     }
-                    knowledge.set(prefix + ".2",destinationString);
-                    knowledge.set(prefix + ".3",teamMembers,delay);
+                    NativeDoubleVector NDV = new NativeDoubleVector();
+                    NDV.setName(knowledge,prefix + ".2");
+                    NDV.resize(3);
+                    NDV.set(0, destination[0]); NDV.set(1, destination[1]); NDV.set(2, destination[2]);
+                    NDV.free();                                                                
+                    
+                    NativeIntegerVector NIV = new NativeIntegerVector();
+                    NIV.setName(knowledge,prefix + ".3");
+                    NIV.resize(teamMembersList.size());
+                    for (int teamMember = 0; teamMember < teamMembersList.size(); teamMember++) {
+                        NIV.set(teamMember, teamMembersList.get(teamMember));
+                    }
+                    NIV.free();                                                                                    
+                    
                 }
                 knowledge.sendModifieds();                
                 //knowledge.print();////////////////////////////////                
@@ -719,7 +742,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 }                
             }
             if (numProxies == 0) {
-                LOGGER.log(Level.WARNING, "ProxyFormationCoverage had no relevant proxies attached: " + oe);
+                LOGGER.log(Level.WARNING, "FormGroup had no relevant proxies attached: " + oe);
             }                        
             
             if (groupMembers.size() > 0) {
