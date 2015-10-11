@@ -28,6 +28,7 @@ import crw.event.output.proxy.CreateSimulatedProxy;
 import crw.event.output.proxy.FormCylindricalFormation;
 import crw.event.output.proxy.FormGroup;
 import crw.event.output.proxy.FormationSyncMove;
+import crw.event.output.proxy.GroupBarrierTest;
 import crw.event.output.service.AssembleLocationRequest;
 import crw.event.output.proxy.ProxyEmergencyAbort;
 import crw.event.output.proxy.ProxyEndGAMSAlgorithm;
@@ -766,6 +767,38 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             for (GeneratedEventListenerInt listener : listeners) {
                 listener.eventGenerated(ie);
             }                                    
+        }
+        
+        else if (oe instanceof GroupBarrierTest) {
+            GroupBarrierTest request = (GroupBarrierTest)oe;
+            String groupName = request.getGroupName();
+            
+            ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
+            if (proxyServer instanceof CrwProxyServer) { 
+                KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
+                EvalSettings delay = new EvalSettings();
+                delay.setDelaySendingModifieds(true);
+                StringVector groupMembersContainer = new StringVector();
+                groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));
+                for (int i = 0; i < groupMembersContainer.size(); i++) {
+                    Vector args = new Vector();
+                    com.madara.containers.String command = new com.madara.containers.String();
+                    command.setName(knowledge, groupMembersContainer.get(i) + ".command");
+                    command.set("barrier");                    
+                    command.free();
+                    args.setName(knowledge, groupMembersContainer.get(i) + ".command");
+                    args.resize(0);
+                    args.pushback("group");
+                    args.pushback(groupName);
+                    args.free();
+                }                
+                knowledge.sendModifieds();
+                groupMembersContainer.free();                                                                  
+            }
+            GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }            
         }
         
         /*
