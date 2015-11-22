@@ -143,7 +143,7 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                                                                
                 for (int member = 0; member < numProxies; member++) { // for each team member
                     int boatNo = boatProxies.get(member).getBoatNo();
-                    String prefix = String.format("device.%d.command",boatNo);
+                    String prefix = String.format("agent.%d.command",boatNo);
                     knowledge.set(prefix + ".size",6,delay);
                     //knowledge.set(prefix + ".size",5+regionVertexCount,delay);
                     knowledge.set(prefix,"formation coverage",delay);
@@ -207,7 +207,7 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                 delay.setDelaySendingModifieds(true);                
                 for (int member = 0; member < numProxies; member++) { // for each team member
                     int boatNo = boatProxies.get(member).getBoatNo();
-                    String prefix = String.format("device.%d.command",boatNo);
+                    String prefix = String.format("agent.%d.command",boatNo);
                     knowledge.set(prefix + ".size",1,delay);
                     knowledge.set(prefix + ".0",String.format("region.%d",regionNo),delay);
                     knowledge.set(prefix,"perimeter patrol",delay);
@@ -244,7 +244,7 @@ public class RegionHandler implements EventHandlerInt, InformationServiceProvide
                 delay.setDelaySendingModifieds(true);                
                 for (int member = 0; member < numProxies; member++) { // for each team member
                     int boatNo = boatProxies.get(member).getBoatNo();
-                    String prefix = String.format("device.%d.command",boatNo);
+                    String prefix = String.format("agent.%d.command",boatNo);
                     knowledge.set(prefix + ".size",1,delay);
                     knowledge.set(prefix + ".0",String.format("region.%d",regionNo),delay);
                     knowledge.set(prefix,"urec",delay);

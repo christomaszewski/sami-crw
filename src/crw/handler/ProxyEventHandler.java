@@ -572,7 +572,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 
                 for (int member = 0; member < numProxies; member++) { // for each team member
                     int boatNo = boatProxies.get(member).getBoatNo();
-                    String prefix = String.format("device.%d.command",boatNo);
+                    String prefix = String.format("agent.%d.command",boatNo);
                     knowledge.set(prefix + ".size",4,delay);
                     knowledge.set(prefix,"formation",delay);
                     knowledge.set(prefix + ".0",leaderNo,delay);
@@ -739,7 +739,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     tokensWithProxy.add(token);
                     boatProxies.add((BoatProxy)token.getProxy());
                     numProxies++;
-                    groupMembers.add(String.format("device.%d",((BoatProxy)token.getProxy()).getBoatNo()));
+                    groupMembers.add(String.format("agent.%d",((BoatProxy)token.getProxy()).getBoatNo()));
                 }                
             }
             if (numProxies == 0) {

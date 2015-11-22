@@ -53,10 +53,10 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     public void init(BaseController controller) {
         super.init(controller);
         containers.setSelf(self); // need to do this here (but not on a real phone) b/c here BoatProxy owns the containers
-        this.self.device.dest.resize(3);
-        this.self.device.home.resize(3);
-        this.self.device.location.resize(3);
-        this.self.device.source.resize(3);
+        this.self.agent.dest.resize(3);
+        this.self.agent.home.resize(3);
+        this.self.agent.location.resize(3);
+        this.self.agent.source.resize(3);
         
         double lat = initialUTMCoord.getLatitude().degrees;
         double lon = initialUTMCoord.getLongitude().degrees;
@@ -67,21 +67,21 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         containers.latitudeZone.set(java.lang.String.format("%c",utmLoc.latitudeZone()));        
         double easting = utmLoc.eastingValue(SI.METER);
         double northing = utmLoc.northingValue(SI.METER);        
-        containers.self.device.home.set(0, easting);
-        containers.self.device.home.set(1, northing);
-        containers.self.device.home.set(2,0.0);
+        containers.self.agent.home.set(0, easting);
+        containers.self.agent.home.set(1, northing);
+        containers.self.agent.home.set(2,0.0);
         containers.eastingNorthingBearing.set(0,easting);
         containers.eastingNorthingBearing.set(1,northing);
         containers.eastingNorthingBearing.set(2, 0.0);
-        containers.self.device.location.set(0, lat);
-        containers.self.device.location.set(1, lon);
-        containers.self.device.location.set(2,0.0);
-        containers.self.device.source.set(0, lat);
-        containers.self.device.source.set(1, lon);
-        containers.self.device.source.set(2,0.0);        
-        containers.self.device.dest.set(0, easting);
-        containers.self.device.dest.set(1, northing);
-        containers.self.device.dest.set(2,0.0);
+        containers.self.agent.location.set(0, lat);
+        containers.self.agent.location.set(1, lon);
+        containers.self.agent.location.set(2,0.0);
+        containers.self.agent.source.set(0, lat);
+        containers.self.agent.source.set(1, lon);
+        containers.self.agent.source.set(2,0.0);        
+        containers.self.agent.dest.set(0, easting);
+        containers.self.agent.dest.set(1, northing);
+        containers.self.agent.dest.set(2,0.0);
         
         currentDestination = new double[2];      
         
@@ -134,7 +134,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
                 VEL = VEL_MAX;
                 ROTVEL = ROTVEL_MAX;
                 if (containers.distToDest.get() > getPositionAccuracy()) {                                                                       
-                    double[] xd = self.device.dest.toRecord().toDoubleArray();
+                    double[] xd = self.agent.dest.toRecord().toDoubleArray();
                     double[] xError = new double[3];
                     xError[0] = xd[0] - x[0];
                     xError[1] = xd[1] - x[1];                    
@@ -180,9 +180,9 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         LatLong latLong = UTM.utmToLatLong(utm, ReferenceEllipsoid.WGS84);
         double lat = latLong.latitudeValue(NonSI.DEGREE_ANGLE);
         double lon = latLong.longitudeValue(NonSI.DEGREE_ANGLE);                
-        self.device.location.set(0, lat);
-        self.device.location.set(1, lon);
-        self.device.location.set(2, 0.0); 
+        self.agent.location.set(0, lat);
+        self.agent.location.set(1, lon);
+        self.agent.location.set(2, 0.0); 
     }
     
     double[] thrustAndRudderFractionToVelocityMap() {
@@ -248,11 +248,11 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
             UTM utmLoc = UTM.latLongToUtm(LatLong.valueOf(target.getX(),target.getY(), NonSI.DEGREE_ANGLE),ReferenceEllipsoid.WGS84);
             double easting = utmLoc.eastingValue(SI.METER);
             double northing = utmLoc.northingValue(SI.METER);
-            self.device.dest.set(0,easting);
-            self.device.dest.set(1,northing);
-            self.device.source.set(0,self.device.location.get(0));
-            self.device.source.set(1,self.device.location.get(1));
-            self.device.source.set(2,self.device.location.get(2));
+            self.agent.dest.set(0,easting);
+            self.agent.dest.set(1,northing);
+            self.agent.source.set(0,self.agent.location.get(0));
+            self.agent.source.set(1,self.agent.location.get(1));
+            self.agent.source.set(2,self.agent.location.get(2));
             
             //System.out.println(String.format("New destination: X,Y =  %f,  %f",easting,northing));
         }        
@@ -261,7 +261,7 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     
     void updateDistToDest() {
         double[] x = containers.eastingNorthingBearing.toRecord().toDoubleArray();
-        double[] xd = self.device.dest.toRecord().toDoubleArray();
+        double[] xd = self.agent.dest.toRecord().toDoubleArray();
         containers.distToDest.set(Math.pow(Math.pow(xd[0]-x[0],2.0) + Math.pow(xd[1]-x[1],2.0),0.5));
     }
     

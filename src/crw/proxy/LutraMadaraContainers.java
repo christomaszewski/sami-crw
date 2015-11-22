@@ -40,12 +40,12 @@ public class LutraMadaraContainers {
     NativeDoubleVector thrustPPIGains;
     NativeDoubleVector eastingNorthingBearing; // UTM x,y,th
     NativeDoubleVector errorEllipse; // width, height, angle
-    NativeDoubleVector location; // stand in for device.{id}.location
-    NativeDoubleVector dest; // stand in for device.{.id}.dest
-    NativeDoubleVector home; // stand in for device.{.id}.ome
+    NativeDoubleVector location; // stand in for agent.{id}.location
+    NativeDoubleVector dest; // stand in for agent.{.id}.dest
+    NativeDoubleVector home; // stand in for agent.{.id}.ome
     Integer longitudeZone;
     String latitudeZone; // a single character (see UTM) http://jscience.org/api/org/jscience/geography/coordinates/UTM.html
-    Integer waypointsFinishedStatus; // used as a stand in for device.{id}.algorithm.waypoints.finished
+    Integer waypointsFinishedStatus; // used as a stand in for agent.{id}.algorithm.waypoints.finished
     Integer resetLocalization;
     Integer connectivityWatchdog;
     Integer wifiStrength;
@@ -63,7 +63,7 @@ public class LutraMadaraContainers {
     
     public LutraMadaraContainers(KnowledgeBase knowledge, int id) {        
         this.knowledge = knowledge;
-        this.prefix = java.lang.String.format("device.%d.",id);
+        this.prefix = java.lang.String.format("agent.%d.",id);
         this.settings = new UpdateSettings();
         settings.setTreatGlobalsAsLocals(true);
         

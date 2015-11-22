@@ -33,7 +33,7 @@ public class ConnectExistingProxy extends OutputEvent {
         fieldNameToDescription.put("name", "Name of the proxy?");
         fieldNameToDescription.put("color", "Visualization color for the proxy?");
         //fieldNameToDescription.put("server", "IP address (with port number) of proxy?");
-        fieldNameToDescription.put("boatNo", "Madara device number for the proxy?");
+        fieldNameToDescription.put("boatNo", "Madara agent number for the proxy?");
         fieldNameToDescription.put("imageStorageDirectory", "Where to store images taken by this proxy?");
     }
 

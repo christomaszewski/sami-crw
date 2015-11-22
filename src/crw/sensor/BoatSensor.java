@@ -223,6 +223,7 @@ public class BoatSensor implements ObserverInt, SensorListener {
             KR.free();
             newDatum.get("count").set(currentCount + 1);
             String n = String.format("%d",currentCount);
+            newDatum.get(n).get("type").set("SIM");
             newDatum.get(n).get("latitude").set(curP.latitude.degrees);
             newDatum.get(n).get("longitude").set(curP.longitude.degrees);
             DateFormat df = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
