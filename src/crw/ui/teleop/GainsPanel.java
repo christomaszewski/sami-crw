@@ -33,13 +33,17 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     public static final int THRUST_GAINS_AXIS = 0;
     public static final int RUDDER_GAINS_AXIS = 5;
     public static final int WINCH_GAINS_AXIS = 3;
-    private JPanel contentP, velMultP, thrustPidP, rudderPidP, winchPidP, PPI_P;
+    private JPanel contentP, velMultP, thrustPidP, rudderPidP, winchPidP; //PPI_P;
+    private JPanel peakThrustFraction_P;
     public JTextField velocityMultF, winchTF, thrustPTF, thrustITF, thrustDTF, rudderPTF, rudderITF, rudderDTF;
-    public JTextField PPI_PosP_TF, PPI_VelP_TF, PPI_VelI_TF;
+    //public JTextField PPI_PosP_TF, PPI_VelP_TF, PPI_VelI_TF;
+    public JTextField peakThrustFraction_TF;
     public JLabel winchL;
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
     public JButton applyB;
-    public double velocityMult = 0.12, winch, thrustP, thrustI, thrustD, rudderP, rudderI, rudderD, PPI_PosP, PPI_VelP, PPI_VelI;
+    public double velocityMult = 0.12, winch, thrustP, thrustI, thrustD, rudderP, rudderI, rudderD;
+    //double PPI_PosP, PPI_VelP, PPI_VelI;
+    double peakThrustFraction;
     private BoatProxy activeProxy = null;
     /////////////////////////////////////////////////////////////////////////
     //private AsyncVehicleServer activeVehicle = null;
@@ -50,34 +54,40 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     public boolean thrustFractionIsFixed = false;
     public double thrustFractionFixedValue;
     /////////////////////////////////////////////////////////////////////////
-    private ObserverInt activeWinchObserver = null;    
+    private ObserverInt activeWinchObserver = null;   
+    final private int textFieldWidth = 100;
     
     public GainsPanel(KnowledgeBase knowledge) {        
         super();
         this.knowledge = knowledge;
         velocityMultF = new JTextField(velocityMult + "");
-        velocityMultF.setPreferredSize(new Dimension(50, velocityMultF.getPreferredSize().height));
+        velocityMultF.setPreferredSize(new Dimension(textFieldWidth, velocityMultF.getPreferredSize().height));
         winchTF = new JTextField("");
-        winchTF.setPreferredSize(new Dimension(50, winchTF.getPreferredSize().height));
+        winchTF.setPreferredSize(new Dimension(textFieldWidth, winchTF.getPreferredSize().height));
         thrustPTF = new JTextField("");
-        thrustPTF.setPreferredSize(new Dimension(50, thrustPTF.getPreferredSize().height));
+        thrustPTF.setPreferredSize(new Dimension(textFieldWidth, thrustPTF.getPreferredSize().height));
         thrustITF = new JTextField("");
-        thrustITF.setPreferredSize(new Dimension(50, thrustITF.getPreferredSize().height));
+        thrustITF.setPreferredSize(new Dimension(textFieldWidth, thrustITF.getPreferredSize().height));
         thrustDTF = new JTextField("");
-        thrustDTF.setPreferredSize(new Dimension(50, thrustDTF.getPreferredSize().height));
+        thrustDTF.setPreferredSize(new Dimension(textFieldWidth, thrustDTF.getPreferredSize().height));
         rudderPTF = new JTextField("");
-        rudderPTF.setPreferredSize(new Dimension(50, rudderPTF.getPreferredSize().height));
+        rudderPTF.setPreferredSize(new Dimension(textFieldWidth, rudderPTF.getPreferredSize().height));
         rudderITF = new JTextField("");
-        rudderITF.setPreferredSize(new Dimension(50, rudderITF.getPreferredSize().height));
+        rudderITF.setPreferredSize(new Dimension(textFieldWidth, rudderITF.getPreferredSize().height));
         rudderDTF = new JTextField("");
-        rudderDTF.setPreferredSize(new Dimension(50, rudderDTF.getPreferredSize().height));
+        rudderDTF.setPreferredSize(new Dimension(textFieldWidth, rudderDTF.getPreferredSize().height));
         
+        /*
         PPI_PosP_TF = new JTextField("");
         PPI_PosP_TF.setPreferredSize(new Dimension(50, PPI_PosP_TF.getPreferredSize().height));
         PPI_VelP_TF = new JTextField("");
         PPI_VelP_TF.setPreferredSize(new Dimension(50, PPI_VelP_TF.getPreferredSize().height));
         PPI_VelI_TF = new JTextField("");
         PPI_VelI_TF.setPreferredSize(new Dimension(50, PPI_VelI_TF.getPreferredSize().height));
+        */
+        
+        peakThrustFraction_TF = new JTextField("");
+        peakThrustFraction_TF.setPreferredSize(new Dimension(textFieldWidth, peakThrustFraction_TF.getPreferredSize().height));
 
         velMultP = new JPanel();
         velMultP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -104,6 +114,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         rudderPidP.add(new JLabel("D:"));
         rudderPidP.add(rudderDTF);
         
+        /*
         PPI_P = new JPanel();
         PPI_P.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         PPI_P.add(new JLabel("PPI"));
@@ -113,6 +124,12 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         PPI_P.add(PPI_VelP_TF);
         PPI_P.add(new JLabel("VelI:"));
         PPI_P.add(PPI_VelI_TF);
+        */
+        
+        peakThrustFraction_P = new JPanel();
+        peakThrustFraction_P.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        peakThrustFraction_P.add(new JLabel("peak thrust fraction:"));
+        peakThrustFraction_P.add(peakThrustFraction_TF);
 
         winchPidP = new JPanel();
         winchPidP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -150,7 +167,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
 //        contentP.add(velMultP);
         contentP.add(thrustPidP);
         contentP.add(rudderPidP);
-        contentP.add(PPI_P);
+        //contentP.add(PPI_P);
+        contentP.add(peakThrustFraction_P);
         contentP.add(winchPidP);
         contentP.add(applyB);
         contentP.add(thrustFractionFixP);
@@ -219,6 +237,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             rudderD = temp;
         }
         
+        /*
         // PPI
         temp = stringToDouble(PPI_PosP_TF.getText());
         if (Double.isFinite(temp)) {
@@ -231,7 +250,14 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         temp = stringToDouble(PPI_VelI_TF.getText());
         if (Double.isFinite(temp)) {
             PPI_VelI = temp;
-        }        
+        } 
+        */
+        
+        // peak thrust fraction
+        temp = stringToDouble(peakThrustFraction_TF.getText());
+        if (Double.isFinite(temp)) {
+            peakThrustFraction = temp;
+        }
         
         // Winch
         temp = stringToDouble(winchTF.getText());
@@ -242,7 +268,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         activeProxy.containers.setThrustPIDGains(thrustP, thrustI, thrustD);
         activeProxy.containers.setBearingPIDGains(rudderP, rudderI, rudderD);
-        activeProxy.containers.setThrustPPIGains(PPI_PosP, PPI_VelP, PPI_VelI);
+        //activeProxy.containers.setThrustPPIGains(PPI_PosP, PPI_VelP, PPI_VelI);
+        activeProxy.containers.setPeakThrustFraction(peakThrustFraction);
         knowledge.sendModifieds();
 
         /*
@@ -292,16 +319,18 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             
             double[] thrustPIDGains = activeProxy.containers.getThrustPIDGains();
             double[] bearingPIDGains = activeProxy.containers.getBearingPIDGains();
-            double[] thrustPPIGains = activeProxy.containers.getThrustPPIGains();
+            //double[] thrustPPIGains = activeProxy.containers.getThrustPPIGains();
+            peakThrustFraction = activeProxy.containers.getPeakThrustFraction();
             thrustPTF.setText(String.format("%.2f", thrustPIDGains[0]));
-            thrustITF.setText(String.format("%.2f", thrustPIDGains[0]));
-            thrustDTF.setText(String.format("%.2f", thrustPIDGains[0]));
+            thrustITF.setText(String.format("%.2f", thrustPIDGains[1]));
+            thrustDTF.setText(String.format("%.2f", thrustPIDGains[2]));
             rudderPTF.setText(String.format("%.2f", bearingPIDGains[0]));
-            rudderITF.setText(String.format("%.2f", bearingPIDGains[0]));
-            rudderDTF.setText(String.format("%.2f", bearingPIDGains[0]));
-            PPI_PosP_TF.setText(String.format("%.2f", thrustPPIGains[0]));
-            PPI_VelP_TF.setText(String.format("%.2f", thrustPPIGains[0]));
-            PPI_VelI_TF.setText(String.format("%.2f", thrustPPIGains[0]));            
+            rudderITF.setText(String.format("%.2f", bearingPIDGains[1]));
+            rudderDTF.setText(String.format("%.2f", bearingPIDGains[2]));
+            //PPI_PosP_TF.setText(String.format("%.2f", thrustPPIGains[0]));
+            //PPI_VelP_TF.setText(String.format("%.2f", thrustPPIGains[1]));
+            //PPI_VelI_TF.setText(String.format("%.2f", thrustPPIGains[2]));    
+            peakThrustFraction_TF.setText(String.format("%.2f",peakThrustFraction));
               
 
             // Retrieve vehicle specific values
@@ -364,6 +393,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             rudderITF.setText("");
             rudderDTF.setText("");
             winchTF.setText("");
+            peakThrustFraction_TF.setText("");
             applyB.setEnabled(false);
         }
     }

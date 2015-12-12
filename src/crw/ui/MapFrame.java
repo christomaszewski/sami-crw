@@ -16,6 +16,10 @@ import sami.uilanguage.UiClientListenerInt;
 import sami.uilanguage.UiServerInt;
 import sami.uilanguage.toui.ToUiMessage;
 
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
+import java.awt.Font;
+
 /**
  *
  * @author nbb
@@ -54,6 +58,7 @@ public class MapFrame extends UiFrame implements UiClientListenerInt {
 
         pack();
         setVisible(true);
+        
     }
 
     public static void main(String[] args) {

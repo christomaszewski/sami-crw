@@ -244,6 +244,10 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
             //knowledge.print();
             ////////////////
             
+            
+            System.out.println(String.format("target.getX() =  %f,  target.getY() = %f", target.getX(),target.getY()));
+
+            
             currentDestination = targetDA.clone();
             UTM utmLoc = UTM.latLongToUtm(LatLong.valueOf(target.getX(),target.getY(), NonSI.DEGREE_ANGLE),ReferenceEllipsoid.WGS84);
             double easting = utmLoc.eastingValue(SI.METER);

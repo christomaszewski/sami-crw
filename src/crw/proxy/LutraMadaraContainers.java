@@ -28,7 +28,7 @@ public class LutraMadaraContainers {
     FlexMap environmentalData;
     Double distToDest;
     Double sufficientProximity;
-    Double peakVelocity;
+    Double peakThrustFraction;
     Double accel;
     Double decel;
     public Integer teleopStatus; // see TELEOPERATION_TYPES enum
@@ -37,7 +37,7 @@ public class LutraMadaraContainers {
     Double bearingFraction;
     NativeDoubleVector bearingPIDGains;
     NativeDoubleVector thrustPIDGains;
-    NativeDoubleVector thrustPPIGains;
+    //NativeDoubleVector thrustPPIGains;
     NativeDoubleVector eastingNorthingBearing; // UTM x,y,th
     NativeDoubleVector errorEllipse; // width, height, angle
     NativeDoubleVector location; // stand in for agent.{id}.location
@@ -51,13 +51,14 @@ public class LutraMadaraContainers {
     Integer wifiStrength;
     Integer gpsWatchdog;
     final double defaultSufficientProximity = 2.0;
-    final double defaultPeakVelocity = 2.0;
+    //final double defaultPeakVelocity = 2.0;
     final double defaultAccelTime = 5.0;
     final double defaultDecelTime = 5.0;
     final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_MS.getLongValue();
     final double[] bearingPIDGainsDefaults = new double[]{0.3,0.01,0.5}; // cols: P,I,D
     final double[] thrustPIDGainsDefaults = new double[]{0.1,0,0.2}; // cols: P,I,D
-    final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.05}; // cols: Pos-P, Vel-P, Vel-I
+    //final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.05}; // cols: Pos-P, Vel-P, Vel-I
+    final double defaultPeakThrustFraction = 0.5;
 
     Self self;
     
@@ -71,8 +72,9 @@ public class LutraMadaraContainers {
         distToDest.setName(knowledge, prefix + "distToDest");
         sufficientProximity = new Double();
         sufficientProximity.setName(knowledge,prefix + "sufficientProximity");
-        peakVelocity = new Double();
-        peakVelocity.setName(knowledge, prefix + "peakVelocity");
+        peakThrustFraction = new Double();
+        peakThrustFraction.setName(knowledge, prefix + "peakThrustFraction");
+        peakThrustFraction.setSettings(settings);
         accel = new Double();
         accel.setName(knowledge, prefix + "accelTime");
         decel = new Double();
@@ -130,10 +132,12 @@ public class LutraMadaraContainers {
         thrustPIDGains.setSettings(settings);
         thrustPIDGains.resize(3);
 
+        /*
         thrustPPIGains= new NativeDoubleVector();
         thrustPPIGains.setName(knowledge, prefix + "thrustPPIGains");
         thrustPPIGains.setSettings(settings);
         thrustPPIGains.resize(3);
+        */
         
         thrustFraction = new Double();
         bearingFraction = new Double();
@@ -163,7 +167,7 @@ public class LutraMadaraContainers {
     public void freeAll() {
         distToDest.free();
         sufficientProximity.free();
-        peakVelocity.free();
+        peakThrustFraction.free();
         accel.free();
         decel.free();
         teleopStatus.free();
@@ -176,7 +180,7 @@ public class LutraMadaraContainers {
         waypointsFinishedStatus.free();
         bearingPIDGains.free();
         thrustPIDGains.free();
-        thrustPPIGains.free();    
+        //thrustPPIGains.free();    
         thrustFraction.free();
         bearingFraction.free();
         resetLocalization.free();
@@ -189,15 +193,15 @@ public class LutraMadaraContainers {
 
     public void restoreDefaults() {
         sufficientProximity.set(defaultSufficientProximity);
-        peakVelocity.set(defaultPeakVelocity);
         accel.set(defaultAccelTime);
         decel.set(defaultDecelTime);
         teleopStatus.set(defaultTeleopStatus);
         for (int i = 0; i < 3; i++) {
             bearingPIDGains.set(i,bearingPIDGainsDefaults[i]);
             thrustPIDGains.set(i,thrustPIDGainsDefaults[i]);
-            thrustPPIGains.set(i,thrustPPIGainsDefaults[i]);
+            //thrustPPIGains.set(i,thrustPPIGainsDefaults[i]);
         }
+        peakThrustFraction.set(defaultPeakThrustFraction);
     }
     
     public void setSelf(Self self) {
@@ -290,7 +294,7 @@ public class LutraMadaraContainers {
         result[2] = thrustPIDGains.get(2);
         return result;
     }    
-    
+    /*
     public void setThrustPPIGains(double PosP, double VelP, double VelI) {
         UpdateSettings makeItGlobal = new UpdateSettings();
         thrustPPIGains.setSettings(makeItGlobal);        
@@ -304,8 +308,21 @@ public class LutraMadaraContainers {
         result[0] = thrustPPIGains.get(0);
         result[1] = thrustPPIGains.get(1);
         result[2] = thrustPPIGains.get(2);
+        return result;l
+    }
+    */
+    
+    public double getPeakThrustFraction() {
+        double result;
+        result = peakThrustFraction.get();
         return result;
-    }      
+    }
+    public void setPeakThrustFraction(double peakThrustFraction_in) {
+        UpdateSettings makeItGlobal = new UpdateSettings();
+        peakThrustFraction.setSettings(makeItGlobal);        
+        peakThrustFraction.set(peakThrustFraction_in);
+        makeItGlobal.free();
+    }
     
     public double[] getErrorEllipse() {
         double[] result = new double[3];

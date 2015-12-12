@@ -40,6 +40,7 @@ import crw.event.output.proxy.ProxyResendWaypoints;
 import crw.event.output.proxy.ProxyResetLocalization;
 import crw.event.output.proxy.SetGains;
 import crw.event.output.proxy.StopAllAgents;
+import crw.event.output.proxy.ZoneCoverage;
 import crw.event.output.service.ProxyCompareDistanceRequest;
 import crw.general.FastSimpleBoatSimulator;
 import crw.proxy.BoatProxy;
@@ -662,58 +663,6 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     args.pushback(groupName);
                     args.pushback("barrier");
                     args.pushback(barrier);
-                    
-                    /*
-                    KnowledgeRecord KR = new KnowledgeRecord("start");
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    double[] latlon = new double[] {stagingPosition.latitude.degrees, stagingPosition.longitude.degrees};                    
-                    KR = new KnowledgeRecord(latlon);
-                    args.pushback(KR);
-                    KR.free();                    
-                    
-                    KR = new KnowledgeRecord("end");
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    latlon = new double[] {destinationPosition.latitude.degrees, destinationPosition.longitude.degrees};
-                    KR = new KnowledgeRecord(latlon);
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord("formation");
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord(formationType);
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord("buffer");
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord(bufferDistance);
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord("group");
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord(groupName);
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord("barrier");
-                    args.pushback(KR);
-                    KR.free();
-                    
-                    KR = new KnowledgeRecord(barrier);
-                    args.pushback(KR);
-                    KR.free();  
-                    */
                                         
                     args.free();                    
                 }
@@ -794,6 +743,99 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 }                
                 knowledge.sendModifieds();
                 groupMembersContainer.free();                                                                  
+            }
+            GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+            for (GeneratedEventListenerInt listener : listeners) {
+                listener.eventGenerated(ie);
+            }            
+        }
+        
+        else if (oe instanceof ZoneCoverage) {
+            ZoneCoverage request = (ZoneCoverage)oe;
+            String defendersGroupName = request.getDefendersGroupName();
+            String assetsGroupName = request.getAssetsGroupName();
+            String enemiesGroupName = request.getEnemiesGroupName();
+            String formationType = request.getFormationType();
+            double bufferDistance = request.getBufferDistance();
+            
+             ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
+            if (proxyServer instanceof CrwProxyServer) { 
+                KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
+                EvalSettings delay = new EvalSettings();
+                delay.setDelaySendingModifieds(true);
+                
+                // defenders group commands                
+                StringVector defendersGroupMembersContainer = new StringVector();
+                defendersGroupMembersContainer.setName(knowledge, String.format("group.%s.members",defendersGroupName));                
+                for (int i = 0; i < defendersGroupMembersContainer.size(); i++) {
+                    Vector args = new Vector();
+                    com.madara.containers.String command = new com.madara.containers.String();
+                    command.setName(knowledge, defendersGroupMembersContainer.get(i) + ".command");
+                    command.set("zone coverage");                    
+                    command.free();
+                    args.setName(knowledge, defendersGroupMembersContainer.get(i) + ".command");
+                    args.resize(0);       
+                    args.pushback("assets");
+                    args.pushback(assetsGroupName);                    
+                    args.pushback("buffer");
+                    args.pushback(bufferDistance);
+                    args.pushback("enemies");
+                    args.pushback(enemiesGroupName);                    
+                    args.pushback("formation");
+                    args.pushback(formationType);
+                    args.pushback("protectors");
+                    args.pushback(defendersGroupName);
+                    
+                    args.free();
+                }
+                
+                // assets group commands                
+                StringVector assetsGroupMembersContainer = new StringVector();
+                assetsGroupMembersContainer.setName(knowledge, String.format("group.%s.members",assetsGroupName));                
+                for (int i = 0; i < assetsGroupMembersContainer.size(); i++) {
+                    Vector args = new Vector();
+                    com.madara.containers.String command = new com.madara.containers.String();
+                    command.setName(knowledge, assetsGroupMembersContainer.get(i) + ".command");
+                    command.set("zone coverage");                    
+                    command.free();
+                    args.setName(knowledge, assetsGroupMembersContainer.get(i) + ".command");
+                    args.resize(0);                    
+                    args.pushback("assets");
+                    args.pushback(assetsGroupName);                    
+                    args.pushback("buffer");
+                    args.pushback(bufferDistance);
+                    args.pushback("enemies");
+                    args.pushback(enemiesGroupName);                    
+                    args.pushback("formation");
+                    args.pushback(formationType);
+                    args.pushback("protectors");
+                    args.pushback(defendersGroupName);                 
+                    args.free();
+                }
+                // enemies group commands                
+                StringVector enemiesGroupMembersContainer = new StringVector();
+                enemiesGroupMembersContainer.setName(knowledge, String.format("group.%s.members",enemiesGroupName));                
+                for (int i = 0; i < enemiesGroupMembersContainer.size(); i++) {
+                    Vector args = new Vector();
+                    com.madara.containers.String command = new com.madara.containers.String();
+                    command.setName(knowledge, enemiesGroupMembersContainer.get(i) + ".command");
+                    command.set("zone coverage");                    
+                    command.free();
+                    args.setName(knowledge, enemiesGroupMembersContainer.get(i) + ".command");
+                    args.resize(0);                    
+                    args.pushback("assets");
+                    args.pushback(assetsGroupName);                    
+                    args.pushback("buffer");
+                    args.pushback(bufferDistance);
+                    args.pushback("enemies");
+                    args.pushback(enemiesGroupName);                    
+                    args.pushback("formation");
+                    args.pushback(formationType);
+                    args.pushback("protectors");
+                    args.pushback(defendersGroupName);                   
+                    args.free();
+                }                                                
+                knowledge.sendModifieds();
             }
             GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
             for (GeneratedEventListenerInt listener : listeners) {
