@@ -26,6 +26,8 @@ public class LutraMadaraContainers {
     UpdateSettings settings; // used to force a global variable to not broadcast as if it were local
 
     FlexMap environmentalData;
+    String unhandledException;
+    Integer distress;
     Double distToDest;
     Double sufficientProximity;
     Double peakThrustFraction;
@@ -157,6 +159,13 @@ public class LutraMadaraContainers {
         
         environmentalData = new FlexMap();
         environmentalData.setName(knowledge, prefix + "environmentalData");
+        
+        unhandledException = new String();
+        unhandledException.setName(knowledge, prefix + "unhandledException");
+        unhandledException.set("");
+        distress = new Integer();
+        distress.setName(knowledge, prefix + "distress");
+        distress.set(0L);
         
                 
         restoreDefaults();

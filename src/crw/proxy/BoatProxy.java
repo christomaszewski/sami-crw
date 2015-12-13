@@ -903,6 +903,12 @@ public class BoatProxy extends Thread implements ProxyInt {
     class MadaraConnectivityWatchdogListener extends BaseThread {
         @Override
         public void run() {
+            
+            if (containers.distress.get() == 1L) {
+                System.out.println(String.format("WARNING: boat # %d is in distress!",_boatNo));
+                System.out.println(String.format("boat #d unhandled exception: %s",containers.unhandledException.get()));
+            }
+            
             if (containers.connectivityWatchdog.get() == 1L) {
                 containers.connectivityWatchdog.set(0L);
                 
