@@ -43,10 +43,11 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     public SimulatedGAMSBoatPlatform(KnowledgeBase knowledge, int id, UTMCoord initialUTMCoord) {
         this.knowledge = knowledge;        
         this.id = id;
-        name = java.lang.String.format("SimBoat#%d",id);
+        name = java.lang.String.format("SimBoat%d",id);
         this.initialUTMCoord = initialUTMCoord;
         
-        containers = new LutraMadaraContainers(this.knowledge, id);                
+        containers = new LutraMadaraContainers(this.knowledge, id, name);
+        containers.batteryVoltage.set(999);
     }
     
     @Override

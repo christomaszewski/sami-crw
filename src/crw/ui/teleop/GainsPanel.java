@@ -34,16 +34,16 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
     public static final int RUDDER_GAINS_AXIS = 5;
     public static final int WINCH_GAINS_AXIS = 3;
     private JPanel contentP, velMultP, thrustPidP, rudderPidP, winchPidP; //PPI_P;
-    private JPanel peakThrustFraction_P;
+    private JPanel peakMotorSignal_P;
     public JTextField velocityMultF, winchTF, thrustPTF, thrustITF, thrustDTF, rudderPTF, rudderITF, rudderDTF;
     //public JTextField PPI_PosP_TF, PPI_VelP_TF, PPI_VelI_TF;
-    public JTextField peakThrustFraction_TF;
+    public JTextField peakForwardMotorSignal_TF, peakBackwardMotorSignal_TF;
     public JLabel winchL;
     private DecimalFormat decimalFormat = new DecimalFormat("#.##");
     public JButton applyB;
     public double velocityMult = 0.12, winch, thrustP, thrustI, thrustD, rudderP, rudderI, rudderD;
     //double PPI_PosP, PPI_VelP, PPI_VelI;
-    double peakThrustFraction;
+    double peakForwardMotorSignal, peakBackwardMotorSignal;
     private BoatProxy activeProxy = null;
     /////////////////////////////////////////////////////////////////////////
     //private AsyncVehicleServer activeVehicle = null;
@@ -86,8 +86,10 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         PPI_VelI_TF.setPreferredSize(new Dimension(50, PPI_VelI_TF.getPreferredSize().height));
         */
         
-        peakThrustFraction_TF = new JTextField("");
-        peakThrustFraction_TF.setPreferredSize(new Dimension(textFieldWidth, peakThrustFraction_TF.getPreferredSize().height));
+        peakForwardMotorSignal_TF = new JTextField("");
+        peakBackwardMotorSignal_TF = new JTextField("");
+        peakForwardMotorSignal_TF.setPreferredSize(new Dimension(textFieldWidth, peakForwardMotorSignal_TF.getPreferredSize().height));
+        peakBackwardMotorSignal_TF.setPreferredSize(new Dimension(textFieldWidth, peakBackwardMotorSignal_TF.getPreferredSize().height));
 
         velMultP = new JPanel();
         velMultP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -126,10 +128,13 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         PPI_P.add(PPI_VelI_TF);
         */
         
-        peakThrustFraction_P = new JPanel();
-        peakThrustFraction_P.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        peakThrustFraction_P.add(new JLabel("peak thrust fraction:"));
-        peakThrustFraction_P.add(peakThrustFraction_TF);
+        peakMotorSignal_P = new JPanel();
+        peakMotorSignal_P.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        peakMotorSignal_P.add(new JLabel("max FRWD mtr sgnl:"));
+        peakMotorSignal_P.add(peakForwardMotorSignal_TF);
+        peakMotorSignal_P.add(new JLabel("max BCKWRD mtr sgnl:"));
+        peakMotorSignal_P.add(peakBackwardMotorSignal_TF);
+        
 
         winchPidP = new JPanel();
         winchPidP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -168,7 +173,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         contentP.add(thrustPidP);
         contentP.add(rudderPidP);
         //contentP.add(PPI_P);
-        contentP.add(peakThrustFraction_P);
+        contentP.add(peakMotorSignal_P);
         contentP.add(winchPidP);
         contentP.add(applyB);
         contentP.add(thrustFractionFixP);
@@ -253,11 +258,15 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         } 
         */
         
-        // peak thrust fraction
-        temp = stringToDouble(peakThrustFraction_TF.getText());
+        // peak motor signals
+        temp = stringToDouble(peakForwardMotorSignal_TF.getText());
         if (Double.isFinite(temp)) {
-            peakThrustFraction = temp;
+            peakForwardMotorSignal = temp;
         }
+        temp = stringToDouble(peakBackwardMotorSignal_TF.getText());
+        if (Double.isFinite(temp)) {
+            peakBackwardMotorSignal = temp;
+        }        
         
         // Winch
         temp = stringToDouble(winchTF.getText());
@@ -269,7 +278,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
         activeProxy.containers.setThrustPIDGains(thrustP, thrustI, thrustD);
         activeProxy.containers.setBearingPIDGains(rudderP, rudderI, rudderD);
         //activeProxy.containers.setThrustPPIGains(PPI_PosP, PPI_VelP, PPI_VelI);
-        activeProxy.containers.setPeakThrustFraction(peakThrustFraction);
+        activeProxy.containers.setPeakForwardMotorSignal(peakForwardMotorSignal);
+        activeProxy.containers.setPeakBackwardMotorSignal(peakBackwardMotorSignal);
         knowledge.sendModifieds();
 
         /*
@@ -320,7 +330,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             double[] thrustPIDGains = activeProxy.containers.getThrustPIDGains();
             double[] bearingPIDGains = activeProxy.containers.getBearingPIDGains();
             //double[] thrustPPIGains = activeProxy.containers.getThrustPPIGains();
-            peakThrustFraction = activeProxy.containers.getPeakThrustFraction();
+            peakForwardMotorSignal = activeProxy.containers.getPeakForwardMotorSignal();
+            peakBackwardMotorSignal = activeProxy.containers.getPeakBackwardMotorSignal();
             thrustPTF.setText(String.format("%.2f", thrustPIDGains[0]));
             thrustITF.setText(String.format("%.2f", thrustPIDGains[1]));
             thrustDTF.setText(String.format("%.2f", thrustPIDGains[2]));
@@ -330,7 +341,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             //PPI_PosP_TF.setText(String.format("%.2f", thrustPPIGains[0]));
             //PPI_VelP_TF.setText(String.format("%.2f", thrustPPIGains[1]));
             //PPI_VelI_TF.setText(String.format("%.2f", thrustPPIGains[2]));    
-            peakThrustFraction_TF.setText(String.format("%.2f",peakThrustFraction));
+            peakForwardMotorSignal_TF.setText(String.format("%.2f",peakForwardMotorSignal));
+            peakBackwardMotorSignal_TF.setText(String.format("%.2f",peakBackwardMotorSignal));
               
 
             // Retrieve vehicle specific values
@@ -393,7 +405,8 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
             rudderITF.setText("");
             rudderDTF.setText("");
             winchTF.setText("");
-            peakThrustFraction_TF.setText("");
+            peakForwardMotorSignal_TF.setText("");
+            peakBackwardMotorSignal_TF.setText("");
             applyB.setEnabled(false);
         }
     }

@@ -78,6 +78,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     public static final int NUM_SENSOR_PORTS = 4;
     // Identifiers
     int _boatNo;
+    String boatName;
     private final String name;
     private Color color = null;
     // SAMI variables
@@ -130,15 +131,17 @@ public class BoatProxy extends Thread implements ProxyInt {
     static final double MADARA_WP_UPDATE_RATE = 4.0; // Hz
     static final double MADARA_CONNECTIVITY_WATCHDOG_RATE = 0.5; // Hz
     static final double MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH = -85.0; // dBi
+    static final double MINIMUM_SAFE_BATTERY_VOLTAGE = 11.0; // V
 
     // End stuff for simulated data creation
     //public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
     public BoatProxy(final String name, Color color, final int boatNo, KnowledgeBase knowledge) {
         this._boatNo = boatNo;
+        this.boatName = name;
         //this.address = addr;
         this.knowledge = knowledge;
 
-        containers = new LutraMadaraContainers(knowledge, boatNo);
+        containers = new LutraMadaraContainers(knowledge, boatNo, boatName);
         
         madaraListenerThreader = new Threader(knowledge);
         startListeners();
@@ -184,6 +187,10 @@ public class BoatProxy extends Thread implements ProxyInt {
     public String getIpAddress() {
         //return ipAddress;
         return "IHaveNoIpAddress";
+    }
+    
+    public String getBoatName() {
+        return boatName;
     }
     
     public KnowledgeBase getKnowledgeBase() {
@@ -896,7 +903,6 @@ public class BoatProxy extends Thread implements ProxyInt {
 
     @Override
     public void completeMission(UUID missionId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
    
     
@@ -918,18 +924,22 @@ public class BoatProxy extends Thread implements ProxyInt {
                 else {
                     // TODO: how to alert the user that the boat has lost GPS?
                     // A crw.event.output.ui event?
-                    System.out.println(String.format("WARNING: GPS may not available for boat # %d",_boatNo));
+                    System.out.println(String.format("WARNING: GPS may not available for \"%s\", boat # %d",name,_boatNo));
                 }                
                 
             }
             else {
                 // TODO: how to alert the user that the boat isn't connected?
                 // A crw.event.output.ui event?
-                System.out.println(String.format("WARNING: Madara connectivity NOT available for boat # %d",_boatNo));
+                System.out.println(String.format("WARNING: Madara connectivity NOT available for \"%s\", boat # %d",name,_boatNo));
             }
             if (containers.wifiStrength.get() < MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH) {
                 // TODO: alert the user that the wifi signal is weak
-                System.out.println(String.format("WARNING: Wifi signal strength is low: %d", containers.wifiStrength.get()));
+                System.out.println(String.format("WARNING: Wifi signal strength is low: %d for \"%s\", boat # %d",name,_boatNo, containers.wifiStrength.get()));
+            }
+            if (containers.batteryVoltage.get() < MINIMUM_SAFE_BATTERY_VOLTAGE) {
+                // TODO: alert the user that the battery voltage is low
+                System.out.println(String.format("WARNING: Battery voltage is low: %.2f for \"%s\", boat # %d",containers.batteryVoltage.get(),name,_boatNo));
             }
         }
     }

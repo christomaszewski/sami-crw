@@ -46,9 +46,12 @@ import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import sami.engine.Engine;
 import sami.event.InputEvent;
 import sami.event.OutputEvent;
@@ -103,6 +106,8 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     //  expanded by selectin "Teleop" mode in controlModeP
     // combinedPanel: Combines controlModeP and expandedPanel
     private JPanel controlModeP, expandedP, combinedPanel;
+    private JPanel agentNameP;
+    private JTextField agentNameTF;
     private List<ControlMode> enabledModes;
     private Marker selectedMarker = null;
     private MarkerLayer markerLayer;
@@ -441,6 +446,12 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         expandedP.setLayout(new BoxLayout(expandedP, BoxLayout.X_AXIS));
         controlModeP = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         combinedPanel = new JPanel(new BorderLayout());
+        
+        agentNameP = new JPanel(new BorderLayout());
+        agentNameP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        agentNameP.add(new JLabel("Selected Boat:"));
+        agentNameTF = new JTextField("");
+        agentNameP.add(agentNameTF);
 
         if (enabledModes.contains(ControlMode.TELEOP)) {
             teleopButton = new JButton("Teleop");
@@ -501,10 +512,12 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         autoButton.setEnabled(false);
         controlModeP.add(autoButton);
 
+        controlModeP.add(agentNameP);
+        
         combinedPanel.add(expandedP, BorderLayout.NORTH);
         combinedPanel.add(controlModeP, BorderLayout.SOUTH);
         wwPanel.buttonPanels.add(combinedPanel, BorderLayout.SOUTH);
-        wwPanel.buttonPanels.revalidate();
+        wwPanel.buttonPanels.revalidate();        
     }
 
     public void initExpandables() {
@@ -604,7 +617,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         }
         selectedMarker = boatMarker;
         if (boatMarker != null) {
-            boatMarker.getAttributes().setHeadingMaterial(SELECTED_MAT);
+            boatMarker.getAttributes().setHeadingMaterial(SELECTED_MAT);            
         }
 
         // Proxy stuff 
@@ -621,13 +634,15 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             //_vehicle = boatProxy.getVehicleServer();
             //velocityP.setVehicle(boatProxy.getVehicleServer());
             velocityP.setVehicle(boatProxy);
-            gainsP.setProxy(boatProxy);            
+            gainsP.setProxy(boatProxy);
+            agentNameTF.setText(boatProxy.getBoatName());
+            wwPanel.revalidate();
         } else {
             // Remove teleop panel's proxy and hide teleop panel            
             //_vehicle = null;
             velocityP.setVehicle(null);
             gainsP.setProxy(null);
-            
+            agentNameTF.setText("");
             
             setControlMode(ControlMode.NONE);
             hideExpandables();

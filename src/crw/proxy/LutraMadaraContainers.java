@@ -27,10 +27,13 @@ public class LutraMadaraContainers {
 
     FlexMap environmentalData;
     String unhandledException;
+    String name;
     Integer distress;
+    Double batteryVoltage;
     Double distToDest;
     Double sufficientProximity;
-    Double peakThrustFraction;
+    Double peakForwardMotorSignal;
+    Double peakBackwardMotorSignal;
     Double accel;
     Double decel;
     public Integer teleopStatus; // see TELEOPERATION_TYPES enum
@@ -60,23 +63,32 @@ public class LutraMadaraContainers {
     final double[] bearingPIDGainsDefaults = new double[]{0.3,0.01,0.5}; // cols: P,I,D
     final double[] thrustPIDGainsDefaults = new double[]{0.1,0,0.2}; // cols: P,I,D
     //final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.05}; // cols: Pos-P, Vel-P, Vel-I
-    final double defaultPeakThrustFraction = 0.5;
+    final double defaultPeakForwardMotorSignal = 0.1;
+    final double defaultPeakBackwardMotorSignal = 1.0;
 
     Self self;
     
-    public LutraMadaraContainers(KnowledgeBase knowledge, int id) {        
+    public LutraMadaraContainers(KnowledgeBase knowledge, int id, java.lang.String boatName) {        
         this.knowledge = knowledge;
-        this.prefix = java.lang.String.format("agent.%d.",id);
+        this.prefix = java.lang.String.format("agent.%d.",id);        
         this.settings = new UpdateSettings();
         settings.setTreatGlobalsAsLocals(true);
+        
+        name = new String();
+        name.setName(knowledge, prefix + "name");
+        name.set(boatName);
         
         distToDest = new Double();
         distToDest.setName(knowledge, prefix + "distToDest");
         sufficientProximity = new Double();
         sufficientProximity.setName(knowledge,prefix + "sufficientProximity");
-        peakThrustFraction = new Double();
-        peakThrustFraction.setName(knowledge, prefix + "peakThrustFraction");
-        peakThrustFraction.setSettings(settings);
+        peakForwardMotorSignal = new Double();
+        peakForwardMotorSignal.setName(knowledge, prefix + "peakForwardMotorSignal");
+        peakForwardMotorSignal.setSettings(settings);
+        peakBackwardMotorSignal = new Double();
+        peakBackwardMotorSignal.setName(knowledge, prefix + "peakBackwardMotorSignal");
+        peakBackwardMotorSignal.setSettings(settings);
+        
         accel = new Double();
         accel.setName(knowledge, prefix + "accelTime");
         decel = new Double();
@@ -167,6 +179,9 @@ public class LutraMadaraContainers {
         distress.setName(knowledge, prefix + "distress");
         distress.set(0L);
         
+        batteryVoltage = new Double();
+        batteryVoltage.setName(knowledge, prefix + "batteryVoltage");
+        
                 
         restoreDefaults();
         
@@ -176,7 +191,8 @@ public class LutraMadaraContainers {
     public void freeAll() {
         distToDest.free();
         sufficientProximity.free();
-        peakThrustFraction.free();
+        peakForwardMotorSignal.free();
+        peakBackwardMotorSignal.free();
         accel.free();
         decel.free();
         teleopStatus.free();
@@ -210,7 +226,8 @@ public class LutraMadaraContainers {
             thrustPIDGains.set(i,thrustPIDGainsDefaults[i]);
             //thrustPPIGains.set(i,thrustPPIGainsDefaults[i]);
         }
-        peakThrustFraction.set(defaultPeakThrustFraction);
+        peakForwardMotorSignal.set(defaultPeakForwardMotorSignal);
+        peakBackwardMotorSignal.set(defaultPeakBackwardMotorSignal);
     }
     
     public void setSelf(Self self) {
@@ -219,6 +236,10 @@ public class LutraMadaraContainers {
     
     public void setTeleopStatus(TELEOPERATION_TYPES type) {
         teleopStatus.set(type.getLongValue());
+    }
+    
+    public java.lang.String getName() {
+        return name.get();
     }
     
     public double[] getLocation() {
@@ -321,17 +342,28 @@ public class LutraMadaraContainers {
     }
     */
     
-    public double getPeakThrustFraction() {
+    public double getPeakForwardMotorSignal() {
         double result;
-        result = peakThrustFraction.get();
+        result = peakForwardMotorSignal.get();
         return result;
     }
-    public void setPeakThrustFraction(double peakThrustFraction_in) {
+    public double getPeakBackwardMotorSignal() {
+        double result;
+        result = peakBackwardMotorSignal.get();
+        return result;
+    }    
+    public void setPeakForwardMotorSignal(double peakForwardMotorSignal_in) {
         UpdateSettings makeItGlobal = new UpdateSettings();
-        peakThrustFraction.setSettings(makeItGlobal);        
-        peakThrustFraction.set(peakThrustFraction_in);
+        peakForwardMotorSignal.setSettings(makeItGlobal);        
+        peakForwardMotorSignal.set(peakForwardMotorSignal_in);
         makeItGlobal.free();
     }
+    public void setPeakBackwardMotorSignal(double peakBackwardMotorSignal_in) {
+        UpdateSettings makeItGlobal = new UpdateSettings();
+        peakBackwardMotorSignal.setSettings(makeItGlobal);        
+        peakBackwardMotorSignal.set(peakBackwardMotorSignal_in);
+        makeItGlobal.free();
+    }    
     
     public double[] getErrorEllipse() {
         double[] result = new double[3];
