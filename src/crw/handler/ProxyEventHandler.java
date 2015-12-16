@@ -757,6 +757,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             String enemiesGroupName = request.getEnemiesGroupName();
             String formationType = request.getFormationType();
             double bufferDistance = request.getBufferDistance();
+            double distanceFraction = request.getDistanceFraction();
             
              ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
             if (proxyServer instanceof CrwProxyServer) { 
@@ -779,6 +780,8 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     args.pushback(assetsGroupName);                    
                     args.pushback("buffer");
                     args.pushback(bufferDistance);
+                    args.pushback("distance");
+                    args.pushback(distanceFraction);
                     args.pushback("enemies");
                     args.pushback(enemiesGroupName);                    
                     args.pushback("formation");
@@ -804,6 +807,8 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     args.pushback(assetsGroupName);                    
                     args.pushback("buffer");
                     args.pushback(bufferDistance);
+                    args.pushback("distance");
+                    args.pushback(distanceFraction);                    
                     args.pushback("enemies");
                     args.pushback(enemiesGroupName);                    
                     args.pushback("formation");
@@ -827,6 +832,8 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     args.pushback(assetsGroupName);                    
                     args.pushback("buffer");
                     args.pushback(bufferDistance);
+                    args.pushback("distance");
+                    args.pushback(distanceFraction);                    
                     args.pushback("enemies");
                     args.pushback(enemiesGroupName);                    
                     args.pushback("formation");

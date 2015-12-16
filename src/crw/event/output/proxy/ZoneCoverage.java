@@ -21,6 +21,7 @@ public class ZoneCoverage extends OutputEvent {
     public String enemiesGroupName;
     public String formationType;
     public double bufferDistance;
+    public double distanceFraction;
     
     static {
         fieldNames.add("defendersGroupName");
@@ -28,12 +29,14 @@ public class ZoneCoverage extends OutputEvent {
         fieldNames.add("enemiesGroupName");
         fieldNames.add("formationType");
         fieldNames.add("bufferDistance");
+        fieldNames.add("distanceFraction");
         
         fieldNameToDescription.put("defendersGroupName", "Name of the defenders group?");
         fieldNameToDescription.put("assetsGroupName", "Name of the assets group?");
         fieldNameToDescription.put("enemiesGroupName", "Name of the enemies group?");
         fieldNameToDescription.put("formationType", "Type of formation?");
         fieldNameToDescription.put("bufferDistance", "Meters of buffer distance between agents?");
+        fieldNameToDescription.put("distanceFraction", "Defenders location fraction, 0 at enemy, 1 at asset?");
     }
 
     public ZoneCoverage() {
@@ -56,6 +59,9 @@ public class ZoneCoverage extends OutputEvent {
     public double getBufferDistance() {
         return this.bufferDistance;
     }    
+    public double getDistanceFraction() {
+        return this.distanceFraction;
+    }
     public String getFormationType() {
         return this.formationType;
     }                    
