@@ -24,6 +24,9 @@ public class LutraMadaraContainers {
     KnowledgeBase knowledge;
     public java.lang.String prefix;
     UpdateSettings settings; // used to force a global variable to not broadcast as if it were local
+    
+    String compassMessage;
+    Integer magneticLock;
 
     FlexMap environmentalData;
     String unhandledException;
@@ -60,7 +63,7 @@ public class LutraMadaraContainers {
     final double defaultAccelTime = 5.0;
     final double defaultDecelTime = 5.0;
     final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_MS.getLongValue();
-    final double[] bearingPIDGainsDefaults = new double[]{0.3,0.01,0.5}; // cols: P,I,D
+    final double[] bearingPIDGainsDefaults = new double[]{1.0,0.1,0.5}; // cols: P,I,D
     final double[] thrustPIDGainsDefaults = new double[]{0.1,0,0.2}; // cols: P,I,D
     //final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.05}; // cols: Pos-P, Vel-P, Vel-I
     final double defaultPeakForwardMotorSignal = 0.1;
@@ -77,6 +80,13 @@ public class LutraMadaraContainers {
         name = new String();
         name.setName(knowledge, prefix + "name");
         name.set(boatName);
+        
+        compassMessage = new String();
+        compassMessage.setName(knowledge,prefix + "compassMessage");
+        compassMessage.set("");
+        magneticLock = new Integer();
+        magneticLock.setName(knowledge,prefix + "magneticLock");
+        magneticLock.set(0L);
         
         distToDest = new Double();
         distToDest.setName(knowledge, prefix + "distToDest");
@@ -189,6 +199,8 @@ public class LutraMadaraContainers {
     }
 
     public void freeAll() {
+        compassMessage.free();
+        magneticLock.free();
         distToDest.free();
         sufficientProximity.free();
         peakForwardMotorSignal.free();
@@ -248,6 +260,13 @@ public class LutraMadaraContainers {
         result[1] = location.get(1);
         result[2] = 0.0;
         return result;
+    }
+    
+    public java.lang.String getCompassMessage() {
+        return compassMessage.get();
+    }
+    public void setCompassMessage(java.lang.String compassMessage_in) {
+        compassMessage.set(compassMessage_in);
     }
     
     public void resetLocalization() {

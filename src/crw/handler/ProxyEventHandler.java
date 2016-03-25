@@ -315,7 +315,6 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
         } else if (oe instanceof ConnectExistingProxy) {
             // Connect to a non-simulated proxy
             ConnectExistingProxy connectEvent = (ConnectExistingProxy) oe;
-            //ProxyInt proxy = Engine.getInstance().getProxyServer().createProxy(connectEvent.name, connectEvent.color, CrwNetworkUtils.toInetSocketAddress(connectEvent.server));
             ProxyInt proxy = Engine.getInstance().getProxyServer().createNumberedProxy(connectEvent.name, connectEvent.color, Integer.parseInt(connectEvent.boatNo));
             
             ImagePanel.setImagesDirectory(connectEvent.imageStorageDirectory);
@@ -524,92 +523,29 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             FormCylindricalFormation request = (FormCylindricalFormation) oe;
             int leaderNo = request.getLeaderNo();
             double spacing = request.getSpacing();
-            
-            int numProxies = 0;     
-            String teamMembers = "";
-            ArrayList<Token> tokensWithProxy = new ArrayList<Token>();
-            ArrayList<BoatProxy> boatProxies = new ArrayList<BoatProxy>();
-            ArrayList<Integer> teamMembersList = new ArrayList<>();
-            for (Token token : tokens) {
-                if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
-                    tokensWithProxy.add(token);
-                    boatProxies.add((BoatProxy)token.getProxy());
-                    numProxies++;
-                    teamMembers = teamMembers.concat(String.format("%d,",((BoatProxy)token.getProxy()).getBoatNo()));
-                    teamMembersList.add(((BoatProxy)token.getProxy()).getBoatNo());
-                }                
-            }
-            teamMembers = teamMembers.substring(0, teamMembers.length()-1); // remove trailing comma            
-            teamMembers = String.format("%d,",numProxies).concat(teamMembers); // append number of members to the front of this list
-            if (numProxies == 0) {
-                LOGGER.log(Level.WARNING, "ProxyFormationCoverage had no relevant proxies attached: " + oe);
-            }            
+            java.lang.String groupName = request.getGroupName();         
             
             ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
             if (proxyServer instanceof CrwProxyServer) { 
                 KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
+                // TODO - Need to fix FormCylindricalFormation
+                /*
                 EvalSettings delay = new EvalSettings();
                 delay.setDelaySendingModifieds(true);
-                int numFollowers = numProxies - 1;
+                StringVector groupMembersContainer = new StringVector();
+                groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));                                  
+                long numMembers = knowledge.get(String.format("group.%s.members.size",groupName)).toLong();
+                int numFollowers = (int)numMembers - 1;
                 int followerCount = 0;
                 double anglePerFollower = 2*Math.PI/numFollowers;
-                
                 double[] destination = new double[3];
-                String destinationString = "";
-                BoatProxy leaderProxy;                
-                for (int member = 0; member < numProxies; member++) { // for each team member
-                    int boatNo = boatProxies.get(member).getBoatNo();
-                    if (boatNo == leaderNo) {
-                        leaderProxy = boatProxies.get(member);
-                        destination = leaderProxy.containers.getLocation().clone();
-                        destinationString = String.format("%f,%f,%f",destination[0],destination[1],destination[2]);                        
-                        break;
-                    }
-                }
-                
-                if ("".equals(destinationString)) {
-                    LOGGER.log(Level.WARNING, "FormCylindricalFormation could not find leader destination: " + oe);
-                }
-                
-                for (int member = 0; member < numProxies; member++) { // for each team member
-                    int boatNo = boatProxies.get(member).getBoatNo();
-                    String prefix = String.format("agent.%d.command",boatNo);
-                    knowledge.set(prefix + ".size",4,delay);
-                    knowledge.set(prefix,"formation",delay);
-                    knowledge.set(prefix + ".0",leaderNo,delay);
-                    if (boatNo == leaderNo) {
-                        NativeDoubleVector NDV = new NativeDoubleVector();
-                        NDV.setName(knowledge,prefix + ".1");
-                        NDV.resize(3);
-                        NDV.set(0, 0.0); NDV.set(1, 0.0); NDV.set(2, 0.0);
-                        NDV.free();
-                    }
-                    else {                        
-                        NativeDoubleVector NDV = new NativeDoubleVector();
-                        NDV.setName(knowledge,prefix + ".1");
-                        NDV.resize(3);
-                        NDV.set(0, spacing); NDV.set(1, anglePerFollower*followerCount); NDV.set(2, 0.0);
-                        NDV.free();                        
-                        followerCount++;
-                    }
-                    NativeDoubleVector NDV = new NativeDoubleVector();
-                    NDV.setName(knowledge,prefix + ".2");
-                    NDV.resize(3);
-                    NDV.set(0, destination[0]); NDV.set(1, destination[1]); NDV.set(2, destination[2]);
-                    NDV.free();                                                                
-                    
-                    NativeIntegerVector NIV = new NativeIntegerVector();
-                    NIV.setName(knowledge,prefix + ".3");
-                    NIV.resize(teamMembersList.size());
-                    for (int teamMember = 0; teamMember < teamMembersList.size(); teamMember++) {
-                        NIV.set(teamMember, teamMembersList.get(teamMember));
-                    }
-                    NIV.free();                                                                                    
-                    
-                }
+                // need to get the leader's current location as the destination                
+                NativeDoubleVector destNDV = new NativeDoubleVector();                
+                destNDV.free();                                        
                 knowledge.sendModifieds();                
-                //knowledge.print();////////////////////////////////                
-                delay.free();      
+                //knowledge.print();
+                delay.free();     
+                */
                 
                 GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
                 for (GeneratedEventListenerInt listener : listeners) {
@@ -641,32 +577,23 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));                
                 for (int i = 0; i < groupMembersContainer.size(); i++) {
                     //groupMembers.add(groupMembersContainer.get(i));
-                    Vector args = new Vector();
+                    //Vector args = new Vector();
                     com.madara.containers.String command = new com.madara.containers.String();
-                    command.setName(knowledge, groupMembersContainer.get(i) + ".command");
+                    command.setName(knowledge, groupMembersContainer.get(i) + ".algorithm");
                     command.set("formation sync");                    
                     command.free();
-                    args.setName(knowledge, groupMembersContainer.get(i) + ".command");
-                    args.resize(0);
                     
-                    args.pushback("start");
                     double[] latlon = new double[] {stagingPosition.latitude.degrees, stagingPosition.longitude.degrees};
-                    args.pushback(latlon);
-                    args.pushback("end");
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.start", latlon, delay);
                     latlon = new double[] {destinationPosition.latitude.degrees, destinationPosition.longitude.degrees};
-                    args.pushback(latlon);
-                    args.pushback("formation");
-                    args.pushback(formationType);
-                    args.pushback("buffer");
-                    args.pushback(bufferDistance);
-                    args.pushback("group");
-                    args.pushback(groupName);
-                    args.pushback("barrier");
-                    args.pushback(barrier);
-                                        
-                    args.free();                    
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.end", latlon, delay);
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.group", groupName, delay);
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.barrier", barrier, delay);
                 }
                 knowledge.sendModifieds();
+                delay.free();
             }            
             
             GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
@@ -730,18 +657,11 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 StringVector groupMembersContainer = new StringVector();
                 groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));
                 for (int i = 0; i < groupMembersContainer.size(); i++) {
-                    Vector args = new Vector();
-                    com.madara.containers.String command = new com.madara.containers.String();
-                    command.setName(knowledge, groupMembersContainer.get(i) + ".command");
-                    command.set("barrier");                    
-                    command.free();
-                    args.setName(knowledge, groupMembersContainer.get(i) + ".command");
-                    args.resize(0);
-                    args.pushback("group");
-                    args.pushback(groupName);
-                    args.free();
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm", "barrier", delay);
+                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.group", groupName, delay);
                 }                
                 knowledge.sendModifieds();
+                delay.free();
                 groupMembersContainer.free();                                                                  
             }
             GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
@@ -769,85 +689,53 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 StringVector defendersGroupMembersContainer = new StringVector();
                 defendersGroupMembersContainer.setName(knowledge, String.format("group.%s.members",defendersGroupName));                
                 for (int i = 0; i < defendersGroupMembersContainer.size(); i++) {
-                    Vector args = new Vector();
-                    com.madara.containers.String command = new com.madara.containers.String();
-                    command.setName(knowledge, defendersGroupMembersContainer.get(i) + ".command");
-                    command.set("zone coverage");                    
-                    command.free();
-                    args.setName(knowledge, defendersGroupMembersContainer.get(i) + ".command");
-                    args.resize(0);       
-                    args.pushback("assets");
-                    args.pushback(assetsGroupName);                    
-                    args.pushback("buffer");
-                    args.pushback(bufferDistance);
-                    args.pushback("distance");
-                    args.pushback(distanceFraction);
-                    args.pushback("enemies");
-                    args.pushback(enemiesGroupName);                    
-                    args.pushback("formation");
-                    args.pushback(formationType);
-                    args.pushback("protectors");
-                    args.pushback(defendersGroupName);
-                    
-                    args.free();
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
                 }
+                defendersGroupMembersContainer.free();
                 
                 // assets group commands                
                 StringVector assetsGroupMembersContainer = new StringVector();
                 assetsGroupMembersContainer.setName(knowledge, String.format("group.%s.members",assetsGroupName));                
                 for (int i = 0; i < assetsGroupMembersContainer.size(); i++) {
-                    Vector args = new Vector();
-                    com.madara.containers.String command = new com.madara.containers.String();
-                    command.setName(knowledge, assetsGroupMembersContainer.get(i) + ".command");
-                    command.set("zone coverage");                    
-                    command.free();
-                    args.setName(knowledge, assetsGroupMembersContainer.get(i) + ".command");
-                    args.resize(0);                    
-                    args.pushback("assets");
-                    args.pushback(assetsGroupName);                    
-                    args.pushback("buffer");
-                    args.pushback(bufferDistance);
-                    args.pushback("distance");
-                    args.pushback(distanceFraction);                    
-                    args.pushback("enemies");
-                    args.pushback(enemiesGroupName);                    
-                    args.pushback("formation");
-                    args.pushback(formationType);
-                    args.pushback("protectors");
-                    args.pushback(defendersGroupName);                 
-                    args.free();
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
                 }
+                assetsGroupMembersContainer.free();
+                
                 // enemies group commands                
                 StringVector enemiesGroupMembersContainer = new StringVector();
                 enemiesGroupMembersContainer.setName(knowledge, String.format("group.%s.members",enemiesGroupName));                
                 for (int i = 0; i < enemiesGroupMembersContainer.size(); i++) {
-                    Vector args = new Vector();
-                    com.madara.containers.String command = new com.madara.containers.String();
-                    command.setName(knowledge, enemiesGroupMembersContainer.get(i) + ".command");
-                    command.set("zone coverage");                    
-                    command.free();
-                    args.setName(knowledge, enemiesGroupMembersContainer.get(i) + ".command");
-                    args.resize(0);                    
-                    args.pushback("assets");
-                    args.pushback(assetsGroupName);                    
-                    args.pushback("buffer");
-                    args.pushback(bufferDistance);
-                    args.pushback("distance");
-                    args.pushback(distanceFraction);                    
-                    args.pushback("enemies");
-                    args.pushback(enemiesGroupName);                    
-                    args.pushback("formation");
-                    args.pushback(formationType);
-                    args.pushback("protectors");
-                    args.pushback(defendersGroupName);                   
-                    args.free();
-                }                                                
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
+                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
+                }                   
+                enemiesGroupMembersContainer.free();
+                
                 knowledge.sendModifieds();
+                delay.free();
+                
+                GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
+                for (GeneratedEventListenerInt listener : listeners) {
+                    listener.eventGenerated(ie);
+                }                  
             }
-            GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
-            for (GeneratedEventListenerInt listener : listeners) {
-                listener.eventGenerated(ie);
-            }            
+          
         }
         
         /*

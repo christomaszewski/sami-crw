@@ -100,6 +100,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
     private final Hashtable<BoatProxy, BoatMarker> proxyToMarker = new Hashtable<BoatProxy, BoatMarker>();
     private final Hashtable<BoatMarker, BoatProxy> markerToProxy = new Hashtable<BoatMarker, BoatProxy>();
     private final Hashtable<BoatProxy, UUID> proxyToWpEventId = new Hashtable<BoatProxy, UUID>();
+    private JTextField compassDebugTf;
     private JButton teleopButton, pointButton, pathButton, cancelButton, autoButton;
     // controlModeP: Contains buttons for navigation control modes for selected proxy
     // expandedPanel: Contains components for teleoperation and setting gains of selected proxy
@@ -453,6 +454,17 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
         agentNameTF = new JTextField("");
         agentNameP.add(agentNameTF);
 
+            compassDebugTf = new JTextField("OK");
+            controlModeP.add(compassDebugTf);
+            compassDebugTf.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(selectedProxy != null) {
+                    System.out.println("### compassDebugTf.getText() " + compassDebugTf.getText());
+                    selectedProxy.containers.setCompassMessage(compassDebugTf.getText());
+                }
+            }
+        });
         if (enabledModes.contains(ControlMode.TELEOP)) {
             teleopButton = new JButton("Teleop");
             teleopButton.setEnabled(false);

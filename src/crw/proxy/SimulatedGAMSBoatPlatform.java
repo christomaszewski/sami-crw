@@ -84,12 +84,17 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
         containers.self.agent.dest.set(1, northing);
         containers.self.agent.dest.set(2,0.0);
         
-        currentDestination = new double[2];      
+        currentDestination = new double[2];   
+
+        this.status.init(knowledge, "SimBoat");
+        this.status.ok.set(1L);
+        this.status.movementAvailable.set(1L);
+        
         
         t = System.currentTimeMillis();
         threader = new Threader(knowledge);
         threader.run(25.0,"movement",new MovementThread());
-        threader.run(1.0/30.0,"KB printout",new KnowledgeBasePrintoutThread());
+        threader.run(1.0/20.0,"KB printout",new KnowledgeBasePrintoutThread());
         
         knowledge.sendModifieds();
     }
@@ -209,12 +214,13 @@ class SimulatedGAMSBoatPlatform extends BasePlatform {
     }
     @Override
     public double getAccuracy() {
-        return 2.0/METERS_PER_LATLONG_DEGREE; // this is used in a Lat/Long comparison, so it needs to be very small. 0.00001 degrees is about 1 meter
+        //return 2.0/METERS_PER_LATLONG_DEGREE; // this is used in a Lat/Long comparison, so it needs to be very small. 0.00001 degrees is about 1 meter        
         // The control uses UTM easting,northing. Converting this to lat,long is not perfect. 
+        return getPositionAccuracy();
     }
     @Override
     public double getPositionAccuracy() {
-        return 0.0;//getAccuracy()*METERS_PER_LATLONG_DEGREE; ////////////// this value is irrelevant for the waypoints algorithm, but not for the platform's effort to reach the waypoint
+        return 0.1; //getAccuracy()*METERS_PER_LATLONG_DEGREE; ////////////// this value is irrelevant for the waypoints algorithm, but not for the platform's effort to reach the waypoint
     }
             
     @Override

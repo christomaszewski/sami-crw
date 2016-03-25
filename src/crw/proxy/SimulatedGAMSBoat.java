@@ -45,8 +45,10 @@ public class SimulatedGAMSBoat implements Runnable {
         knowledge = new KnowledgeBase(name,settings);
         controller = new BaseController(knowledge);
         
-        //com.gams.utility.Logging.setLevel(6);
-        //com.madara.logger.GlobalLogger.setLevel(6);
+        if (id == 0) {
+            //com.gams.utility.Logging.setLevel(6);
+            //com.madara.logger.GlobalLogger.setLevel(6);
+        }
     }
     
     void start() {

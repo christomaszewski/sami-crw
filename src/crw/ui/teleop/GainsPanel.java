@@ -393,6 +393,7 @@ public class GainsPanel extends JScrollPane implements ObservationListenerInt {
 
             applyB.setEnabled(true);
         */
+            applyB.setEnabled(true);
         } 
         
         else {

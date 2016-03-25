@@ -6,6 +6,7 @@ import com.madara.KnowledgeRecord;
 import com.madara.containers.NativeDoubleVector;
 import com.madara.threads.Threader;
 import com.madara.threads.BaseThread;
+import com.madara.containers.String;
 
 import com.perc.mitpas.adi.mission.planning.task.Task;
 import crw.Conversion;
@@ -78,8 +79,8 @@ public class BoatProxy extends Thread implements ProxyInt {
     public static final int NUM_SENSOR_PORTS = 4;
     // Identifiers
     int _boatNo;
-    String boatName;
-    private final String name;
+    java.lang.String boatName;
+    private final java.lang.String name;
     private Color color = null;
     // SAMI variables
     // OutputEvents that must occur sequentially (require movement)
@@ -135,7 +136,7 @@ public class BoatProxy extends Thread implements ProxyInt {
 
     // End stuff for simulated data creation
     //public BoatProxy(final String name, Color color, final int boatNo, InetSocketAddress addr, KnowledgeBase knowledge) {
-    public BoatProxy(final String name, Color color, final int boatNo, KnowledgeBase knowledge) {
+    public BoatProxy(final java.lang.String name, Color color, final int boatNo, KnowledgeBase knowledge) {
         this._boatNo = boatNo;
         this.boatName = name;
         //this.address = addr;
@@ -146,7 +147,7 @@ public class BoatProxy extends Thread implements ProxyInt {
         madaraListenerThreader = new Threader(knowledge);
         startListeners();
 
-        String message = "Boat proxy created with name: " + name + ", color: " + color;
+        java.lang.String message = "Boat proxy created with name: " + name + ", color: " + color;
         LOGGER.info(message);
 
         Timer stateTimer = new Timer(EVENT_GENERATION_TIMER, new ActionListener() {
@@ -184,12 +185,12 @@ public class BoatProxy extends Thread implements ProxyInt {
         return ((int)containers.teleopStatus.get() > 0);
     }    
     
-    public String getIpAddress() {
+    public java.lang.String getIpAddress() {
         //return ipAddress;
         return "IHaveNoIpAddress";
     }
     
-    public String getBoatName() {
+    public java.lang.String getBoatName() {
         return boatName;
     }
     
@@ -203,10 +204,14 @@ public class BoatProxy extends Thread implements ProxyInt {
     
     void sendWaypointsQueue() {
         int N = _curWaypoints.size();
-        EvalSettings delay = new EvalSettings();
-        delay.setDelaySendingModifieds(true);
-        knowledge.set(containers.prefix + "command","waypoints",delay); // note the delay
-        knowledge.set(containers.prefix + "command.size", N,delay);        
+        //EvalSettings delay = new EvalSettings();
+        //delay.setDelaySendingModifieds(true);
+        String algoName = new String();
+        algoName.setName(knowledge, containers.prefix + "algorithm");
+        algoName.set("waypoints");
+        algoName.free();
+        //knowledge.set(containers.prefix + "algorithm","waypoints",delay); // note the delay
+        //knowledge.set(containers.prefix + "algorithm.size", N,delay);        
         
         Position[] wps = _curWaypoints.toArray(new Position[N]);
         for (int i = 0; i < N; i++) {                                    
@@ -218,7 +223,7 @@ public class BoatProxy extends Thread implements ProxyInt {
             
             // TODO: switch to DoubleVector
             NativeDoubleVector wpNDV = new NativeDoubleVector();
-            wpNDV.setName(knowledge, java.lang.String.format("%scommand.%d",containers.prefix,i));
+            wpNDV.setName(knowledge, java.lang.String.format("%salgorithm.args.%d",containers.prefix,i));
             wpNDV.resize(3);            
             wpNDV.set(0,lat);
             wpNDV.set(1,lon);
@@ -226,7 +231,7 @@ public class BoatProxy extends Thread implements ProxyInt {
             wpNDV.free();
         }      
         knowledge.sendModifieds();
-        delay.free();
+        //delay.free();
         
         _curWaypoints.clear();
     }
@@ -238,7 +243,7 @@ public class BoatProxy extends Thread implements ProxyInt {
         } catch (InterruptedException ex) {
             //
         }        
-        knowledge.set(containers.prefix + "command", "null"); // this must happen AFTER at least one call from the GAMS algorithm to the platform's move()
+        knowledge.set(containers.prefix + "algorithm", "null"); // this must happen AFTER at least one call from the GAMS algorithm to the platform's move()
     }    
 
     public void startListeners() {
@@ -258,7 +263,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     }
 
     @Override
-    public String getProxyName() {
+    public java.lang.String getProxyName() {
         return name;
     }
 
@@ -849,7 +854,7 @@ public class BoatProxy extends Thread implements ProxyInt {
 
     public void beginTeleop() {
         containers.teleopStatus.set(TELEOPERATION_TYPES.GUI_MS.getLongValue());
-        knowledge.set(containers.prefix + "command", "null");
+        knowledge.set(containers.prefix + "algorithm", "null");
         
         // TODO: joystick control in java?
         // see "package crw.ui.teleop", "GamepadController"
@@ -881,7 +886,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     }
 
     @Override
-    public String toString() {
+    public java.lang.String toString() {
         return name;
 //        return name + "@" + _server.getVehicleService();
     }
@@ -911,8 +916,8 @@ public class BoatProxy extends Thread implements ProxyInt {
         public void run() {
             
             if (containers.distress.get() == 1L) {
-                System.out.println(String.format("WARNING: boat # %d is in distress!",_boatNo));
-                System.out.println(String.format("boat #d unhandled exception: %s",containers.unhandledException.get()));
+                System.out.println(java.lang.String.format("WARNING: boat # %d is in distress!",_boatNo));
+                System.out.println(java.lang.String.format("boat #d unhandled exception: %s",containers.unhandledException.get()));
             }
             
             if (containers.connectivityWatchdog.get() == 1L) {
@@ -924,22 +929,26 @@ public class BoatProxy extends Thread implements ProxyInt {
                 else {
                     // TODO: how to alert the user that the boat has lost GPS?
                     // A crw.event.output.ui event?
-                    System.out.println(String.format("WARNING: GPS may not available for \"%s\", boat # %d",name,_boatNo));
+                    //System.out.println(String.format("WARNING: GPS may not available for \"%s\", boat # %d",name,_boatNo));
                 }                
                 
             }
+            if (containers.magneticLock.get() == 1L) {
+                System.out.println(java.lang.String.format("\"%s\", boat # %d compass message: %s",name,_boatNo,containers.compassMessage.get()));
+            }
+            
             else {
                 // TODO: how to alert the user that the boat isn't connected?
                 // A crw.event.output.ui event?
-                System.out.println(String.format("WARNING: Madara connectivity NOT available for \"%s\", boat # %d",name,_boatNo));
+                //System.out.println(String.format("WARNING: Madara connectivity NOT available for \"%s\", boat # %d",name,_boatNo));
             }
             if (containers.wifiStrength.get() < MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH) {
                 // TODO: alert the user that the wifi signal is weak
-                System.out.println(String.format("WARNING: Wifi signal strength is low: %d for \"%s\", boat # %d",name,_boatNo, containers.wifiStrength.get()));
+                System.out.println(java.lang.String.format("WARNING: Wifi signal strength is low: %d for \"%s\", boat # %d",name,_boatNo, containers.wifiStrength.get()));
             }
             if (containers.batteryVoltage.get() < MINIMUM_SAFE_BATTERY_VOLTAGE) {
                 // TODO: alert the user that the battery voltage is low
-                System.out.println(String.format("WARNING: Battery voltage is low: %.2f for \"%s\", boat # %d",containers.batteryVoltage.get(),name,_boatNo));
+                //System.out.println(String.format("WARNING: Battery voltage is low: %.2f for \"%s\", boat # %d",containers.batteryVoltage.get(),name,_boatNo));
             }
         }
     }
@@ -960,8 +969,8 @@ public class BoatProxy extends Thread implements ProxyInt {
             Angle lon = Angle.fromDegrees(containers.location.get(1));
             LatLon latlon = new LatLon(lat, lon);
             int zone = (int)containers.longitudeZone.get();
-            String hemisphere;  
-            String wwHemi;
+            java.lang.String hemisphere;  
+            java.lang.String wwHemi;
             if (lat.getDegrees() > 0) {
                 hemisphere = "N";
                 wwHemi = AVKey.NORTH;
@@ -1010,10 +1019,10 @@ public class BoatProxy extends Thread implements ProxyInt {
     class MadaraWaypointListener extends BaseThread {
         @Override
         public void run() {
-            // Check if waypoints were completed
+            // Check if waypoints were completed ///////////////////////////////////////////////////////////////////////////////
             if (knowledge.get(containers.prefix + "algorithm.waypoints.finished").toLong() == 1) {
 
-                knowledge.set(containers.prefix + "command","null");
+                knowledge.set(containers.prefix + "algorithm","null");
                 containers.waypointsFinishedStatus.set(0); // need to manually set this to 0 or this poll will fire over and over
                 
                 // Notify listeners

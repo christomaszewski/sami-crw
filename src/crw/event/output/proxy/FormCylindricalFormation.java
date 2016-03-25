@@ -18,14 +18,18 @@ public class FormCylindricalFormation extends OutputEvent{
     // Fields
     public int leaderNo;
     public double spacing;
+    public String groupName;
     //public String teamMembers; ////// will use OperatorSelectBoatList instead
     
     static {
         fieldNames.add("leaderNo");
         fieldNames.add("spacing");
+        fieldNames.add("groupName");
 
         fieldNameToDescription.put("leaderNo", "boatNo of leading agent?");
         fieldNameToDescription.put("spacing", "distance from leader to ring of agents around leader?");
+        fieldNameToDescription.put("groupName", "name of group?");
+        
         //fieldNameToDescription.put("teamMembers", "a,b,c,... team boatNo N-tuple?");
     }
     
@@ -44,6 +48,12 @@ public class FormCylindricalFormation extends OutputEvent{
     }
     public void setSpacing(double spacing) {
         this.spacing = spacing;
+    }
+    public String getGroupName() {
+        return groupName; 
+    }
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
     public String toString() {
         return "FormCylindricalFormation";
