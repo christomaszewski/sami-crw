@@ -27,6 +27,7 @@ public class LutraMadaraContainers {
     
     String compassMessage;
     Integer magneticLock;
+    Integer operatorHeartbeat;
 
     FlexMap environmentalData;
     String unhandledException;
@@ -191,6 +192,10 @@ public class LutraMadaraContainers {
         
         batteryVoltage = new Double();
         batteryVoltage.setName(knowledge, prefix + "batteryVoltage");
+        
+        operatorHeartbeat = new Integer();
+        operatorHeartbeat.setName(knowledge, prefix + "operatorHeartbeat");
+        operatorHeartbeat.set(1L);        
         
                 
         restoreDefaults();

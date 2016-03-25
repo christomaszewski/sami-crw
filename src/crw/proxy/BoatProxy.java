@@ -230,6 +230,14 @@ public class BoatProxy extends Thread implements ProxyInt {
             wpNDV.set(2,0.0); // altitude
             wpNDV.free();
         }      
+        NativeDoubleVector wpNDV = new NativeDoubleVector();
+        wpNDV.setName(knowledge, java.lang.String.format("%salgorithm.args.%d",containers.prefix,N));
+        wpNDV.resize(3);            
+        wpNDV.set(0,wps[N-1].latitude.degrees);
+        wpNDV.set(1,wps[N-1].longitude.degrees);
+        wpNDV.set(2,0.0); // altitude
+        wpNDV.free();
+        
         knowledge.sendModifieds();
         //delay.free();
         
@@ -244,6 +252,7 @@ public class BoatProxy extends Thread implements ProxyInt {
             //
         }        
         knowledge.set(containers.prefix + "algorithm", "null"); // this must happen AFTER at least one call from the GAMS algorithm to the platform's move()
+        knowledge.sendModifieds();
     }    
 
     public void startListeners() {
@@ -854,7 +863,10 @@ public class BoatProxy extends Thread implements ProxyInt {
 
     public void beginTeleop() {
         containers.teleopStatus.set(TELEOPERATION_TYPES.GUI_MS.getLongValue());
+        containers.thrustFraction.set(0L);
+        containers.bearingFraction.set(0L);
         knowledge.set(containers.prefix + "algorithm", "null");
+        knowledge.sendModifieds();
         
         // TODO: joystick control in java?
         // see "package crw.ui.teleop", "GamepadController"
@@ -863,6 +875,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     
     void endTeleop() {
         containers.teleopStatus.set(TELEOPERATION_TYPES.NONE.getLongValue());
+        knowledge.sendModifieds();
     }
     
 
@@ -929,19 +942,20 @@ public class BoatProxy extends Thread implements ProxyInt {
                 else {
                     // TODO: how to alert the user that the boat has lost GPS?
                     // A crw.event.output.ui event?
-                    //System.out.println(String.format("WARNING: GPS may not available for \"%s\", boat # %d",name,_boatNo));
+                    System.out.println(java.lang.String.format("WARNING: GPS may not available for \"%s\", boat # %d",name,_boatNo));
                 }                
                 
             }
+            else {
+                // TODO: how to alert the user that the boat isn't connected?
+                // A crw.event.output.ui event?
+                System.out.println(java.lang.String.format("WARNING: Madara connectivity NOT available for \"%s\", boat # %d",name,_boatNo));
+            }            
             if (containers.magneticLock.get() == 1L) {
                 System.out.println(java.lang.String.format("\"%s\", boat # %d compass message: %s",name,_boatNo,containers.compassMessage.get()));
             }
             
-            else {
-                // TODO: how to alert the user that the boat isn't connected?
-                // A crw.event.output.ui event?
-                //System.out.println(String.format("WARNING: Madara connectivity NOT available for \"%s\", boat # %d",name,_boatNo));
-            }
+
             if (containers.wifiStrength.get() < MINIMUM_SAFE_WIFI_SIGNAL_STRENGTH) {
                 // TODO: alert the user that the wifi signal is weak
                 System.out.println(java.lang.String.format("WARNING: Wifi signal strength is low: %d for \"%s\", boat # %d",name,_boatNo, containers.wifiStrength.get()));
@@ -955,7 +969,11 @@ public class BoatProxy extends Thread implements ProxyInt {
 
     class MadaraPoseListener extends BaseThread {
         @Override
-        public void run() {            
+        public void run() {         
+            // send heartbeat to the boat
+            containers.operatorHeartbeat.set(1L);
+            knowledge.sendModifieds();
+            
             KnowledgeRecord kr = containers.eastingNorthingBearing.toRecord();
             double[] eastingNorthingBearing = kr.toDoubleArray();
             kr.free();
