@@ -556,6 +556,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
 
         else if (oe instanceof FormationSyncMove) {
             FormationSyncMove request = (FormationSyncMove) oe;
+            int uid = request.getUID();
             Location destination = request.getDestination();
             Position destinationPosition = Conversion.locationToPosition(destination);
             Location stagingPoint = request.getStagingPoint();
@@ -568,32 +569,36 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
             ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
             if (proxyServer instanceof CrwProxyServer) { 
                 KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
-                EvalSettings delay = new EvalSettings();
-                delay.setDelaySendingModifieds(true);
                 
-                // need to extract group members using the group name
-                //ArrayList<String> groupMembers = new ArrayList<>();
-                StringVector groupMembersContainer = new StringVector();
-                groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));                
-                for (int i = 0; i < groupMembersContainer.size(); i++) {
-                    //groupMembers.add(groupMembersContainer.get(i));
-                    //Vector args = new Vector();
-                    com.madara.containers.String command = new com.madara.containers.String();
-                    command.setName(knowledge, groupMembersContainer.get(i) + ".algorithm");
-                    command.set("formation sync");                    
-                    command.free();
-                    
-                    double[] latlon = new double[] {stagingPosition.latitude.degrees, stagingPosition.longitude.degrees};
-                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.start", latlon, delay);
-                    latlon = new double[] {destinationPosition.latitude.degrees, destinationPosition.longitude.degrees};
-                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.end", latlon, delay);
-                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
-                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
-                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.group", groupName, delay);
-                    knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.barrier", barrier, delay);
+                for (int resends = 0; resends < 10; resends++) {
+                    EvalSettings delay = new EvalSettings();
+                    delay.setDelaySendingModifieds(true);
+
+                    // need to extract group members using the group name
+                    //ArrayList<String> groupMembers = new ArrayList<>();
+                    StringVector groupMembersContainer = new StringVector();
+                    groupMembersContainer.setName(knowledge, String.format("group.%s.members",groupName));                
+                    for (int i = 0; i < groupMembersContainer.size(); i++) {
+                        //groupMembers.add(groupMembersContainer.get(i));
+                        //Vector args = new Vector();
+                        com.madara.containers.String command = new com.madara.containers.String();
+                        command.setName(knowledge, groupMembersContainer.get(i) + ".algorithm");
+                        command.set("formation sync");                    
+                        command.free();
+
+                        double[] latlon = new double[] {stagingPosition.latitude.degrees, stagingPosition.longitude.degrees};
+                        knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.start", latlon, delay);
+                        latlon = new double[] {destinationPosition.latitude.degrees, destinationPosition.longitude.degrees};
+                        knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.end", latlon, delay);
+                        knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
+                        knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                        knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.group", groupName, delay);
+                        knowledge.set(groupMembersContainer.get(i) + ".algorithm.args.barrier", barrier, delay);
+                        knowledge.set(groupMembersContainer.get(i) + ".algorithm.id", uid, delay);
+                    }
+                    knowledge.sendModifieds();
+                    delay.free();
                 }
-                knowledge.sendModifieds();
-                delay.free();
             }            
             
             GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
@@ -672,6 +677,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
         
         else if (oe instanceof ZoneCoverage) {
             ZoneCoverage request = (ZoneCoverage)oe;
+            int uid = request.getUID();
             String defendersGroupName = request.getDefendersGroupName();
             String assetsGroupName = request.getAssetsGroupName();
             String enemiesGroupName = request.getEnemiesGroupName();
@@ -682,53 +688,59 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
              ProxyServerInt proxyServer = Engine.getInstance().getProxyServer();
             if (proxyServer instanceof CrwProxyServer) { 
                 KnowledgeBase knowledge = ((CrwProxyServer)proxyServer).knowledge;
-                EvalSettings delay = new EvalSettings();
-                delay.setDelaySendingModifieds(true);
                 
-                // defenders group commands                
-                StringVector defendersGroupMembersContainer = new StringVector();
-                defendersGroupMembersContainer.setName(knowledge, String.format("group.%s.members",defendersGroupName));                
-                for (int i = 0; i < defendersGroupMembersContainer.size(); i++) {
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
+                for (int resends = 0; resends < 10; resends++) {
+                    EvalSettings delay = new EvalSettings();
+                    delay.setDelaySendingModifieds(true);
+
+                    // defenders group commands                
+                    StringVector defendersGroupMembersContainer = new StringVector();
+                    defendersGroupMembersContainer.setName(knowledge, String.format("group.%s.members",defendersGroupName));                
+                    for (int i = 0; i < defendersGroupMembersContainer.size(); i++) {
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.id", uid, delay);
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
+                        knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
+                    }
+                    defendersGroupMembersContainer.free();
+
+                    // assets group commands                
+                    StringVector assetsGroupMembersContainer = new StringVector();
+                    assetsGroupMembersContainer.setName(knowledge, String.format("group.%s.members",assetsGroupName));                
+                    for (int i = 0; i < assetsGroupMembersContainer.size(); i++) {
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm.id", uid, delay);
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
+                        knowledge.set(assetsGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
+                    }
+                    assetsGroupMembersContainer.free();
+
+                    // enemies group commands                
+                    StringVector enemiesGroupMembersContainer = new StringVector();
+                    enemiesGroupMembersContainer.setName(knowledge, String.format("group.%s.members",enemiesGroupName));                
+                    for (int i = 0; i < enemiesGroupMembersContainer.size(); i++) {
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm.id", uid, delay);
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
+                        knowledge.set(enemiesGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
+                    }                   
+                    enemiesGroupMembersContainer.free();
+
+                    knowledge.sendModifieds();
+                    delay.free();
                 }
-                defendersGroupMembersContainer.free();
-                
-                // assets group commands                
-                StringVector assetsGroupMembersContainer = new StringVector();
-                assetsGroupMembersContainer.setName(knowledge, String.format("group.%s.members",assetsGroupName));                
-                for (int i = 0; i < assetsGroupMembersContainer.size(); i++) {
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
-                }
-                assetsGroupMembersContainer.free();
-                
-                // enemies group commands                
-                StringVector enemiesGroupMembersContainer = new StringVector();
-                enemiesGroupMembersContainer.setName(knowledge, String.format("group.%s.members",enemiesGroupName));                
-                for (int i = 0; i < enemiesGroupMembersContainer.size(); i++) {
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm", "zone coverage", delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.assets", assetsGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.protectors", defendersGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.enemies", enemiesGroupName, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.buffer", bufferDistance, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.distance", distanceFraction, delay);
-                    knowledge.set(defendersGroupMembersContainer.get(i) + ".algorithm.args.formation", formationType, delay);
-                }                   
-                enemiesGroupMembersContainer.free();
-                
-                knowledge.sendModifieds();
-                delay.free();
                 
                 GenericGAMSCommandSent ie = new GenericGAMSCommandSent(oe.getId(),oe.getMissionId());
                 for (GeneratedEventListenerInt listener : listeners) {

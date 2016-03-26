@@ -16,6 +16,7 @@ public class ZoneCoverage extends OutputEvent {
     // Description for each field
     public static final HashMap<String, String> fieldNameToDescription = new HashMap<String, String>();
     // Fields
+    public int uid;
     public String defendersGroupName;
     public String assetsGroupName;
     public String enemiesGroupName;
@@ -24,6 +25,7 @@ public class ZoneCoverage extends OutputEvent {
     public double distanceFraction;
     
     static {
+        fieldNames.add("uid");
         fieldNames.add("defendersGroupName");
         fieldNames.add("assetsGroupName");
         fieldNames.add("enemiesGroupName");
@@ -31,6 +33,7 @@ public class ZoneCoverage extends OutputEvent {
         fieldNames.add("bufferDistance");
         fieldNames.add("distanceFraction");
         
+        fieldNameToDescription.put("uid", "Unique ID of the command (> 0)");
         fieldNameToDescription.put("defendersGroupName", "Name of the defenders group?");
         fieldNameToDescription.put("assetsGroupName", "Name of the assets group?");
         fieldNameToDescription.put("enemiesGroupName", "Name of the enemies group?");
@@ -47,6 +50,12 @@ public class ZoneCoverage extends OutputEvent {
         return "ZoneCoverage";
     }        
     
+    public int getUID() {
+        return this.uid;
+    }    
+    void setUID(int uid) {
+        this.uid = uid;
+    }    
     public String getDefendersGroupName() {
         return this.defendersGroupName;
     }

@@ -17,6 +17,7 @@ public class FormationSyncMove extends OutputEvent {
     // Description for each field
     public static final HashMap<String, String> fieldNameToDescription = new HashMap<String, String>();
     // Fields
+    public int uid;
     public Location destination;
     public Location stagingPoint;
     public double bufferDistance;
@@ -25,6 +26,7 @@ public class FormationSyncMove extends OutputEvent {
     public String groupName;
     
     static {
+        fieldNames.add("uid");
         fieldNames.add("stagingPoint");
         fieldNames.add("destination");
         fieldNames.add("bufferDistance");
@@ -32,6 +34,7 @@ public class FormationSyncMove extends OutputEvent {
         fieldNames.add("formationType");
         fieldNames.add("groupName");
         
+        fieldNameToDescription.put("uid", "Unique ID of the command (> 0)");
         fieldNameToDescription.put("stagingPoint", "Location of initial formation?");
         fieldNameToDescription.put("destination", "Final location of formation?");
         fieldNameToDescription.put("bufferDistance", "Meters of buffer distance between agents?");
@@ -47,6 +50,13 @@ public class FormationSyncMove extends OutputEvent {
     public String toString() {
         return "FormationSyncMove";
     }        
+    
+    public int getUID() {
+        return this.uid;
+    }    
+    void setUID(int uid) {
+        this.uid = uid;
+    }
     
     public Location getDestination() {
         return this.destination;
