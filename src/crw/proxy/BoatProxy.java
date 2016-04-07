@@ -204,14 +204,13 @@ public class BoatProxy extends Thread implements ProxyInt {
     
     void sendWaypointsQueue() {
         int N = _curWaypoints.size();
-        //EvalSettings delay = new EvalSettings();
-        //delay.setDelaySendingModifieds(true);
+        EvalSettings delay = new EvalSettings();
+        delay.setDelaySendingModifieds(true);
         String algoName = new String();
         algoName.setName(knowledge, containers.prefix + "algorithm");
         algoName.set("waypoints");
-        algoName.free();
-        //knowledge.set(containers.prefix + "algorithm","waypoints",delay); // note the delay
-        //knowledge.set(containers.prefix + "algorithm.size", N,delay);        
+        algoName.free(); 
+        knowledge.set(containers.prefix + "algorithm.args.locations.size", N,delay);       
         
         Position[] wps = _curWaypoints.toArray(new Position[N]);
         for (int i = 0; i < N; i++) {                                    
@@ -223,13 +222,15 @@ public class BoatProxy extends Thread implements ProxyInt {
             
             // TODO: switch to DoubleVector
             NativeDoubleVector wpNDV = new NativeDoubleVector();
-            wpNDV.setName(knowledge, java.lang.String.format("%salgorithm.args.%d",containers.prefix,i));
+            wpNDV.setName(knowledge, java.lang.String.format("%salgorithm.args.locations.%d",containers.prefix,i));
             wpNDV.resize(3);            
             wpNDV.set(0,lat);
             wpNDV.set(1,lon);
             wpNDV.set(2,0.0); // altitude
             wpNDV.free();
         }      
+        knowledge.set(containers.prefix + "algorithm.args.repeat", 0, delay);
+        /*
         NativeDoubleVector wpNDV = new NativeDoubleVector();
         wpNDV.setName(knowledge, java.lang.String.format("%salgorithm.args.%d",containers.prefix,N));
         wpNDV.resize(3);            
@@ -237,9 +238,10 @@ public class BoatProxy extends Thread implements ProxyInt {
         wpNDV.set(1,wps[N-1].longitude.degrees);
         wpNDV.set(2,0.0); // altitude
         wpNDV.free();
+        */
         
         knowledge.sendModifieds();
-        //delay.free();
+        delay.free();
         
         _curWaypoints.clear();
     }

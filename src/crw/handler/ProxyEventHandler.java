@@ -452,12 +452,12 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 if (token.getProxy() != null && token.getProxy() instanceof BoatProxy) {
                     BoatProxy bp = (BoatProxy)token.getProxy();
                     bp.containers.setTeleopStatus(TELEOPERATION_TYPES.NONE);
-                    bp.containers.keepCurrentLocation();
-                    bp.containers.reHome();                    
+                    //bp.containers.keepCurrentLocation();
+                    //bp.containers.reHome();                    
                 }                
             }            
             if (numProxies == 0) {
-                LOGGER.log(Level.WARNING, "ProxyEndGAMSAlgorithm had no relevant proxies attached: " + oe);
+                LOGGER.log(Level.WARNING, "ProxyReHomeAutonomy had no relevant proxies attached: " + oe);
             }
             KnowledgeBase knowledge;
             if (proxyServer instanceof CrwProxyServer) {            
