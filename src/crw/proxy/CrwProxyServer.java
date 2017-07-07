@@ -75,11 +75,11 @@ public class CrwProxyServer implements ProxyServerInt {
         
         
         QoSTransportSettings simSettings = new QoSTransportSettings();
-        simSettings.setHosts(new String[]{"239.255.0.1:4150"});
+        simSettings.setHosts(new String[]{"239.255.1.1:4150"});
         simSettings.setType(TransportType.MULTICAST_TRANSPORT);
         //simSettings.setRebroadcastTtl(2);
         //simSettings.enableParticipantTtl(1);
-        knowledge.attachTransport("base_station", simSettings);
+        //knowledge.attachTransport("base_station", simSettings);
         
         
         /*
@@ -116,6 +116,7 @@ public class CrwProxyServer implements ProxyServerInt {
     @Override
     public ProxyInt createNumberedProxy(String name, Color color, int boatNo) {
         try {
+            System.out.println("Creating proxy");
             // Create proxy
             if (color == null) {
                 LOGGER.severe("Boat proxy's color was null, using white");

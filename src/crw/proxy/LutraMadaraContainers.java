@@ -1,6 +1,5 @@
 package crw.proxy;
 
-import com.gams.variables.Self;
 import com.madara.EvalSettings;
 
 import com.madara.KnowledgeBase;
@@ -41,11 +40,13 @@ public class LutraMadaraContainers {
     Double accel;
     Double decel;
     public Integer teleopStatus; // see TELEOPERATION_TYPES enum
+    Integer autonomyEnabled; // Added by CKT need to make sure it doesn't break anything
     NativeDoubleVector motorCommands;
     Double thrustFraction;
     Double bearingFraction;
     NativeDoubleVector bearingPIDGains;
     NativeDoubleVector thrustPIDGains;
+    NativeDoubleVector losPIDGains;
     //NativeDoubleVector thrustPPIGains;
     NativeDoubleVector eastingNorthingBearing; // UTM x,y,th
     NativeDoubleVector errorEllipse; // width, height, angle
@@ -63,14 +64,14 @@ public class LutraMadaraContainers {
     //final double defaultPeakVelocity = 2.0;
     final double defaultAccelTime = 5.0;
     final double defaultDecelTime = 5.0;
-    final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_MS.getLongValue();
+    final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_WP.getLongValue();
     final double[] bearingPIDGainsDefaults = new double[]{1.0,0.1,0.5}; // cols: P,I,D
     final double[] thrustPIDGainsDefaults = new double[]{0.1,0,0.2}; // cols: P,I,D
+    final double[] losPIDGainsDefaults = new double[]{0.5, 0.0, 0.25};
     //final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.05}; // cols: Pos-P, Vel-P, Vel-I
     final double defaultPeakForwardMotorSignal = 0.1;
     final double defaultPeakBackwardMotorSignal = 1.0;
 
-    Self self;
     
     public LutraMadaraContainers(KnowledgeBase knowledge, int id, java.lang.String boatName) {        
         this.knowledge = knowledge;
@@ -109,6 +110,8 @@ public class LutraMadaraContainers {
         motorCommands.resize(2);
         teleopStatus = new Integer();
         teleopStatus.setName(knowledge, prefix + "teleopStatus");
+        autonomyEnabled = new Integer();
+        autonomyEnabled.setName(knowledge, prefix + "autonomyEnabled");
         longitudeZone = new Integer();
         longitudeZone.setName(knowledge, prefix + "longitudeZone");
         longitudeZone.setSettings(settings);
@@ -157,6 +160,11 @@ public class LutraMadaraContainers {
         thrustPIDGains.setSettings(settings);
         thrustPIDGains.resize(3);
 
+        losPIDGains = new NativeDoubleVector();
+        losPIDGains.setName(knowledge, prefix + "LOS_heading_PID");
+        losPIDGains.setSettings(settings);
+        losPIDGains.resize(3);
+        
         /*
         thrustPPIGains= new NativeDoubleVector();
         thrustPPIGains.setName(knowledge, prefix + "thrustPPIGains");
@@ -213,6 +221,7 @@ public class LutraMadaraContainers {
         accel.free();
         decel.free();
         teleopStatus.free();
+        autonomyEnabled.free();
         motorCommands.free();
         longitudeZone.free();
         latitudeZone.free();
@@ -222,6 +231,7 @@ public class LutraMadaraContainers {
         waypointsFinishedStatus.free();
         bearingPIDGains.free();
         thrustPIDGains.free();
+        losPIDGains.free();
         //thrustPPIGains.free();    
         thrustFraction.free();
         bearingFraction.free();
@@ -241,14 +251,11 @@ public class LutraMadaraContainers {
         for (int i = 0; i < 3; i++) {
             bearingPIDGains.set(i,bearingPIDGainsDefaults[i]);
             thrustPIDGains.set(i,thrustPIDGainsDefaults[i]);
+            losPIDGains.set(i, losPIDGainsDefaults[i]);
             //thrustPPIGains.set(i,thrustPPIGainsDefaults[i]);
         }
         peakForwardMotorSignal.set(defaultPeakForwardMotorSignal);
         peakBackwardMotorSignal.set(defaultPeakBackwardMotorSignal);
-    }
-    
-    public void setSelf(Self self) {
-        this.self = self;
     }
     
     public void setTeleopStatus(TELEOPERATION_TYPES type) {
@@ -323,6 +330,12 @@ public class LutraMadaraContainers {
         bearingPIDGains.set(0, P);
         bearingPIDGains.set(1, I);
         bearingPIDGains.set(2, D);
+        
+        losPIDGains.setSettings(makeItGlobal);
+        losPIDGains.set(0, P);
+        losPIDGains.set(1, I);
+        losPIDGains.set(2, D);
+
         makeItGlobal.free();
     }
     public double[] getBearingPIDGains() {

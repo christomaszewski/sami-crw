@@ -347,6 +347,9 @@ public class BoatProxy extends Thread implements ProxyInt {
         if (oe instanceof ProxyExecutePath) {
             sequentialOutputEvents.add(index, oe);
             sequentialInputEvents.add(index, new ProxyPathCompleted(oe.getId(), oe.getMissionId(), this));
+            // Adding send waypoints here !!! Not sure why this was not here/what this will break
+            sendWps = true;
+            
         } else if (oe instanceof ProxyGotoPoint) {
             sequentialOutputEvents.add(index, oe);
             sequentialInputEvents.add(index, new ProxyPathCompleted(oe.getId(), oe.getMissionId(), this));
@@ -864,7 +867,7 @@ public class BoatProxy extends Thread implements ProxyInt {
     }
 
     public void beginTeleop() {
-        containers.teleopStatus.set(TELEOPERATION_TYPES.GUI_MS.getLongValue());
+        containers.teleopStatus.set(TELEOPERATION_TYPES.GUI_WP.getLongValue());
         containers.thrustFraction.set(0L);
         containers.bearingFraction.set(0L);
         knowledge.set(containers.prefix + "algorithm", "null");
@@ -882,9 +885,9 @@ public class BoatProxy extends Thread implements ProxyInt {
     
 
     public void activateAutonomy(final boolean activate) {
-        //autonomyEnabled.set((activate ? 1 : 0));
+        containers.autonomyEnabled.set((activate ? 1 : 0));
         //autonomyEnabledReceivedAck.set(1);
-        //autonomyEnabled.set((activate ? beginTeleop() : endTeleop()));
+        //containers.autonomyEnabled.set((activate ? beginTeleop() : endTeleop()));
     }
 
     public Color getColor() {
@@ -937,6 +940,7 @@ public class BoatProxy extends Thread implements ProxyInt {
             
             if (containers.connectivityWatchdog.get() == 1L) {
                 containers.connectivityWatchdog.set(0L);
+                System.out.println("Setting connectivity watchdog");
                 
                 if (containers.gpsWatchdog.get() == 1L) {
                     containers.gpsWatchdog.set(0L);
@@ -951,6 +955,7 @@ public class BoatProxy extends Thread implements ProxyInt {
             else {
                 // TODO: how to alert the user that the boat isn't connected?
                 // A crw.event.output.ui event?
+                knowledge.print();
                 System.out.println(java.lang.String.format("WARNING: Madara connectivity NOT available for \"%s\", boat # %d",name,_boatNo));
             }            
             if (containers.magneticLock.get() == 1L) {
@@ -981,6 +986,8 @@ public class BoatProxy extends Thread implements ProxyInt {
             kr.free();
             double yaw = eastingNorthingBearing[2];
 
+            double latitude = containers.location.get(0);
+            double longitude = containers.location.get(1);
             double altitude = 0.0;
             double roll = 0.0;
             double pitch = 0.0;
@@ -1002,6 +1009,8 @@ public class BoatProxy extends Thread implements ProxyInt {
             UTMCoord boatPos = UTMCoord.fromLatLon(lat, lon);
             double easting = boatPos.getEasting();
             double northing = boatPos.getNorthing();
+            //double easting = eastingNorthingBearing[0];
+            //double northing = eastingNorthingBearing[1];
             
             errorEllipse = containers.getErrorEllipse();
             
@@ -1012,7 +1021,8 @@ public class BoatProxy extends Thread implements ProxyInt {
                 // Update state variables
                 _pose = new UtmPose(new Pose3D(easting, northing, altitude, roll, pitch, yaw), new Utm(zone, (hemisphere.startsWith("N") || hemisphere.startsWith("n"))));
                 position = p;
-                location = Conversion.positionToLocation(position);
+                location = new Location(latitude, longitude, altitude);
+                //location = Conversion.positionToLocation(position);
                 
 
                 for (ProxyListenerInt boatProxyListener : listeners) {

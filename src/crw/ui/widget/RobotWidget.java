@@ -575,7 +575,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                 showExpandables();
                 if (selectedProxy != null) {
                     enableTeleop();
-                    selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.GUI_MS);////////////////////////////////////////                
+                    selectedProxy.containers.setTeleopStatus(TELEOPERATION_TYPES.GUI_WP);////////////////////////////////////////                
                     knowledge.sendModifieds();
                 }
                 break;

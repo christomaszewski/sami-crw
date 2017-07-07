@@ -45,7 +45,6 @@ import crw.event.output.service.ProxyCompareDistanceRequest;
 import crw.general.FastSimpleBoatSimulator;
 import crw.proxy.BoatProxy;
 import crw.proxy.CrwProxyServer;
-import crw.proxy.SimulatedGAMSBoat;
 import crw.proxy.TELEOPERATION_TYPES;
 import crw.ui.ImagePanel;
 import static crw.ui.teleop.GainsPanel.RUDDER_GAINS_AXIS;
@@ -355,7 +354,7 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                     relevantProxyList.add(proxy);
                     if (proxy instanceof BoatProxy) {                        
                         BoatProxy bp = (BoatProxy) proxy;                                                
-                        new Thread(new SimulatedGAMSBoat(boatNo, BoatProxy.DEFAULT_TEAM_SIZE, utmCoord, bp,spoofData)).start();
+                        //new Thread(new SimulatedGAMSBoat(boatNo, BoatProxy.DEFAULT_TEAM_SIZE, utmCoord, bp,spoofData)).start();
                     }
                 } else {
                     LOGGER.severe("Failed to create simulated proxy");
