@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/proxy/CrwProxyServer.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/event/output/proxy/ConnectExistingProxy.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/proxy/BoatProxy.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/agent/checker/LowFuelChecker.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/ui/widget/RobotWidget.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/event/output/operator/OperatorSelectBoat.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/ui/component/WorldWindPanel.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/proxy/TELEOPERATION_TYPES.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/handler/ProxyEventHandler.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/ui/teleop/MouseController.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/proxy/LutraMadaraContainers.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/CrwHelper.java</file>
+            <file>file:/home/ckt/src/jjblum/sami-crw/src/crw/ui/teleop/VelocityPanel.java</file>
+        </group>
+    </open-files>
+</project-private>
