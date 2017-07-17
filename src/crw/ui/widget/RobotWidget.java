@@ -318,7 +318,9 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             */
             
             // Create marker
-            final BoatMarker bm = new BoatMarker(boatProxy, boatProxy.getPosition(), new BasicMarkerAttributes(new Material(boatProxy.getColor()), BasicMarkerShape.ORIENTED_SPHERE, 0.9));            
+            BasicMarkerAttributes markerAttr = new BasicMarkerAttributes(new Material(boatProxy.getColor(), 50.0f), BasicMarkerShape.ORIENTED_SPHERE_LINE, 1.0);
+            markerAttr.setMarkerPixels(5d);
+            final BoatMarker bm = new BoatMarker(boatProxy, boatProxy.getPosition(), markerAttr);            
             bm.getAttributes().setHeadingMaterial(UNSELECTED_MAT);
             bm.setPosition(boatProxy.getPosition());
 
@@ -342,7 +344,7 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
                         first = false;
                     }
 
-                    wwPanel.wwCanvas.redraw();
+                    wwPanel.wwCanvas.redrawNow();
                 }
 
                 @Override
@@ -758,6 +760,10 @@ public class RobotWidget implements MarkupComponentWidget, WorldWindWidgetInt, P
             OutputEvent curEvent = selectedProxy.getCurSequentialEvent();
             if (curEvent != null && curEvent.getId().equals(eventId)) {
                 selectedProxy.cancelCurrentSeqEvent();
+                // Boat should stop if current waypoints are cancelled
+                stopBoat();
+                selectedProxy.endGAMSAlgorithm();
+                stopBoat();
             }
         }
     }

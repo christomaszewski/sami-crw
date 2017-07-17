@@ -44,6 +44,7 @@ public class LutraMadaraContainers {
     NativeDoubleVector motorCommands;
     Double thrustFraction;
     Double bearingFraction;
+    Double losSurgeFraction;
     NativeDoubleVector bearingPIDGains;
     NativeDoubleVector thrustPIDGains;
     NativeDoubleVector losPIDGains;
@@ -67,7 +68,7 @@ public class LutraMadaraContainers {
     final long defaultTeleopStatus = TELEOPERATION_TYPES.GUI_WP.getLongValue();
     final double[] bearingPIDGainsDefaults = new double[]{1.0,0.1,0.5}; // cols: P,I,D
     final double[] thrustPIDGainsDefaults = new double[]{0.1,0,0.2}; // cols: P,I,D
-    final double[] losPIDGainsDefaults = new double[]{0.5, 0.0, 0.25};
+    final double[] losPIDGainsDefaults = new double[]{-0.5, 0.0, 0.25};
     //final double[] thrustPPIGainsDefaults = new double[]{0.2,0.2,0.05}; // cols: Pos-P, Vel-P, Vel-I
     final double defaultPeakForwardMotorSignal = 0.1;
     final double defaultPeakBackwardMotorSignal = 1.0;
@@ -174,8 +175,10 @@ public class LutraMadaraContainers {
         
         thrustFraction = new Double();
         bearingFraction = new Double();
+        losSurgeFraction = new Double();
         thrustFraction.setName(knowledge, prefix + "thrustFraction");
-        bearingFraction.setName(knowledge, prefix + "bearingFraction");        
+        bearingFraction.setName(knowledge, prefix + "bearingFraction");
+        losSurgeFraction.setName(knowledge, prefix + "LOS_surge_effort_fraction");
                
         connectivityWatchdog = new Integer();
         connectivityWatchdog.setName(knowledge, prefix + "connectivityWatchdog");
@@ -352,6 +355,9 @@ public class LutraMadaraContainers {
         thrustPIDGains.set(0, P);
         thrustPIDGains.set(1, I);
         thrustPIDGains.set(2, D);  
+        
+        losSurgeFraction.setSettings(makeItGlobal);
+        losSurgeFraction.set(P);
         makeItGlobal.free();
     }    
     public double[] getThrustPIDGains() {

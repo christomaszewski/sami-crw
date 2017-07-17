@@ -247,14 +247,15 @@ public class BoatProxy extends Thread implements ProxyInt {
     }
     
     public void endGAMSAlgorithm() {        
-        containers.keepCurrentLocation();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ex) {
-            //
-        }        
+        containers.keepCurrentLocation();  
         knowledge.set(containers.prefix + "algorithm", "null"); // this must happen AFTER at least one call from the GAMS algorithm to the platform's move()
         knowledge.sendModifieds();
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            //
+        }      
     }    
 
     public void startListeners() {
@@ -932,7 +933,8 @@ public class BoatProxy extends Thread implements ProxyInt {
     class MadaraConnectivityWatchdogListener extends BaseThread {
         @Override
         public void run() {
-            
+            knowledge.print();
+
             if (containers.distress.get() == 1L) {
                 System.out.println(java.lang.String.format("WARNING: boat # %d is in distress!",_boatNo));
                 System.out.println(java.lang.String.format("boat #d unhandled exception: %s",containers.unhandledException.get()));
@@ -955,7 +957,6 @@ public class BoatProxy extends Thread implements ProxyInt {
             else {
                 // TODO: how to alert the user that the boat isn't connected?
                 // A crw.event.output.ui event?
-                knowledge.print();
                 System.out.println(java.lang.String.format("WARNING: Madara connectivity NOT available for \"%s\", boat # %d",name,_boatNo));
             }            
             if (containers.magneticLock.get() == 1L) {

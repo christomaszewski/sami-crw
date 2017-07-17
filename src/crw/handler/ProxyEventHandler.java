@@ -2,13 +2,8 @@ package crw.handler;
 
 import com.madara.EvalSettings;
 import com.madara.KnowledgeBase;
-import com.madara.KnowledgeRecord;
-import com.madara.containers.NativeDoubleVector;
-import com.madara.containers.NativeIntegerVector;
 import com.madara.containers.StringVector;
-import com.madara.containers.Vector;
 import crw.Conversion;
-import crw.CrwHelper;
 import crw.event.input.proxy.GainsSent;
 import crw.event.input.proxy.GenericGAMSCommandSent;
 import crw.event.input.proxy.ProxyAutonomyReHomed;
@@ -24,6 +19,7 @@ import crw.event.input.service.QuantityEqual;
 import crw.event.input.service.QuantityGreater;
 import crw.event.input.service.QuantityLess;
 import crw.event.output.proxy.ConnectExistingProxy;
+import crw.event.output.proxy.ConnectProxyList;
 import crw.event.output.proxy.CreateSimulatedProxy;
 import crw.event.output.proxy.FormCylindricalFormation;
 import crw.event.output.proxy.FormGroup;
@@ -42,27 +38,23 @@ import crw.event.output.proxy.SetGains;
 import crw.event.output.proxy.StopAllAgents;
 import crw.event.output.proxy.ZoneCoverage;
 import crw.event.output.service.ProxyCompareDistanceRequest;
-import crw.general.FastSimpleBoatSimulator;
 import crw.proxy.BoatProxy;
 import crw.proxy.CrwProxyServer;
 import crw.proxy.TELEOPERATION_TYPES;
 import crw.ui.ImagePanel;
 import static crw.ui.teleop.GainsPanel.RUDDER_GAINS_AXIS;
 import static crw.ui.teleop.GainsPanel.THRUST_GAINS_AXIS;
-import edu.cmu.ri.crw.CrwNetworkUtils;
 import edu.cmu.ri.crw.FunctionObserver;
-import edu.cmu.ri.crw.VehicleServer;
 import edu.cmu.ri.crw.data.Utm;
 import edu.cmu.ri.crw.data.UtmPose;
-import edu.cmu.ri.crw.udp.UdpVehicleService;
 import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.geom.coords.UTMCoord;
 import gov.nasa.worldwind.render.Polygon;
 import java.awt.Color;
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -673,6 +665,27 @@ public class ProxyEventHandler implements EventHandlerInt, ProxyListenerInt, Inf
                 listener.eventGenerated(ie);
             }            
         }
+        
+        else if (oe instanceof ConnectProxyList) {
+            // Connect to a non-simulated proxy
+            ConnectProxyList connectEvent = (ConnectProxyList) oe;
+            List<String> names = Arrays.asList(connectEvent.names.split("\\s*,\\s*"));
+            List<String> ids = Arrays.asList(connectEvent.ids.split("\\s*,\\s*"));
+            for(int i = 0; i < names.size(); i++)
+            {    
+                ProxyInt proxy = Engine.getInstance().getProxyServer().createNumberedProxy(names.get(i), connectEvent.colors.get(i%connectEvent.colors.size()), Integer.parseInt(ids.get(i)));
+
+                ImagePanel.setImagesDirectory("not_a_directory");
+                if (proxy != null) {
+                    ProxyCreated proxyCreated = new ProxyCreated(oe.getId(), oe.getMissionId(), proxy);
+                    for (GeneratedEventListenerInt listener : listeners) {
+                        listener.eventGenerated(proxyCreated);
+                    }
+                } else {
+                    LOGGER.severe("Failed to connect proxy " + ids.get(i));
+                }
+            }
+        } 
         
         else if (oe instanceof ZoneCoverage) {
             ZoneCoverage request = (ZoneCoverage)oe;
